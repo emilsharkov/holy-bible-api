@@ -1,0 +1,1 @@
+https://www.stepbible.org/version.jsp?version=AmhNASV

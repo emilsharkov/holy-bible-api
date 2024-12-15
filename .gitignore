@@ -1,0 +1,9 @@
+**/*.xml
+**/*.json
+**/*.sql
+**/*.mp3
+**/.env
+**/node_modules
+.nx/installation
+.nx/cache
+.nx/workspace-data
