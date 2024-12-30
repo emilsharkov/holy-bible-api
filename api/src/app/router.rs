@@ -4,11 +4,12 @@ use std::sync::Arc;
 use std::error::Error;
 use app::state::AppState;
 use config::settings::Settings;
-use handlers::{bibles};
+use handlers::bibles;
+use db::{postgres, s3};
 
-pub async fn get_app(settings: &Settings) -> Result<Router, Box<dyn Error>> {
-    let app_state = get_app_state(settings).await?;
-    let app = Router::new()
+pub async fn get_app_router(settings: &Settings) -> Result<Router<AppState>, Box<dyn Error>> {
+    let app_state = AppState::get_app_state(settings).await?;
+    let app_router = Router::new()
         .route("/bibles", get(bibles::get_bibles))
         // .route("/bibles/:bibleId/search", get(search_verse))
         // .route("/bibles/:bibleId/books", get(get_books))
@@ -28,13 +29,5 @@ pub async fn get_app(settings: &Settings) -> Result<Router, Box<dyn Error>> {
         // )
         .with_state(app_state);
 
-    Ok(app)
-}
-
-async fn get_app_state(settings: &Settings) -> Result<AppState, Box<dyn Error>> {
-    let db_pool = db::connection::establish_connection(&settings.database_settings).await?;
-    let app_state = AppState {
-        db_pool: Arc::new(db_pool),
-    };
-    Ok(app_state)
+    Ok(app_router)
 }

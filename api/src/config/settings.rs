@@ -17,9 +17,16 @@ pub struct AppSettings {
 }
 
 #[derive(Debug)]
+pub struct AwsSettings {
+    pub access_key_id: String,
+    pub secret_access_key: String,
+}
+
+#[derive(Debug)]
 pub struct Settings {
     pub database_settings: DatabaseSettings,
     pub app_setting: AppSettings,
+    pub aws_settings: AwsSettings,
 }
 
 impl Settings {
@@ -27,10 +34,12 @@ impl Settings {
         config::env::load_env();
         let database_settings = Self::get_database_settings()?;
         let app_setting = Self::get_app_settings()?;
+        let aws_settings = Self::get_aws_settings()?;
 
         Ok(Self {
             database_settings,
             app_setting,
+            aws_settings,
         })
     }
 
@@ -51,5 +60,13 @@ impl Settings {
             port: std::env::var("APP_PORT")?.parse()?,
         };
         Ok(app_settings)
+    }
+
+    fn get_aws_settings() -> Result<AwsSettings, Box<dyn Error>> {
+        let aws_settings = AwsSettings {
+            access_key_id: std::env::var("AWS_ACCESS_KEY_ID")?,
+            secret_access_key: std::env::var("AWS_SECRET_ACCESS_KEY")?,
+        };
+        Ok(aws_settings)
     }
 }

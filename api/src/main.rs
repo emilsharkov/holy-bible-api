@@ -10,8 +10,8 @@ mod utils;
 async fn main() {
     utils::logging::init_logging();
     let settings = config::settings::Settings::new().unwrap();
-    let app = app::app::get_app(&settings).await.unwrap();
-    let addr = format!("{}:{}", settings.app_setting.host, settings.app_setting.port);
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    let app_router = app::router::get_app_router(&settings).await.unwrap();
+    let address = utils::address::get_app_address(&settings);
+    let listener = tokio::net::TcpListener::bind(address).await.unwrap();
+    axum::serve(listener, app_router).await.unwrap();
 }
