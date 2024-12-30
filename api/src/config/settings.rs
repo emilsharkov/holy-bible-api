@@ -1,4 +1,5 @@
 use std::error::Error;
+use crate::config;
 
 #[derive(Debug)]
 pub struct DatabaseSettings {
@@ -23,6 +24,7 @@ pub struct Settings {
 
 impl Settings {
     pub fn new() -> Result<Self, Box<dyn Error>> {
+        config::env::load_env();
         let database_settings = Self::get_database_settings()?;
         let app_setting = Self::get_app_settings()?;
 
@@ -36,17 +38,17 @@ impl Settings {
         let database_settings = DatabaseSettings {
             host: std::env::var("DB_HOST")?,
             port: std::env::var("DB_PORT")?.parse()?,
+            database: std::env::var("DB_NAME")?,
             user: std::env::var("DB_USER")?,
             password: std::env::var("DB_PASSWORD")?,
-            database: std::env::var("DB_NAME")?,
         };
         Ok(database_settings)
     }
     
     fn get_app_settings() -> Result<AppSettings, Box<dyn Error>> {
         let app_settings = AppSettings {
-            host: std::env::var("HOST")?,
-            port: std::env::var("PORT")?.parse()?,
+            host: std::env::var("APP_HOST")?,
+            port: std::env::var("APP_PORT")?.parse()?,
         };
         Ok(app_settings)
     }
