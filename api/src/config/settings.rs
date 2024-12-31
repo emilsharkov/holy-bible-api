@@ -23,10 +23,18 @@ pub struct AwsSettings {
 }
 
 #[derive(Debug)]
+pub struct MiddlewareSettings {
+    pub rate_limiter_per_second: u64,
+    pub rate_limiter_burst_size: u32,
+    pub timeout_seconds: u64
+}
+
+#[derive(Debug)]
 pub struct Settings {
     pub database_settings: DatabaseSettings,
     pub app_setting: AppSettings,
     pub aws_settings: AwsSettings,
+    pub middleware_settings: MiddlewareSettings,
 }
 
 impl Settings {
@@ -35,11 +43,13 @@ impl Settings {
         let database_settings = Self::get_database_settings()?;
         let app_setting = Self::get_app_settings()?;
         let aws_settings = Self::get_aws_settings()?;
+        let middleware_settings = Self::get_middleware_settings()?;
 
         Ok(Self {
             database_settings,
             app_setting,
             aws_settings,
+            middleware_settings,
         })
     }
 
@@ -68,5 +78,14 @@ impl Settings {
             secret_access_key: std::env::var("AWS_SECRET_ACCESS_KEY")?,
         };
         Ok(aws_settings)
+    }
+
+    pub fn get_middleware_settings() -> Result<MiddlewareSettings, Box<dyn Error>> {
+        let middleware_settings = MiddlewareSettings {
+            rate_limiter_per_second: std::env::var("RATE_LIMITER_PER_SECOND")?.parse()?,
+            rate_limiter_burst_size: std::env::var("RATE_LIMITER_BURST_SIZE")?.parse()?,
+            timeout_seconds: std::env::var("TIMEOUT_SECONDS")?.parse()?,
+        };
+        Ok(middleware_settings)
     }
 }

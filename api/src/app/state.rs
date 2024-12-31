@@ -1,6 +1,8 @@
-use std::sync::Arc;
+use std::{error::Error, sync::Arc};
 use aws_sdk_s3::Client;
-use crate::config::settings::Settings;
+use crate::{config,db};
+use config::settings::Settings;
+use db::{postgres,s3};
 
 #[derive(Clone)]
 pub struct AppState {

@@ -1,10 +1,13 @@
-use axum::extract::State;
-use sqlx::{FromRow, PgPool};
-use tracing::{event, Level};
+use axum::extract::{Query, State};
+use sqlx::PgPool;
 use crate::app::state::AppState;
+use crate::models::http::params::bible::BibleQueryParams;
 use crate::models::sql::bible;
 
-pub async fn get_bibles(State(app_state): State<AppState>) -> Result<String, axum::response::Response> {
+pub async fn get_bibles(
+    State(app_state): State<AppState>,
+    Query(params): Query<BibleQueryParams>
+) -> Result<String, axum::response::Response> {
     let db_pool: &PgPool = &app_state.db_pool;
 
     let rows: Vec<bible::Bible> = sqlx::query_as("SELECT * FROM bible")
