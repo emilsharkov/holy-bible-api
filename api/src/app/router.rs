@@ -1,50 +1,49 @@
-use crate::{app, config, handlers, middleware::{self, rate_limiter}};
+use crate::{app,config,handlers,middleware};
 use axum::{error_handling::HandleErrorLayer, http::StatusCode, routing::get, BoxError, Router};
-use tower::{timeout::TimeoutLayer, ServiceBuilder};
+use tower::ServiceBuilder;
 use tracing::error;
-use std::{error::Error, time::Duration};
+use std::error::Error;
 use app::state::AppState;
 use config::settings::Settings;
-use handlers::bibles;
+use handlers::{bibles,books,chapters,verses};
 
 pub async fn get_app_router(settings: &Settings) -> Result<Router, Box<dyn Error>> {
-    let service = ServiceBuilder::new()
-     .layer(TimeoutLayer::new(Duration::from_secs(30)));
     let app_state = AppState::get_app_state(settings).await?;
     let app_router = Router::new()
-        .route("/bibles", get(bibles::get_bibles))
-        // .route("/bibles/:bibleId/search", get(search_verse))
-        // .route("/bibles/:bibleId/books", get(get_books))
-        // .route("/bibles/:bibleId/books/:bookNum", get(get_book_by_number))
-        // .route("/bibles/:bibleId/books/:bookNum/chapters", get(get_chapters))
-        // .route(
-        //     "/bibles/:bibleId/books/:bookNum/chapters/:chapterNum",
-        //     get(get_chapter_by_number),
-        // )
-        // .route(
-        //     "/bibles/:bibleId/books/:bookNum/chapters/:chapterNum/verses",
-        //     get(get_verses),
-        // )
-        // .route(
-        //     "/bibles/:bibleId/books/:bookNum/chapters/:chapterNum/verses/:verseNum",
-        //     get(get_verse_by_number),
-        // )
+        .route(
+            "/bibles", 
+            get(bibles::get_bibles)
+        )
+        .route(
+            "/bibles/{bibleId}/search",
+            get(bibles::get_verse_by_search))
+        .route(
+            "/bibles/{bibleId}/books", 
+            get(books::get_books))
+        .route(
+            "/bibles/{bibleId}/books/{bookNum}/chapters", 
+            get(chapters::get_chapters))
+        .route(
+            "/bibles/{bibleId}/books/{bookNum}/chapters/{chapterNum}/verses",
+            get(verses::get_verses),
+        )
+        .route(
+            "/bibles/{bibleId}/books/{bookNum}/chapters/{chapterNum}/verses/{verseNum}",
+            get(verses::get_verse_by_number),
+        )
         .with_state(app_state)
-        .layer(TimeoutLayer::new(Duration::from_nanos(0)))  // Set it to `0` but still did not get REQUEST TIMEOUT status code
-
         .layer(
             ServiceBuilder::new()
-                .layer(middleware::trace::get_trace_layer())
-                .layer(HandleErrorLayer::new(|_: BoxError| async {
-                    error!("some error");
+                .layer(HandleErrorLayer::new(|err: BoxError| async move {
+                    error!("Middleware Error: {}", err);
                     StatusCode::REQUEST_TIMEOUT
                 }))
-                .layer(rate_limiter::get_rate_limiter_layer(
-                    settings.middleware_settings.rate_limiter_per_second,
-                    settings.middleware_settings.rate_limiter_burst_size,
+                .layer(middleware::trace::get_trace_layer())
+                .layer(middleware::compression::get_compression_layer())
+                .layer(middleware::timeout::get_timeout_layer(
+                    settings.middleware_settings.timeout_seconds,
                 ))
         );
-        
 
     Ok(app_router)
 }
