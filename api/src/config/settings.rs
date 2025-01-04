@@ -28,11 +28,19 @@ pub struct MiddlewareSettings {
 }
 
 #[derive(Debug)]
+pub struct RedisSettings {
+    pub host: String,
+    pub port: u16,
+    pub password: String,
+}
+
+#[derive(Debug)]
 pub struct Settings {
     pub database_settings: DatabaseSettings,
     pub app_setting: AppSettings,
     pub aws_settings: AwsSettings,
     pub middleware_settings: MiddlewareSettings,
+    pub redis_settings: RedisSettings,
 }
 
 impl Settings {
@@ -42,12 +50,14 @@ impl Settings {
         let app_setting = Self::get_app_settings()?;
         let aws_settings = Self::get_aws_settings()?;
         let middleware_settings = Self::get_middleware_settings()?;
+        let redis_settings = Self::get_redis_settings()?;
 
         Ok(Self {
             database_settings,
             app_setting,
             aws_settings,
             middleware_settings,
+            redis_settings,
         })
     }
 
@@ -83,5 +93,14 @@ impl Settings {
             timeout_seconds: std::env::var("TIMEOUT_SECONDS")?.parse()?,
         };
         Ok(middleware_settings)
+    }
+
+    pub fn get_redis_settings() -> Result<RedisSettings, Box<dyn Error>> {
+        let redis_settings = RedisSettings {
+            host: std::env::var("REDIS_HOST")?,
+            port: std::env::var("REDIS_PORT")?.parse()?,
+            password: std::env::var("REDIS_PASSWORD")?,
+        };
+        Ok(redis_settings)
     }
 }

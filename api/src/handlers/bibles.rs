@@ -10,7 +10,7 @@ pub async fn get_bibles(
     State(app_state): State<AppState>,
     Query(params): Query<BibleQueryParams>
 ) -> Result<String, axum::response::Response> {
-    let db_pool: &PgPool = &app_state.db_pool;
+    let db_client: &PgPool = &app_state.db_client;
 
     let mut query_builder = QueryBuilder::new("SELECT bible_id, language, version FROM bible");
     
@@ -32,7 +32,7 @@ pub async fn get_bibles(
     }
 
     let rows: Vec<bible::Bible> = query_builder.build_query_as::<bible::Bible>()
-        .fetch_all(db_pool)
+        .fetch_all(db_client)
         .await
         .map_err(|err| {
             axum::response::Response::builder()
@@ -55,7 +55,7 @@ pub async fn get_verse_by_search(
     Path(bible_id): Path<i32>,
     Query(params): Query<BibleSearchQueryParams> 
 ) -> Result<Json<GetVersesRes>, axum::response::Response> {
-    let db_pool: &PgPool = &app_state.db_pool;
+    let db_client: &PgPool = &app_state.db_client;
 
     let mut query_builder = QueryBuilder::new("SELECT * FROM verses WHERE bible_id = ");
     query_builder.push_bind(bible_id);
@@ -95,7 +95,7 @@ pub async fn get_verse_by_search(
     }
 
     let rows: Vec<bible::Verse> = query_builder.build_query_as::<bible::Verse>()
-        .fetch_all(db_pool)
+        .fetch_all(db_client)
         .await
         .map_err(|err| {
             axum::response::Response::builder()

@@ -13,7 +13,7 @@ pub async fn get_verses(
     Query(query): Query<VersesQueryParams>,
     Path(path): Path<VersesPathParams>,
 ) -> Result<Json<response::verses::GetVersesRes>, axum::response::Response> {
-    let db_pool: &PgPool = &app_state.db_pool;
+    let db_client: &PgPool = &app_state.db_client;
 
     let start = query.start.unwrap_or(1);
     let end = query.end.unwrap_or(i32::MAX);
@@ -36,7 +36,7 @@ pub async fn get_verses(
         .bind(path.bible_id)
         .bind(path.book_num)
         .bind(path.chapter_num)
-        .fetch_all(db_pool)
+        .fetch_all(db_client)
         .await
         .map_err(|err| {
             axum::response::Response::builder()
@@ -69,7 +69,7 @@ pub async fn get_verse_by_number(
     State(app_state): State<AppState>,
     Path(path): Path<VerseByNumberPathParams>,
 ) -> Result<Json<response::verses::Verse>, axum::response::Response> {
-    let db_pool: &PgPool = &app_state.db_pool;
+    let db_client: &PgPool = &app_state.db_client;
 
     let rows: Vec<bible::Verse> = sqlx::query_as(
         "SELECT * FROM verses 
@@ -82,7 +82,7 @@ pub async fn get_verse_by_number(
         .bind(path.book_num)
         .bind(path.chapter_num)
         .bind(path.verse_num)
-        .fetch_all(db_pool)
+        .fetch_all(db_client)
         .await
         .map_err(|err| {
             axum::response::Response::builder()

@@ -10,14 +10,14 @@ pub async fn get_chapters(
     State(app_state): State<AppState>,
     Path(params): Path<ChaptersPathParams>,
 ) -> Result<Json<response::chapters::GetChaptersRes>, axum::response::Response> {
-    let db_pool: &PgPool = &app_state.db_pool;
+    let db_client: &PgPool = &app_state.db_client;
 
     let rows: Vec<bible::Count> = sqlx::query_as(
         "SELECT count(*) FROM verses WHERE bible_id = $1 AND book_num = $2"
     )
         .bind(params.bible_id)
         .bind(params.book_num)
-        .fetch_all(db_pool)
+        .fetch_all(db_client)
         .await
         .map_err(|err| {
             axum::response::Response::builder()
