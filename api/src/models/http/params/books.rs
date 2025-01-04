@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub struct BookQueryParams {
-    testament: Option<String>,
+pub struct BookPathParams {
+    pub bible_id: i32,
 }

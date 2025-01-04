@@ -6,7 +6,7 @@ pub struct BibleQueryParams {
     pub version: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct BibleSearchQueryParams {
     pub book: Option<i32>,
     pub chapter: Option<i32>,

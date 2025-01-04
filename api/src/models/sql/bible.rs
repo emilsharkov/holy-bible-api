@@ -1,5 +1,4 @@
 use sqlx::FromRow;
-use serde::Deserialize;
 
 #[derive(Debug, FromRow)]
 pub struct Bible {
@@ -15,4 +14,9 @@ pub struct Verse {
     pub chapter: i32,
     pub verse: i32,
     pub text: String
+}
+
+#[derive(Debug, FromRow)]
+pub struct Count {
+    pub count: i32,
 }

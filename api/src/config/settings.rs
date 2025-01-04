@@ -24,8 +24,6 @@ pub struct AwsSettings {
 
 #[derive(Debug)]
 pub struct MiddlewareSettings {
-    pub rate_limiter_per_second: u64,
-    pub rate_limiter_burst_size: u32,
     pub timeout_seconds: u64
 }
 
@@ -82,8 +80,6 @@ impl Settings {
 
     pub fn get_middleware_settings() -> Result<MiddlewareSettings, Box<dyn Error>> {
         let middleware_settings = MiddlewareSettings {
-            rate_limiter_per_second: std::env::var("RATE_LIMITER_PER_SECOND")?.parse()?,
-            rate_limiter_burst_size: std::env::var("RATE_LIMITER_BURST_SIZE")?.parse()?,
             timeout_seconds: std::env::var("TIMEOUT_SECONDS")?.parse()?,
         };
         Ok(middleware_settings)

@@ -1,16 +1,18 @@
 use std::i32;
 
 use axum::extract::{Path, Query, State};
+use axum::Json;
 use sqlx::PgPool;
 use crate::app::state::AppState;
 use crate::models::http::params::verses::{VerseByNumberPathParams, VersesPathParams, VersesQueryParams};
 use crate::models::sql::bible;
+use crate::models::http::response;
 
 pub async fn get_verses(
     State(app_state): State<AppState>,
     Query(query): Query<VersesQueryParams>,
     Path(path): Path<VersesPathParams>,
-) -> Result<String, axum::response::Response> {
+) -> Result<Json<response::verses::GetVersesRes>, axum::response::Response> {
     let db_pool: &PgPool = &app_state.db_pool;
 
     let start = query.start.unwrap_or(1);
@@ -45,17 +47,28 @@ pub async fn get_verses(
 
     let result = rows
         .into_iter()
-        .map(|bible| format!("{}: {}", bible.bible_id, bible.verse))
-        .collect::<Vec<String>>()
-        .join(", ");
+        .map(|bible| -> response::verses::Verse {
+            response::verses::Verse {
+                bible_id: bible.bible_id,
+                book: bible.book,
+                chapter: bible.chapter,
+                verse: bible.verse,
+                text: bible.text,
+            }
+        })
+        .collect::<Vec<response::verses::Verse>>();
 
-    Ok(result)
+    Ok(Json(
+        response::verses::GetVersesRes {
+            verses: result,
+        }
+    ))
 }
 
 pub async fn get_verse_by_number(
     State(app_state): State<AppState>,
     Path(path): Path<VerseByNumberPathParams>,
-) -> Result<String, axum::response::Response> {
+) -> Result<Json<response::verses::Verse>, axum::response::Response> {
     let db_pool: &PgPool = &app_state.db_pool;
 
     let rows: Vec<bible::Verse> = sqlx::query_as(
@@ -78,11 +91,18 @@ pub async fn get_verse_by_number(
                 .unwrap()
         })?;
 
-    let result = rows
-        .into_iter()
-        .map(|bible| format!("{}: {}", bible.bible_id, bible.verse))
-        .collect::<Vec<String>>()
-        .join(", ");
+    let first_row = rows.into_iter().next().ok_or_else(|| {
+        axum::response::Response::builder()
+            .status(404)
+            .body("Verse not found".into())
+            .unwrap()
+    })?;
 
-    Ok(result)
+    Ok(Json(response::verses::Verse {
+        bible_id: first_row.bible_id,
+        book: first_row.book,
+        chapter: first_row.chapter,
+        verse: first_row.verse,
+        text: first_row.text.clone(),
+    }))
 }
