@@ -5,11 +5,12 @@ use crate::app::state::AppState;
 use crate::models::http::params::bible::{BibleQueryParams, BibleSearchQueryParams};
 use crate::models::http::response::verses::{GetVersesRes, Verse};
 use crate::models::sql::bible;
+use crate::models::http::response::bibles::{Bible, GetBibleRes};
 
 pub async fn get_bibles(
     State(app_state): State<AppState>,
     Query(params): Query<BibleQueryParams>
-) -> Result<String, axum::response::Response> {
+) -> Result<Json<GetBibleRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let mut query_builder = QueryBuilder::new("SELECT bible_id, language, version FROM bible");
@@ -38,16 +39,19 @@ pub async fn get_bibles(
             axum::response::Response::builder()
                 .status(500)
                 .body(format!("Database query failed: {}", err).into())
-                .unwrap()
+                .expect("axum response builder failed")
         })?;
 
-    let result = rows
+    let bibles = rows
         .into_iter()
-        .map(|bible| format!("{}: {} {}", bible.bible_id, bible.language, bible.version.unwrap()))
-        .collect::<Vec<String>>()
-        .join(", ");
+        .map(|bible| -> Bible { Bible {
+            bible_id: bible.bible_id,
+            language: bible.language,
+            version: bible.version
+        }})
+        .collect::<Vec<Bible>>();
 
-    Ok(result)
+    Ok(Json(GetBibleRes { bibles }))
 }
 
 pub async fn get_verse_by_search(
@@ -101,7 +105,7 @@ pub async fn get_verse_by_search(
             axum::response::Response::builder()
                 .status(500)
                 .body(format!("Database query failed: {}", err).into())
-                .unwrap()
+                .expect("axum response builder failed")
         })?;
 
     let verses = rows

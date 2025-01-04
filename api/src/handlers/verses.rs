@@ -23,7 +23,7 @@ pub async fn get_verses(
             axum::response::Response::builder()
                 .status(400)
                 .body("Invalid range".into())
-                .unwrap(),
+                .expect("axum response builder failed"),
         );
     }
 
@@ -42,7 +42,7 @@ pub async fn get_verses(
             axum::response::Response::builder()
                 .status(500)
                 .body(format!("Database query failed: {}", err).into())
-                .unwrap()
+                .expect("axum response builder failed")
         })?;
 
     let result = rows
@@ -88,14 +88,14 @@ pub async fn get_verse_by_number(
             axum::response::Response::builder()
                 .status(500)
                 .body(format!("Database query failed: {}", err).into())
-                .unwrap()
+                .expect("axum response builder failed")
         })?;
 
     let first_row = rows.into_iter().next().ok_or_else(|| {
         axum::response::Response::builder()
             .status(404)
             .body("Verse not found".into())
-            .unwrap()
+            .expect("axum response builder failed")
     })?;
 
     Ok(Json(response::verses::Verse {

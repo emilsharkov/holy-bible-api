@@ -1,7 +1,7 @@
 use std::error::Error;
 use crate::config;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DatabaseSettings {
     pub host: String,
     pub port: u16,
@@ -10,31 +10,32 @@ pub struct DatabaseSettings {
     pub database: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppSettings {
     pub host: String,
     pub port: u16,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AwsSettings {
     pub access_key_id: String,
     pub secret_access_key: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MiddlewareSettings {
-    pub timeout_seconds: u64
+    pub timeout_seconds: u64,
+    pub request_limit_per_hour: u16,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RedisSettings {
     pub host: String,
     pub port: u16,
     pub password: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Settings {
     pub database_settings: DatabaseSettings,
     pub app_setting: AppSettings,
@@ -91,6 +92,7 @@ impl Settings {
     pub fn get_middleware_settings() -> Result<MiddlewareSettings, Box<dyn Error>> {
         let middleware_settings = MiddlewareSettings {
             timeout_seconds: std::env::var("TIMEOUT_SECONDS")?.parse()?,
+            request_limit_per_hour: std::env::var("REQUEST_LIMIT_PER_HOUR")?.parse()?,
         };
         Ok(middleware_settings)
     }
