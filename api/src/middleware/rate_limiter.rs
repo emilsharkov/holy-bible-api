@@ -1,23 +1,55 @@
-use std::error::Error;
-
-use axum::{extract::{Request, State}, http::Extensions, middleware::Next, response::Response};
-use hyper::{HeaderMap, StatusCode};
-
-use crate::{app::state::AppState, config::settings::RedisSettings};
-
+use std::{net::SocketAddr, time::{SystemTime, UNIX_EPOCH}};
+use axum::{extract::{ConnectInfo, Request, State}, middleware::Next, response::Response};
+use hyper::StatusCode;
+use redis::Commands;
+use crate::app::state::AppState;
 
 pub async fn rate_limiter(
+    ConnectInfo(client_addr): ConnectInfo<SocketAddr>,
     State(state): State<AppState>,
-    headers: HeaderMap,
-    extensions: Extensions,
     request: Request,
     next: Next,
-    settings: u16
+    request_limit_per_hour: u16
 ) -> Result<Response,StatusCode> {
-    Err(StatusCode::TOO_MANY_REQUESTS)
+    let redis_client = state.redis_client;
+    let ip = client_addr.ip().to_string();
+    match is_rate_limited((*redis_client).clone(),ip,request_limit_per_hour).await {
+        Ok(false) => return Ok(next.run(request).await),
+        Ok(true) => return Err(StatusCode::TOO_MANY_REQUESTS),
+        _ => return Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
+}
+
+pub async fn is_rate_limited(
+    redis_client: redis::Client,
+    ip: String,
+    request_limit_per_hour: u16,
+) -> Result<bool, redis::RedisError> {
+    let mut conn = redis_client.get_connection()?;
+    let current_window = get_current_window()?;
+    let bucket_key = format!("rate_limit:{}:{}", ip, current_window);
+
+    let current_request_count: u64 = conn.get(&bucket_key).unwrap_or(0);
+    if current_request_count >= u64::from(request_limit_per_hour) {
+        return Ok(true);
+    }
+
+    let _: () = conn.incr(&bucket_key, 1)?;
+    let _: () = conn.expire(&bucket_key, 3600)?;
+    Ok(false)
 }
 
 
-// async fn is_rate_limited() -> Result<bool, Error>{
-//     Ok(false)
-// }
+fn get_current_window() -> Result<u64, redis::RedisError> {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| duration.as_secs() / 3600)
+        .map_err(|e| {
+            redis::RedisError::from((
+                redis::ErrorKind::ClientError,
+                "Failed to calculate the current window in hours",
+                format!("{:?}", e),
+            ))
+        })
+}
+

@@ -26,9 +26,9 @@ pub async fn get_app_router(settings: &Settings) -> Result<Router, Box<dyn Error
                 ))
                 .layer(from_fn_with_state(
                     app_state.clone(),
-                    move |state, headers, extensions, req, next| {
+                    move |client_addr, state, req, next| {
                         middleware::rate_limiter::rate_limiter(
-                            state, headers, extensions, req, next, app_settings.middleware_settings.request_limit_per_hour
+                            client_addr, state, req, next, app_settings.middleware_settings.request_limit_per_hour
                         )
                     },
                 ))
