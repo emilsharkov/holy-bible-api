@@ -11,3 +11,12 @@ Please double check this data with the real thing before using it. This data has
 ## Usage
 
 
+## To Do List
+- [x] Set up project structure
+- [x] Get Data into Data Sources
+- [x] Implement API
+- [ ] Test API
+- [ ] Infrastructure
+- [ ] Generate SDKs
+- [ ] CICD
+- [ ] Frontend Docs?
