@@ -13,7 +13,7 @@ pub async fn get_bibles(
 ) -> Result<Json<GetBibleRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
-    let mut query_builder = QueryBuilder::new("SELECT bible_id, language, version FROM bible");
+    let mut query_builder = QueryBuilder::new("SELECT bible_id, language, version FROM bibles");
     
     let mut has_conditions = false;
     if params.language.is_some() || params.version.is_some() {

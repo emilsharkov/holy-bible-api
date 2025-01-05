@@ -1,1 +1,1 @@
-https://www.stepbible.org/version.jsp?version=AmhNASV
+Data retrieved at [https://github.com/Beblia/Holy-Bible-XML-Format](https://github.com/Beblia/Holy-Bible-XML-Format)

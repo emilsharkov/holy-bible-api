@@ -3,6 +3,3 @@
 **/*.sql
 **/*.mp3
 **/.env
-**/node_modules
-scraping
-**/target

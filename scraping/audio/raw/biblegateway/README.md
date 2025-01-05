@@ -1,1 +1,0 @@
-https://stream.biblegateway.com/bibles/32/csbs-hao/John.10.4.mp3
