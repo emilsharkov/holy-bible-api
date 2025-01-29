@@ -4,13 +4,13 @@ resource "aws_security_group" "all_traffic_sg" {
   vpc_id      = aws_vpc.example.id
 
   ingress {
-    description      = "Allow all inbound"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    description      = "Allow Redis traffic"
+    from_port        = 6379
+    to_port          = 6379
+    protocol         = "tcp"
+    cidr_blocks      = ["10.0.0.0/16"] # Replace with your VPC or specific IP range
   }
+
 
   egress {
     description      = "Allow all outbound"
