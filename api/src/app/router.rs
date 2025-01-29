@@ -10,6 +10,7 @@ pub async fn get_app_router(settings: &Settings) -> Result<Router, Box<dyn Error
     let app_settings = settings.clone();
     let app_state = AppState::get_app_state(&app_settings).await?;
     let app_router = Router::new()
+        .merge(routes::health::get_health_route())
         .merge(routes::bibles::get_bible_routes())
         .merge(routes::audio_bibles::get_audio_bible_routes())
         .merge(routes::swagger::get_swagger_route())
@@ -26,9 +27,9 @@ pub async fn get_app_router(settings: &Settings) -> Result<Router, Box<dyn Error
                 ))
                 .layer(from_fn_with_state(
                     app_state.clone(),
-                    move |client_addr, state, req, next| {
+                    move |state, req, next| {
                         middleware::rate_limiter::rate_limiter(
-                            client_addr, state, req, next, app_settings.middleware_settings.request_limit_per_hour
+                            state, req, next, app_settings.middleware_settings.request_limit_per_hour
                         )
                     },
                 ))

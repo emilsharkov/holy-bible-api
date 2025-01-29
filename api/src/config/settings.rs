@@ -8,6 +8,7 @@ pub struct DatabaseSettings {
     pub user: String,
     pub password: String,
     pub database: String,
+    pub ssl_mode: String,
 }
 
 #[derive(Debug, Clone)]
@@ -69,6 +70,7 @@ impl Settings {
             database: std::env::var("DB_NAME")?,
             user: std::env::var("DB_USER")?,
             password: std::env::var("DB_PASSWORD")?,
+            ssl_mode: std::env::var("DB_SSL_MODE")?,
         };
         Ok(database_settings)
     }

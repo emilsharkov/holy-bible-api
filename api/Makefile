@@ -10,10 +10,10 @@ clean:
 	cargo clean
 
 build:
-	cargo build --release
+	cargo lambda build --arm64 --release
 
 dev:
-	cargo watch -c -w src -x run
+	cargo lambda watch -w src -x run
 
 prod: build
 	./target/debug/api

@@ -1,18 +1,18 @@
-use std::{net::SocketAddr, time::{SystemTime, UNIX_EPOCH}};
-use axum::{extract::{ConnectInfo, Request, State}, middleware::Next, response::Response};
+use std::time::{SystemTime, UNIX_EPOCH};
+use axum::{extract::{Request, State}, middleware::Next, response::Response};
 use hyper::StatusCode;
+use lambda_http::{request::RequestContext, RequestExt};
 use redis::Commands;
 use crate::app::state::AppState;
 
 pub async fn rate_limiter(
-    ConnectInfo(client_addr): ConnectInfo<SocketAddr>,
     State(state): State<AppState>,
     request: Request,
     next: Next,
     request_limit_per_hour: u16
 ) -> Result<Response,StatusCode> {
     let redis_client = state.redis_client;
-    let ip = client_addr.ip().to_string();
+    let ip = get_client_ip(&request);
     match is_rate_limited((*redis_client).clone(),ip,request_limit_per_hour).await {
         Ok(false) => return Ok(next.run(request).await),
         Ok(true) => return Err(StatusCode::TOO_MANY_REQUESTS),
@@ -53,3 +53,18 @@ fn get_current_window() -> Result<u64, redis::RedisError> {
         })
 }
 
+fn get_client_ip(request: &Request) -> String {
+    let ctx: lambda_http::request::RequestContext = request.request_context();
+    let ip = match &ctx {
+        RequestContext::ApiGatewayV2(api_ctx) => {
+            api_ctx
+                .http
+                .source_ip
+                .as_deref()
+                .unwrap_or("127.0.0.1")
+                .to_string()
+        },
+        _ => "127.0.0.1".to_string(),
+    };
+    return ip;
+}
