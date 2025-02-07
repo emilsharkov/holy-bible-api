@@ -18,5 +18,5 @@ pub struct Verse {
 
 #[derive(Debug, FromRow)]
 pub struct Count {
-    pub count: i32,
+    pub count: i64,
 }

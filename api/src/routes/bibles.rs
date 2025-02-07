@@ -3,32 +3,28 @@ use axum::{
     Router,
 };
 
-use crate::{app::state::AppState, handlers::{bibles, books, chapters, verses}};
+use crate::{app::state::AppState, handlers::bibles:: { bibles, books, chapters, verses }};
 
 pub fn get_bible_routes() -> Router<AppState> {
     Router::<AppState>::new()
         .route(
             "/bibles", 
         get(bibles::get_bibles)
-    )
-        .route(
-            "/bibles/:bibleId/search", 
-            get(bibles::get_verse_by_search)
         )
         .route(
-            "/bibles/:bibleId/books", 
+            "/bibles/:bible_id/books", 
             get(books::get_books)
         )
         .route(
-            "/bibles/:bibleId/books/:bookNum/chapters",
+            "/bibles/:bible_id/books/:book_num/chapters",
             get(chapters::get_chapters)
         )
         .route(
-            "/bibles/:bibleId/books/:bookNum/chapters/:chapterNum/verses",
+            "/bibles/:bible_id/books/:book_num/chapters/:chapter_num/verses",
             get(verses::get_verses),
         )
         .route(
-            "/bibles/:bibleId/books/:bookNum/chapters/:chapterNum/verses/:verseNum",
+            "/bibles/:bible_id/books/:book_num/chapters/:chapter_num/verses/:verse_num",
             get(verses::get_verse_by_number),
         )
 }

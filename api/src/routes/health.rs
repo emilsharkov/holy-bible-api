@@ -5,7 +5,7 @@ pub fn get_health_route() -> Router<AppState> {
     Router::new().route(
         "/health",
         get(|| async {
-            Json("Hello, health!")
+            Json("Healthy!")
         }),
     )
 }

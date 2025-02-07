@@ -1,10 +1,15 @@
-use aws_config::BehaviorVersion;
+use aws_config::{BehaviorVersion, Region};
 use aws_credential_types::Credentials;
-use aws_sdk_s3::Client;
 use crate::config::settings::AwsSettings;
 use std::error::Error;
 
-pub async fn get_client(settings: &AwsSettings) -> Result<Client, Box<dyn Error>> {
+pub struct S3Client {
+    pub client: aws_sdk_s3::Client,
+    pub audio_bibles_bucket: String,
+}
+
+pub async fn get_client(settings: &AwsSettings) -> Result<S3Client, Box<dyn Error>> {
+    let region = Region::new(settings.region.clone());
     let credentials = Credentials::from_keys(
         &settings.access_key_id, 
         &settings.secret_access_key, 
@@ -12,10 +17,12 @@ pub async fn get_client(settings: &AwsSettings) -> Result<Client, Box<dyn Error>
     );
 
     let config = aws_config::defaults(BehaviorVersion::latest())
+        .region(region)
         .credentials_provider(credentials)
         .load()
         .await;
     
-    let client = Client::new(&config);
-    Ok(client)
+    let client = aws_sdk_s3::Client::new(&config);
+    let audio_bibles_bucket = settings.audio_bibles_bucket.to_string();
+    Ok( S3Client { client,audio_bibles_bucket })
 }

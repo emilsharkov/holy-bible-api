@@ -12,15 +12,11 @@ pub struct DatabaseSettings {
 }
 
 #[derive(Debug, Clone)]
-pub struct AppSettings {
-    pub host: String,
-    pub port: u16,
-}
-
-#[derive(Debug, Clone)]
 pub struct AwsSettings {
     pub access_key_id: String,
     pub secret_access_key: String,
+    pub audio_bibles_bucket: String,
+    pub region: String,
 }
 
 #[derive(Debug, Clone)]
@@ -39,7 +35,6 @@ pub struct RedisSettings {
 #[derive(Debug, Clone)]
 pub struct Settings {
     pub database_settings: DatabaseSettings,
-    pub app_setting: AppSettings,
     pub aws_settings: AwsSettings,
     pub middleware_settings: MiddlewareSettings,
     pub redis_settings: RedisSettings,
@@ -49,14 +44,12 @@ impl Settings {
     pub fn new() -> Result<Self, Box<dyn Error>> {
         config::env::load_env();
         let database_settings = Self::get_database_settings()?;
-        let app_setting = Self::get_app_settings()?;
         let aws_settings = Self::get_aws_settings()?;
         let middleware_settings = Self::get_middleware_settings()?;
         let redis_settings = Self::get_redis_settings()?;
 
         Ok(Self {
             database_settings,
-            app_setting,
             aws_settings,
             middleware_settings,
             redis_settings,
@@ -75,18 +68,12 @@ impl Settings {
         Ok(database_settings)
     }
     
-    fn get_app_settings() -> Result<AppSettings, Box<dyn Error>> {
-        let app_settings = AppSettings {
-            host: std::env::var("APP_HOST")?,
-            port: std::env::var("APP_PORT")?.parse()?,
-        };
-        Ok(app_settings)
-    }
-
     fn get_aws_settings() -> Result<AwsSettings, Box<dyn Error>> {
         let aws_settings = AwsSettings {
             access_key_id: std::env::var("AWS_ACCESS_KEY_ID")?,
             secret_access_key: std::env::var("AWS_SECRET_ACCESS_KEY")?,
+            region: std::env::var("AWS_REGION")?,
+            audio_bibles_bucket: std::env::var("AUDIO_BIBLES_BUCKET")?,
         };
         Ok(aws_settings)
     }
