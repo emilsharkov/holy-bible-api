@@ -6,6 +6,14 @@ use crate::models::http::params::bibles::bible::BibleQueryParams;
 use crate::models::http::response::bibles::bibles::{Bible, GetBibleRes};
 use crate::models::sql;
 
+#[utoipa::path(
+    get,
+    path = "/bibles",
+    params(BibleQueryParams),
+    responses(
+        (status = 200, description = "Health check successful", body = GetBibleRes)
+    )
+)]
 pub async fn get_bibles(
     State(app_state): State<AppState>,
     Query(params): Query<BibleQueryParams>
