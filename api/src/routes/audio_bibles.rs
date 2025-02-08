@@ -13,11 +13,11 @@ pub fn get_audio_bible_routes() -> Router<AppState> {
         )
         .route(
             "/audio_bibles/:audio_bible_id/books", 
-            get(books::get_books)
+            get(books::get_audio_bible_books)
         )
         .route(
             "/audio_bibles/:audio_bible_id/books/:book_num/chapters", 
-            get(chapters::get_chapters)
+            get(chapters::get_audio_bible_chapters)
         )
         .route(
             "/audio_bibles/:audio_bible_id/books/:book_num/chapters/:chapter_num", 

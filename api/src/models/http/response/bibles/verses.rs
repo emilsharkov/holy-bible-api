@@ -1,12 +1,13 @@
 use serde::Serialize;
+use utoipa::ToSchema;
 
-#[derive(Debug, Serialize)]
-pub struct GetVersesRes {
-    pub verses: Vec<Verse>
+#[derive(Debug, Serialize, ToSchema)]
+pub struct GetBibleVersesRes {
+    pub verses: Vec<BibleVerse>
 }
 
-#[derive(Debug, Serialize)]
-pub struct Verse {
+#[derive(Debug, Serialize, ToSchema)]
+pub struct BibleVerse {
     pub bible_id: i32,
     pub book: i32,
     pub chapter: i32,

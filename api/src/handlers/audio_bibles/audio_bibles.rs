@@ -3,13 +3,21 @@ use axum::Json;
 use sqlx::{QueryBuilder, PgPool};
 use crate::app::state::AppState;
 use crate::models::http::params::audio_bibles::audio_bible::AudioBibleQueryParams;
-use crate::models::http::response::audio_bibles::audio_bibles::{GetAudioBibleRes, AudioBible};
-use crate::models::{sql};
+use crate::models::http::response::audio_bibles::audio_bibles::{GetAudioBiblesRes, AudioBible};
+use crate::models::sql;
 
+#[utoipa::path(
+    get,
+    path = "/audio_bibles",
+    params(AudioBibleQueryParams),
+    responses(
+        (status = 200, body = GetAudioBiblesRes)
+    )
+)]
 pub async fn get_audio_bibles(
     State(app_state): State<AppState>,
     Query(params): Query<AudioBibleQueryParams>
-) -> Result<Json<GetAudioBibleRes>, axum::response::Response> {
+) -> Result<Json<GetAudioBiblesRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let mut query_builder = QueryBuilder::new("SELECT audio_bible_id, language, version FROM audio_bibles");
@@ -50,5 +58,5 @@ pub async fn get_audio_bibles(
         }})
         .collect::<Vec<AudioBible>>();
 
-    Ok(Json(GetAudioBibleRes { audio_bibles }))
+    Ok(Json(GetAudioBiblesRes { audio_bibles }))
 }

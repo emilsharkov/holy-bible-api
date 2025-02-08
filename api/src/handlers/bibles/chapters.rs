@@ -3,13 +3,21 @@ use axum::Json;
 use sqlx::PgPool;
 use crate::app::state::AppState;
 use crate::models::http::params::bibles::chapters::ChaptersPathParams;
+use crate::models::http::response::bibles::chapters::GetBibleChaptersRes;
 use crate::models::sql::bible;
-use crate::models::http::response;
 
-pub async fn get_chapters(
+#[utoipa::path(
+    get,
+    path = "/bibles/{bible_id}/books/{book_num}/chapters",
+    params(ChaptersPathParams),
+    responses(
+        (status = 200, body = GetBibleChaptersRes)
+    )
+)]
+pub async fn get_bible_chapters(
     State(app_state): State<AppState>,
     Path(params): Path<ChaptersPathParams>,
-) -> Result<Json<response::bibles::chapters::GetChaptersRes>, axum::response::Response> {
+) -> Result<Json<GetBibleChaptersRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let rows: Vec<bible::Count> = sqlx::query_as(
@@ -34,7 +42,7 @@ pub async fn get_chapters(
     })?;
 
     Ok(Json(
-        response::bibles::chapters::GetChaptersRes {
+        GetBibleChaptersRes {
             num_chapters: first_row.count,
         }
     ))

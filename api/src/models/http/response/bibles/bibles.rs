@@ -11,6 +11,6 @@ pub struct Bible {
 
 #[derive(ToSchema)]
 #[derive(Serialize)]
-pub struct GetBibleRes {
+pub struct GetBiblesRes {
     pub bibles: Vec<Bible>,
 }

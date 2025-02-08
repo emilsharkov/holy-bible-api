@@ -2,14 +2,22 @@ use axum::extract::{Path, State};
 use axum::Json;
 use sqlx::PgPool;
 use crate::app::state::AppState;
+use crate::models::http::response::bibles::books::GetBibleBooksRes;
 use crate::models::sql::bible;
-use crate::models::http::response;
 use crate::models::http::params::bibles::books::BookPathParams;
 
-pub async fn get_books(
+#[utoipa::path(
+    get,
+    path = "/bibles/{bible_id}/books",
+    params(BookPathParams),
+    responses(
+        (status = 200, body = GetBibleBooksRes)
+    )
+)]
+pub async fn get_bible_books(
     State(app_state): State<AppState>,
     Path(params): Path<BookPathParams>,
-) -> Result<Json<response::bibles::books::GetBooksRes>, axum::response::Response> {
+) -> Result<Json<GetBibleBooksRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let rows: Vec<bible::Count> = sqlx::query_as(
@@ -33,7 +41,7 @@ pub async fn get_books(
     })?;
 
     Ok(Json(
-        response::bibles::books::GetBooksRes {
+        GetBibleBooksRes {
             num_books: first_row.count,
         }
     ))

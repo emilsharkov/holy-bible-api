@@ -3,7 +3,7 @@ use axum::Json;
 use sqlx::{QueryBuilder, PgPool};
 use crate::app::state::AppState;
 use crate::models::http::params::bibles::bible::BibleQueryParams;
-use crate::models::http::response::bibles::bibles::{Bible, GetBibleRes};
+use crate::models::http::response::bibles::bibles::{Bible, GetBiblesRes};
 use crate::models::sql;
 
 #[utoipa::path(
@@ -11,13 +11,13 @@ use crate::models::sql;
     path = "/bibles",
     params(BibleQueryParams),
     responses(
-        (status = 200, description = "Health check successful", body = GetBibleRes)
+        (status = 200, body = GetBiblesRes)
     )
 )]
 pub async fn get_bibles(
     State(app_state): State<AppState>,
     Query(params): Query<BibleQueryParams>
-) -> Result<Json<GetBibleRes>, axum::response::Response> {
+) -> Result<Json<GetBiblesRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let mut query_builder = QueryBuilder::new("SELECT bible_id, language, version FROM bibles");
@@ -58,5 +58,5 @@ pub async fn get_bibles(
         }})
         .collect::<Vec<Bible>>();
 
-    Ok(Json(GetBibleRes { bibles }))
+    Ok(Json(GetBiblesRes { bibles }))
 }

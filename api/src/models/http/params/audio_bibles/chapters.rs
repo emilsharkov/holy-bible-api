@@ -1,12 +1,13 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use utoipa::{IntoParams, ToSchema};
 
-#[derive(Debug, Deserialize)]
+#[derive(ToSchema, IntoParams, Deserialize, Serialize)]
 pub struct ChaptersPathParams {
     pub audio_bible_id: i32,
     pub book_num: i32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(ToSchema, IntoParams, Deserialize, Serialize)]
 pub struct AudioChapterPathParams {
     pub audio_bible_id: i32,
     pub book_num: i32,

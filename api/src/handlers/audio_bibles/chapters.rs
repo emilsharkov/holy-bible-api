@@ -1,12 +1,20 @@
 use axum::{body::Body, extract::{Path, State}, response::Response, Json};
 use tokio_util::io::ReaderStream;
 
-use crate::{app::state::AppState, db::s3::S3Client, models::{http::{params::audio_bibles::chapters::{AudioChapterPathParams, ChaptersPathParams}, response::audio_bibles::{books::GetBooksRes, chapters::GetChaptersRes}}, sql::audio_bibles}};
+use crate::{app::state::AppState, db::s3::S3Client, models::{http::{params::audio_bibles::chapters::{AudioChapterPathParams, ChaptersPathParams}, response::audio_bibles::chapters::GetAudioChaptersRes}, sql::audio_bibles}};
 
-pub async fn get_chapters(
+#[utoipa::path(
+    get,
+    path = "/audio_bibles/{audio_bible_id}/books/{book_num}/chapters",
+    params(ChaptersPathParams),
+    responses(
+        (status = 200, body = GetAudioChaptersRes)
+    )
+)]
+pub async fn get_audio_bible_chapters(
     State(app_state): State<AppState>,
     Path(params): Path<ChaptersPathParams>,
-) -> Result<Json<GetChaptersRes>, Response> {
+) -> Result<Json<GetAudioChaptersRes>, Response> {
     let db_client = &*app_state.db_client;
     let rows: Vec<audio_bibles::Count> = sqlx::query_as(
     "SELECT COUNT(distinct chapter) 
@@ -36,9 +44,18 @@ pub async fn get_chapters(
         })?
         .count;
 
-    Ok(Json(GetChaptersRes { num_chapters }))
+    Ok(Json(GetAudioChaptersRes { num_chapters }))
 }
 
+#[utoipa::path(
+    get,
+    path = "/audio_bibles/{audio_bible_id}/books/{book_num}/chapters/{chapter_num}",
+    params(AudioChapterPathParams),
+    responses(
+        (status = 200, description = "Returns the audio chapter file", content_type = "audio/mpeg"),
+        (status = 404, description = "Audio Chapter not found", body = String)
+    )
+)]
 pub async fn get_audio_chapter(
     State(app_state): State<AppState>,
     Path(params): Path<AudioChapterPathParams>
@@ -52,10 +69,10 @@ pub async fn get_audio_chapter(
         .bind(params.audio_bible_id)
         .fetch_all(db_client)
         .await
-        .map_err(|err| {
+        .map_err(|_err| {
             Response::builder()
-                .status(500)
-                .body(format!("Database query failed: {}", err).into())
+                .status(404)
+                .body("audio_bible_id not found".into())
                 .expect("axum response builder failed")
         })?;
 
@@ -85,7 +102,7 @@ pub async fn get_audio_chapter(
         .await
         .map_err(|_err| {
             Response::builder()
-                .status(500)
+                .status(404)
                 .body("Resource does not exist".into())
                 .unwrap()
         })?;

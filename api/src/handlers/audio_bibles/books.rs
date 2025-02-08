@@ -1,11 +1,19 @@
 use axum::{extract::{Path, State}, response::Response, Json};
 
-use crate::{app::state::AppState, models::{http::{params::audio_bibles::books::BookPathParams, response::audio_bibles::books::GetBooksRes}, sql::audio_bibles}};
+use crate::{app::state::AppState, models::{http::{params::audio_bibles::books::BookPathParams, response::audio_bibles::books::GetAudioBooksRes}, sql::audio_bibles}};
 
-pub async fn get_books(
+#[utoipa::path(
+    get,
+    path = "/audio_bibles/{audio_bible_id}/books",
+    params(BookPathParams),
+    responses(
+        (status = 200, body = GetAudioBooksRes)
+    )
+)]
+pub async fn get_audio_bible_books(
     State(app_state): State<AppState>,
     Path(params): Path<BookPathParams>
-) -> Result<Json<GetBooksRes>, axum::response::Response> {
+) -> Result<Json<GetAudioBooksRes>, axum::response::Response> {
     let db_client = &*app_state.db_client;
     let rows: Vec<audio_bibles::Count> = sqlx::query_as(
     "SELECT COUNT(distinct book) 
@@ -33,5 +41,5 @@ pub async fn get_books(
         })?
         .count;
 
-    Ok(Json(GetBooksRes { num_books }))
+    Ok(Json(GetAudioBooksRes { num_books }))
 }

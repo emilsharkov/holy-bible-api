@@ -1,18 +1,25 @@
 use std::i32;
-
 use axum::extract::{Path, Query, State};
 use axum::Json;
 use sqlx::PgPool;
 use crate::app::state::AppState;
 use crate::models::http::params::bibles::verses::{VerseByNumberPathParams, VersesPathParams, VersesQueryParams};
+use crate::models::http::response::bibles::verses::{BibleVerse,GetBibleVersesRes};
 use crate::models::sql::bible;
-use crate::models::http::response;
 
-pub async fn get_verses(
+#[utoipa::path(
+    get,
+    path = "/bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses",
+    params(VersesQueryParams,VersesPathParams),
+    responses(
+        (status = 200, body = GetBibleVersesRes)
+    )
+)]
+pub async fn get_bible_verses(
     State(app_state): State<AppState>,
     Query(query): Query<VersesQueryParams>,
     Path(path): Path<VersesPathParams>,
-) -> Result<Json<response::bibles::verses::GetVersesRes>, axum::response::Response> {
+) -> Result<Json<GetBibleVersesRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let start = query.start.unwrap_or(1);
@@ -53,8 +60,8 @@ pub async fn get_verses(
 
     let result = rows
         .into_iter()
-        .map(|bible| -> response::bibles::verses::Verse {
-            response::bibles::verses::Verse {
+        .map(|bible| -> BibleVerse {
+            BibleVerse {
                 bible_id: bible.bible_id,
                 book: bible.book,
                 chapter: bible.chapter,
@@ -62,19 +69,27 @@ pub async fn get_verses(
                 text: bible.text,
             }
         })
-        .collect::<Vec<response::bibles::verses::Verse>>();
+        .collect::<Vec<BibleVerse>>();
 
     Ok(Json(
-        response::bibles::verses::GetVersesRes {
+        GetBibleVersesRes {
             verses: result,
         }
     ))
 }
 
-pub async fn get_verse_by_number(
+#[utoipa::path(
+    get,
+    path = "/bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses/{verse_num}",
+    params(VerseByNumberPathParams),
+    responses(
+        (status = 200, body = BibleVerse)
+    )
+)]
+pub async fn get_bible_verse_by_number(
     State(app_state): State<AppState>,
     Path(path): Path<VerseByNumberPathParams>,
-) -> Result<Json<response::bibles::verses::Verse>, axum::response::Response> {
+) -> Result<Json<BibleVerse>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let rows: Vec<bible::Verse> = sqlx::query_as(
@@ -105,7 +120,7 @@ pub async fn get_verse_by_number(
             .expect("axum response builder failed")
     })?;
 
-    Ok(Json(response::bibles::verses::Verse {
+    Ok(Json(BibleVerse {
         bible_id: first_row.bible_id,
         book: first_row.book,
         chapter: first_row.chapter,

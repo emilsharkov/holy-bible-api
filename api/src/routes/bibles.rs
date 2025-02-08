@@ -13,18 +13,18 @@ pub fn get_bible_routes() -> Router<AppState> {
         )
         .route(
             "/bibles/:bible_id/books", 
-            get(books::get_books)
+            get(books::get_bible_books)
         )
         .route(
             "/bibles/:bible_id/books/:book_num/chapters",
-            get(chapters::get_chapters)
+            get(chapters::get_bible_chapters)
         )
         .route(
             "/bibles/:bible_id/books/:book_num/chapters/:chapter_num/verses",
-            get(verses::get_verses),
+            get(verses::get_bible_verses),
         )
         .route(
             "/bibles/:bible_id/books/:book_num/chapters/:chapter_num/verses/:verse_num",
-            get(verses::get_verse_by_number),
+            get(verses::get_bible_verse_by_number),
         )
 }
