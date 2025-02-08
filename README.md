@@ -1,6 +1,6 @@
 # bible-api
 ## About
-This is an Open-Source API for serving the Holy Bible written in Rust. The API serves text Bibles in 100+ languages with 800+ versions. It also serves audio Bibles in 50+ languages. This API is also OpenAPI compliant, meaning that there are also  [auto-generated](https://openapi-generator.tech/docs/generators) SDKs in Java, Python, TypeScript, JavaScript, Go, Ruby, PHP, Kotlin, C#/.NET
+This is an Open-Source API for serving the Holy Bible written in Rust. The API serves text Bibles in 100+ languages with 800+ versions. It also serves audio Bibles in 50+ languages. This API is also OpenAPI compliant, meaning that the goal is to create [auto-generated](https://openapi-generator.tech/docs/generators) SDKs in Java, Python, TypeScript, JavaScript, Go, Ruby, PHP, Kotlin, C#/.NET
 
 ## Data Sources 
 ### Disclaimer
@@ -15,7 +15,7 @@ Please double check this data with the real thing before using it. This data has
 - [x] Set up project structure
 - [x] Get Data into Data Sources
 - [x] Implement API
-- [ ] Test API
+- [x] Test API
 - [ ] Infrastructure
 - [ ] Generate SDKs
 - [ ] CICD
