@@ -1,0 +1,24 @@
+name: Deploy API
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'api/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image for API
+        run: docker build -t cargo-lambda-deploy .
+
+      - name: Run Deployment Container
+        run: docker run --rm cargo-lambda-deploy
