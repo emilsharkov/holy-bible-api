@@ -1,7 +1,7 @@
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::{any::type_name_of_val, time::{SystemTime, UNIX_EPOCH}};
 use axum::{extract::{Request, State}, middleware::Next, response::Response};
 use hyper::StatusCode;
-use lambda_http::{request::RequestContext, RequestExt};
+use lambda_http::{request::RequestContext, tracing::log::error, RequestExt};
 use redis::Commands;
 use crate::app::state::AppState;
 
@@ -16,7 +16,10 @@ pub async fn rate_limiter(
     match is_rate_limited((*redis_client).clone(),ip,request_limit_per_hour).await {
         Ok(false) => return Ok(next.run(request).await),
         Ok(true) => return Err(StatusCode::TOO_MANY_REQUESTS),
-        _ => return Err(StatusCode::INTERNAL_SERVER_ERROR),
+        Err(e) => {
+            error!("Error type: {}", type_name_of_val(&e));
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
+        }
     }
 }
 

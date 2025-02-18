@@ -9,14 +9,5 @@ format:
 clean:
 	cargo clean
 
-build:
-	cargo lambda build --arm64 --release
-
 dev:
 	cargo lambda watch -w src -x run
-
-prod: build
-	./target/debug/api
-
-test:
-	cargo test
