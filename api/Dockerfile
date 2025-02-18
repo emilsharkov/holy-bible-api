@@ -49,5 +49,5 @@ RUN ln -s /usr/include/x86_64-linux-gnu/openssl/configuration.h /usr/include/ope
 WORKDIR /app
 COPY . .
 
-RUN make build
-RUN make deploy
+RUN cargo lambda build --arm64 --release
+RUN cargo lambda deploy --iam-role $DEPLOY_IAM_ROLE_ARN api
