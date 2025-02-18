@@ -5,8 +5,6 @@ RUN set -eux; \
     rustup toolchain install stable; \
     rustup target install x86_64-unknown-linux-gnu aarch64-unknown-linux-gnu;
 
-CMD [ "cargo", "lambda" ]
-
 ARG ZIG_VERSION=0.13.0
 RUN set -eux; \
     dpkgArch="$(dpkg --print-architecture)"; \
@@ -50,4 +48,4 @@ WORKDIR /app
 COPY . .
 
 RUN cargo lambda build --arm64 --release
-RUN cargo lambda deploy --iam-role $DEPLOY_IAM_ROLE_ARN api
+CMD cargo lambda deploy --iam-role $DEPLOY_IAM_ROLE_ARN api
