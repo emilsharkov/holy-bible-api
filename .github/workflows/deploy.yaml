@@ -18,7 +18,25 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Docker Image for API
-        run: docker build -t cargo-lambda-deploy .
+        run: |
+          docker build \
+            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
+            --build-arg DB_PORT=${{ secrets.DB_PORT }} \
+            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
+            --build-arg DB_USER=${{ secrets.DB_USER }} \
+            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --build-arg DB_SSL_MODE=${{ secrets.DB_SSL_MODE }} \
+            --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+            --build-arg AWS_REGION=${{ secrets.AWS_REGION }} \
+            --build-arg AUDIO_BIBLES_BUCKET=${{ secrets.AUDIO_BIBLES_BUCKET }} \
+            --build-arg DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
+            --build-arg REDIS_HOST=${{ secrets.REDIS_HOST }} \
+            --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} \
+            --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+            --build-arg TIMEOUT_SECONDS=${{ secrets.TIMEOUT_SECONDS }} \
+            --build-arg REQUEST_LIMIT_PER_HOUR=${{ secrets.REQUEST_LIMIT_PER_HOUR }} \
+            -t cargo-lambda-deploy .
 
       - name: Run Deployment Container
         run: docker run --rm cargo-lambda-deploy
