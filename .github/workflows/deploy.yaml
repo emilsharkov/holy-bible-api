@@ -28,6 +28,7 @@ jobs:
           file: ./api/Dockerfile
           tags: cargo-lambda-deploy:latest
           push: false
+          load: true                     # This loads the image into the Docker daemon
           build-args: |
             AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
