@@ -17,26 +17,40 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Build Docker Image for API
-        run: |
-          docker build \
-            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
-            --build-arg DB_PORT=${{ secrets.DB_PORT }} \
-            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
-            --build-arg DB_USER=${{ secrets.DB_USER }} \
-            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --build-arg DB_SSL_MODE=${{ secrets.DB_SSL_MODE }} \
-            --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            --build-arg AWS_REGION=${{ secrets.AWS_REGION }} \
-            --build-arg AUDIO_BIBLES_BUCKET=${{ secrets.AUDIO_BIBLES_BUCKET }} \
-            --build-arg DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
-            --build-arg REDIS_HOST=${{ secrets.REDIS_HOST }} \
-            --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} \
-            --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
-            --build-arg TIMEOUT_SECONDS=${{ secrets.TIMEOUT_SECONDS }} \
-            --build-arg REQUEST_LIMIT_PER_HOUR=${{ secrets.REQUEST_LIMIT_PER_HOUR }} \
-            -t cargo-lambda-deploy .
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile
+          tags: cargo-lambda-deploy:latest
+          push: false
+          build-args: |
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run Deployment Container
-        run: docker run --rm cargo-lambda-deploy
+        run: |
+          docker run --rm \
+            -e DB_HOST=${{ secrets.DB_HOST }} \
+            -e DB_PORT=${{ secrets.DB_PORT }} \
+            -e DB_NAME=${{ secrets.DB_NAME }} \
+            -e DB_USER=${{ secrets.DB_USER }} \
+            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e DB_SSL_MODE=${{ secrets.DB_SSL_MODE }} \
+            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+            -e AWS_REGION=${{ secrets.AWS_REGION }} \
+            -e AUDIO_BIBLES_BUCKET=${{ secrets.AUDIO_BIBLES_BUCKET }} \
+            -e DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
+            -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
+            -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
+            -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+            -e TIMEOUT_SECONDS=${{ secrets.TIMEOUT_SECONDS }} \
+            -e REQUEST_LIMIT_PER_HOUR=${{ secrets.REQUEST_LIMIT_PER_HOUR }} \
+            cargo-lambda-deploy:latest
