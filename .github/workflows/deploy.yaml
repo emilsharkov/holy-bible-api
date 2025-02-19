@@ -21,38 +21,42 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker Image for API
-        uses: docker/build-push-action@v4
-        with:
-          context: ./api
-          file: ./api/Dockerfile
-          tags: cargo-lambda-deploy:latest
-          push: false
-          load: true                     # This loads the image into the Docker daemon
-          build-args: |
-            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build Docker Image for API
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: ./api
+      #     file: ./api/Dockerfile
+      #     tags: cargo-lambda-deploy:latest
+      #     push: false
+      #     load: true                     # This loads the image into the Docker daemon
+      #     build-args: |
+      #       AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+      #       AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #       DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
 
-      - name: Run Deployment Container
+      - name: test
         run: |
-          docker run --rm \
-            -e DB_HOST=${{ secrets.DB_HOST }} \
-            -e DB_PORT=${{ secrets.DB_PORT }} \
-            -e DB_NAME=${{ secrets.DB_NAME }} \
-            -e DB_USER=${{ secrets.DB_USER }} \
-            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -e DB_SSL_MODE=${{ secrets.DB_SSL_MODE }} \
-            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_REGION=${{ secrets.AWS_REGION }} \
-            -e AUDIO_BIBLES_BUCKET=${{ secrets.AUDIO_BIBLES_BUCKET }} \
-            -e DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
-            -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
-            -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
-            -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
-            -e TIMEOUT_SECONDS=${{ secrets.TIMEOUT_SECONDS }} \
-            -e REQUEST_LIMIT_PER_HOUR=${{ secrets.REQUEST_LIMIT_PER_HOUR }} \
-            cargo-lambda-deploy:latest
+          echo ${{ secrets.DB_PORT }}
+
+      # - name: Run Deployment Container
+      #   run: |
+      #     docker run --rm \
+      #       -e DB_HOST=${{ secrets.DB_HOST }} \
+      #       -e DB_PORT=${{ secrets.DB_PORT }} \
+      #       -e DB_NAME=${{ secrets.DB_NAME }} \
+      #       -e DB_USER=${{ secrets.DB_USER }} \
+      #       -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+      #       -e DB_SSL_MODE=${{ secrets.DB_SSL_MODE }} \
+      #       -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+      #       -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+      #       -e AWS_REGION=${{ secrets.AWS_REGION }} \
+      #       -e AUDIO_BIBLES_BUCKET=${{ secrets.AUDIO_BIBLES_BUCKET }} \
+      #       -e DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
+      #       -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
+      #       -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
+      #       -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+      #       -e TIMEOUT_SECONDS=${{ secrets.TIMEOUT_SECONDS }} \
+      #       -e REQUEST_LIMIT_PER_HOUR=${{ secrets.REQUEST_LIMIT_PER_HOUR }} \
+      #       cargo-lambda-deploy:latest
