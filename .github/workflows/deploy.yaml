@@ -24,8 +24,8 @@ jobs:
       - name: Build Docker Image for API
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: Dockerfile
+          context: ./api
+          file: ./api/Dockerfile
           tags: cargo-lambda-deploy:latest
           push: false
           build-args: |
