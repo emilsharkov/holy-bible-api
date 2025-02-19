@@ -33,9 +33,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            RUST_VERSION={{ vars.RUST_VERSION }}
-            CARGO_LAMBDA_VERSION={{ vars.CARGO_LAMBDA_VERSION }}
-            ZIG_VERSION={{ vars.ZIG_VERSION }}
+            RUST_VERSION=${{ vars.RUST_VERSION }}
+            CARGO_LAMBDA_VERSION=${{ vars.CARGO_LAMBDA_VERSION }}
+            ZIG_VERSION=${{ vars.ZIG_VERSION }}
 
       - name: Run Deployment Container
         run: |
