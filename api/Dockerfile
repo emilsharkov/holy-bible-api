@@ -1,11 +1,11 @@
-ARG RUST_VERSION=1.83.0
+ARG RUST_VERSION
 FROM rust:${RUST_VERSION}
 
 RUN set -eux; \
     rustup toolchain install stable; \
     rustup target install x86_64-unknown-linux-gnu aarch64-unknown-linux-gnu;
 
-ARG ZIG_VERSION=0.13.0
+ARG ZIG_VERSION
 RUN set -eux; \
     dpkgArch="$(dpkg --print-architecture)"; \
     case "${dpkgArch##*-}" in \
@@ -23,7 +23,7 @@ RUN set -eux; \
 
 ENV PATH=$PATH:/zig
 
-ARG CARGO_LAMBDA_VERSION=v1.6.3
+ARG CARGO_LAMBDA_VERSION
 RUN set -eux; \
     mkdir cargo-lambda; \
     cd cargo-lambda; \
@@ -48,4 +48,4 @@ WORKDIR /app
 COPY . .
 
 RUN cargo lambda build --arm64 --release
-CMD cargo lambda deploy --iam-role $DEPLOY_IAM_ROLE_ARN api
+CMD cargo lambda deploy --iam-role $DEPLOY_IAM_ROLE_ARN --region us-east-1 api

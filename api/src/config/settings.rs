@@ -16,7 +16,7 @@ pub struct AwsSettings {
     pub access_key_id: String,
     pub secret_access_key: String,
     pub audio_bibles_bucket: String,
-    pub region: String,
+    pub audio_bibles_bucket_aws_region: String,
 }
 
 #[derive(Debug, Clone)]
@@ -72,8 +72,8 @@ impl Settings {
         let aws_settings = AwsSettings {
             access_key_id: std::env::var("AWS_ACCESS_KEY_ID")?,
             secret_access_key: std::env::var("AWS_SECRET_ACCESS_KEY")?,
-            region: std::env::var("AWS_REGION")?,
             audio_bibles_bucket: std::env::var("AUDIO_BIBLES_BUCKET")?,
+            audio_bibles_bucket_aws_region: std::env::var("AUDIO_BIBLES_BUCKET_AWS_REGION")?,
         };
         Ok(aws_settings)
     }
