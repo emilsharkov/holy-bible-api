@@ -32,6 +32,10 @@ jobs:
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            RUST_VERSION={{ vars.RUST_VERSION }}
+            CARGO_LAMBDA_VERSION={{ vars.CARGO_LAMBDA_VERSION }}
+            ZIG_VERSION={{ vars.ZIG_VERSION }}
 
       - name: Run Deployment Container
         run: |
@@ -44,7 +48,7 @@ jobs:
             -e DB_SSL_MODE=${{ secrets.DB_SSL_MODE }} \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_REGION=${{ secrets.AWS_REGION }} \
+            -e AUDIO_BIBLES_BUCKET_AWS_REGION=${{ secrets.AUDIO_BIBLES_BUCKET_AWS_REGION }} \
             -e AUDIO_BIBLES_BUCKET=${{ secrets.AUDIO_BIBLES_BUCKET }} \
             -e DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
             -e REDIS_HOST=${{ secrets.REDIS_HOST }} \

@@ -9,7 +9,7 @@ pub struct S3Client {
 }
 
 pub async fn get_client(settings: &AwsSettings) -> Result<S3Client, Box<dyn Error>> {
-    let region = Region::new(settings.region.clone());
+    let region = Region::new(settings.audio_bibles_bucket_aws_region.clone());
     let credentials = Credentials::from_keys(
         &settings.access_key_id, 
         &settings.secret_access_key, 
