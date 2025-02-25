@@ -12,8 +12,8 @@ pub struct AppState {
 impl AppState {
     pub async fn get_app_state(settings: &Settings) -> Result<Self, Box<dyn Error>> {
         let db_client = db::postgres::get_client(&settings.database_settings).await?;
-        let redis_client = db::redis::get_client(&settings.redis_settings).await?;
         let s3_client = db::s3::get_client(&settings.aws_settings).await?;
+        let redis_client = db::redis::get_client(&settings.redis_settings).await?;
         let app_state = AppState {
             db_client: Arc::new(db_client),
             s3_client: Arc::new(s3_client),
