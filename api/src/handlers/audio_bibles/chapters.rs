@@ -1,3 +1,4 @@
+use aws_sdk_s3::error;
 use axum::{body::Body, extract::{Path, State}, response::Response, Json};
 use tokio_util::io::ReaderStream;
 
@@ -94,13 +95,17 @@ pub async fn get_audio_chapter(
         params.chapter_num
     );
 
+    let message = format!("{}",file_key);
+    info!(message);
+
     let object_output = client
         .get_object()
         .bucket(audio_bibles_bucket)
         .key(file_key)
         .send()
         .await
-        .map_err(|_err| {
+        .map_err(|err| {
+            error!("Failed to get object from S3: {}", err);
             Response::builder()
                 .status(404)
                 .body("Resource does not exist".into())
