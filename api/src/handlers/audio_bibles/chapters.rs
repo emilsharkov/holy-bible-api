@@ -4,10 +4,8 @@ use axum::{
     response::Response,
     Json,
 };
-use aws_sdk_s3::error::SdkError;
-use aws_sdk_s3::operation::get_object::GetObjectError;
+use aws_sdk_s3::error::{SdkError, ProvideErrorMetadata};
 use tokio_util::io::ReaderStream;
-use sqlx::Row;
 use tracing;
 
 use crate::{
