@@ -5,7 +5,7 @@ use tracing::info;
 
 pub async fn get_client(settings: &RedisSettings) -> Result<Client, Box<dyn Error>> {
     let redis_url = format!(
-        "redis://{}:{}",
+        "rediss://{}:{}",
         settings.host, settings.port
     );
     let client = Client::open(redis_url)?;
