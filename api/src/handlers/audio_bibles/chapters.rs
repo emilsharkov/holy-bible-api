@@ -105,7 +105,7 @@ pub async fn get_audio_chapter(
         .send()
         .await
         .map_err(|err| {
-            error!("Failed to get object from S3: {}", err);
+            tracing::error!("Failed to get object from S3: {}", err);
             Response::builder()
                 .status(404)
                 .body("Resource does not exist".into())
