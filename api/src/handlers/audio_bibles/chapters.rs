@@ -1,4 +1,3 @@
-use aws_sdk_s3::error;
 use axum::{body::Body, extract::{Path, State}, response::Response, Json};
 use tokio_util::io::ReaderStream;
 
@@ -95,8 +94,7 @@ pub async fn get_audio_chapter(
         params.chapter_num
     );
 
-    let message = format!("{}",file_key);
-    info!(message);
+    tracing::info!("File key: {}",message);
 
     let object_output = client
         .get_object()
