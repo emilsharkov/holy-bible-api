@@ -1,7 +1,27 @@
-use axum::{body::Body, extract::{Path, State}, response::Response, Json};
+use axum::{
+    body::Body,
+    extract::{Path, State},
+    response::Response,
+    Json,
+};
+use aws_sdk_s3::error::SdkError;
+use aws_sdk_s3::operation::get_object::GetObjectError;
 use tokio_util::io::ReaderStream;
+use sqlx::Row;
+use tracing;
 
-use crate::{app::state::AppState, db::s3::S3Client, models::{http::{params::audio_bibles::chapters::{AudioChapterPathParams, ChaptersPathParams}, response::audio_bibles::chapters::GetAudioChaptersRes}, sql::audio_bibles}};
+use crate::{
+    app::state::AppState,
+    db::s3::S3Client,
+    models::{
+        http::{
+            params::audio_bibles::chapters::{AudioChapterPathParams, ChaptersPathParams},
+            response::audio_bibles::chapters::GetAudioChaptersRes,
+        },
+        sql::audio_bibles,
+    },
+};
+
 
 #[utoipa::path(
     get,
@@ -103,7 +123,27 @@ pub async fn get_audio_chapter(
         .send()
         .await
         .map_err(|err| {
-            tracing::error!("Failed to get object from S3: {}", err);
+            match &err {
+                SdkError::ServiceError(service_err) => {
+                    tracing::error!(
+                        "S3 Service Error: {:?}, Message: {:?}",
+                        service_err.err().code(),
+                        service_err.err().message()
+                    );
+                }
+                SdkError::TimeoutError(_) => {
+                    tracing::error!("S3 request timed out.");
+                }
+                SdkError::DispatchFailure(dispatch_err) => {
+                    tracing::error!("Failed to send request: {:?}", dispatch_err);
+                }
+                SdkError::ResponseError(response_err) => {
+                    tracing::error!("Invalid response from S3: {:?}", response_err);
+                }
+                _ => {
+                    tracing::error!("Unhandled S3 error: {:?}", err);
+                }
+            }
             Response::builder()
                 .status(404)
                 .body("Resource does not exist".into())
