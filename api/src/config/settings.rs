@@ -1,6 +1,4 @@
 use std::error::Error;
-use tracing::info;
-
 use crate::config;
 
 #[derive(Debug, Clone)]
@@ -58,7 +56,6 @@ impl Settings {
     }
 
     fn get_database_settings() -> Result<DatabaseSettings, Box<dyn Error>> {
-        info!("Getting database settings");
         let database_settings = DatabaseSettings {
             host: std::env::var("DB_HOST")?,
             port: std::env::var("DB_PORT")?.parse()?,
@@ -71,7 +68,6 @@ impl Settings {
     }
     
     fn get_aws_settings() -> Result<AwsSettings, Box<dyn Error>> {
-        info!("Getting AWS settings");
         let aws_settings = AwsSettings {
             access_key_id: std::env::var("S3_AWS_ACCESS_KEY_ID")?,
             secret_access_key: std::env::var("S3_AWS_SECRET_ACCESS_KEY")?,
@@ -82,7 +78,6 @@ impl Settings {
     }
 
     pub fn get_middleware_settings() -> Result<MiddlewareSettings, Box<dyn Error>> {
-        info!("Getting middleware settings");
         let middleware_settings = MiddlewareSettings {
             timeout_seconds: std::env::var("TIMEOUT_SECONDS")?.parse()?,
             request_limit_per_hour: std::env::var("REQUEST_LIMIT_PER_HOUR")?.parse()?,
@@ -91,7 +86,6 @@ impl Settings {
     }
 
     pub fn get_redis_settings() -> Result<RedisSettings, Box<dyn Error>> {
-        info!("Getting Redis settings");
         let redis_settings = RedisSettings {
             host: std::env::var("REDIS_HOST")?,
             port: std::env::var("REDIS_PORT")?.parse()?,
