@@ -73,8 +73,8 @@ impl Settings {
     fn get_aws_settings() -> Result<AwsSettings, Box<dyn Error>> {
         info!("Getting AWS settings");
         let aws_settings = AwsSettings {
-            access_key_id: std::env::var("AWS_ACCESS_KEY_ID")?,
-            secret_access_key: std::env::var("AWS_SECRET_ACCESS_KEY")?,
+            access_key_id: std::env::var("S3_AWS_ACCESS_KEY_ID")?,
+            secret_access_key: std::env::var("S3_AWS_SECRET_ACCESS_KEY")?,
             audio_bibles_bucket: std::env::var("AUDIO_BIBLES_BUCKET")?,
             audio_bibles_bucket_aws_region: std::env::var("AUDIO_BIBLES_BUCKET_AWS_REGION")?,
         };
