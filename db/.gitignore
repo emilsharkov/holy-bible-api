@@ -1,0 +1,2 @@
+**/*.pem
+/redis/README.md

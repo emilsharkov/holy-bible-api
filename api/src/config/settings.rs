@@ -29,6 +29,7 @@ pub struct MiddlewareSettings {
 pub struct RedisSettings {
     pub host: String,
     pub port: u16,
+    pub password: String,
 }
 
 #[derive(Debug, Clone)]
@@ -89,6 +90,7 @@ impl Settings {
         let redis_settings = RedisSettings {
             host: std::env::var("REDIS_HOST")?,
             port: std::env::var("REDIS_PORT")?.parse()?,
+            password: std::env::var("REDIS_PASSWORD")?,
         };
         Ok(redis_settings)
     }
