@@ -1,8 +1,8 @@
 use std::{any::type_name_of_val, time::{SystemTime, UNIX_EPOCH}};
 use axum::{extract::{Request, State}, middleware::Next, response::Response};
 use hyper::StatusCode;
-use lambda_http::{request::RequestContext, tracing::log::error, RequestExt};
 use redis::Commands;
+use tracing::error;
 use crate::app::state::AppState;
 
 pub async fn rate_limiter(
@@ -57,16 +57,7 @@ fn get_current_window() -> Result<u64, redis::RedisError> {
 }
 
 fn get_client_ip(request: &Request) -> String {
-    let ctx: lambda_http::request::RequestContext = request.request_context();
-    let ip = match &ctx {
-        RequestContext::ApiGatewayV2(api_ctx) => {
-            api_ctx
-                .http
-                .source_ip
-                .as_deref()
-                .unwrap_or("127.0.0.1")
-                .to_string()
-        },
+    let ip = match &request {
         _ => "127.0.0.1".to_string(),
     };
     return ip;

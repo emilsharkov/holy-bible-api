@@ -1,45 +1,45 @@
-name: Deploy API
+# name: Deploy API
 
-on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'api/**'
-      - '.github/workflows/**'
+# on:
+#   push:
+#     branches:
+#       - master
+#     paths:
+#       - 'api/**'
+#       - '.github/workflows/**'
 
-jobs:
-  deploy:
-    environment: cicd
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: api
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+# jobs:
+#   deploy:
+#     environment: cicd
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working-directory: api
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker Image for API
-        uses: docker/build-push-action@v4
-        with:
-          context: ./api
-          file: ./api/Dockerfile
-          tags: cargo-lambda-deploy:latest
-          push: false
-          load: true
-          no-cache: true
-          build-args: |
-            RUST_VERSION=${{ vars.RUST_VERSION }}
-            CARGO_LAMBDA_VERSION=${{ vars.CARGO_LAMBDA_VERSION }}
-            ZIG_VERSION=${{ vars.ZIG_VERSION }}
+#       - name: Build Docker Image for API
+#         uses: docker/build-push-action@v4
+#         with:
+#           context: ./api
+#           file: ./api/Dockerfile
+#           tags: cargo-lambda-deploy:latest
+#           push: false
+#           load: true
+#           no-cache: true
+#           build-args: |
+#             RUST_VERSION=${{ vars.RUST_VERSION }}
+#             CARGO_LAMBDA_VERSION=${{ vars.CARGO_LAMBDA_VERSION }}
+#             ZIG_VERSION=${{ vars.ZIG_VERSION }}
 
-      - name: Run Deployment Container
-        run: |
-          docker run --rm \
-            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
-            cargo-lambda-deploy:latest
+#       - name: Run Deployment Container
+#         run: |
+#           docker run --rm \
+#             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+#             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+#             -e DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
+#             cargo-lambda-deploy:latest
