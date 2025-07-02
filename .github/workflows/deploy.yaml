@@ -44,6 +44,11 @@ jobs:
           # Copy binary (correct path)
           #rsync -avz -e "ssh -i ~/.ssh/id_rsa" api/target/release/api root@holy-bible-api.com:/usr/local/bin/api
 
+      - name: Debug key (first 100 chars)
+        run: |
+          head -c 100 ~/.ssh/id_rsa
+
+
       - name: SSH into server and run commands
         run: |
           cat ~/.ssh/id_rsa
