@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/go-to-hetzner
 
 jobs:
   deploy:
@@ -20,7 +21,9 @@ jobs:
           override: true
 
       - name: Build release binary
-        run: cargo build --release
+        run: |
+          cd api
+          cargo build --release
 
       - name: Copy binary to VPS using rsync
         env:
