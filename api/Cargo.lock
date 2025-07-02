@@ -94,6 +94,7 @@ dependencies = [
  "axum-client-ip",
  "dotenvy",
  "governor",
+ "http 0.2.12",
  "hyper 1.6.0",
  "redis",
  "serde",

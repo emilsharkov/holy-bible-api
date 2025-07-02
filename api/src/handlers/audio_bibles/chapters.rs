@@ -112,8 +112,6 @@ pub async fn get_audio_chapter(
         params.chapter_num
     );
 
-    tracing::info!("File key: {}",file_key);
-
     let object_output = client
         .get_object()
         .bucket(audio_bibles_bucket)
