@@ -36,3 +36,4 @@ jobs:
           ssh -i ~/.ssh/id_rsa -T root@holy-bible-api.com || echo "SSH failed"
           rsync -avz -e "ssh -i ~/.ssh/id_rsa" ./api/target/release/api root@holy-bible-api.com:/usr/local/bin/api
           ssh -i ~/.ssh/id_rsa root@holy-bible-api.com "systemctl restart api"
+
