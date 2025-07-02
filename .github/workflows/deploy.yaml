@@ -1,45 +1,39 @@
-# name: Deploy API
+name: Deploy API to VPS
 
-# on:
-#   push:
-#     branches:
-#       - master
-#     paths:
-#       - 'api/**'
-#       - '.github/workflows/**'
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   deploy:
-#     environment: cicd
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: api
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v3
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-#       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Build Docker Image for API
-#         uses: docker/build-push-action@v4
-#         with:
-#           context: ./api
-#           file: ./api/Dockerfile
-#           tags: cargo-lambda-deploy:latest
-#           push: false
-#           load: true
-#           no-cache: true
-#           build-args: |
-#             RUST_VERSION=${{ vars.RUST_VERSION }}
-#             CARGO_LAMBDA_VERSION=${{ vars.CARGO_LAMBDA_VERSION }}
-#             ZIG_VERSION=${{ vars.ZIG_VERSION }}
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
 
-#       - name: Run Deployment Container
-#         run: |
-#           docker run --rm \
-#             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-#             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-#             -e DEPLOY_IAM_ROLE_ARN=${{ secrets.DEPLOY_IAM_ROLE_ARN }} \
-#             cargo-lambda-deploy:latest
+      - name: Build release binary
+        run: cargo build --release
+
+      - name: Copy binary to VPS using rsync
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          # Set up SSH
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H holy-bible-api.com >> ~/.ssh/known_hosts
+
+          # Rsync the binary to the server
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa" target/release/api root@holy-bible-api.com:/usr/local/bin/api
+
+          # (Optional) Restart your service
+          # ssh -i ~/.ssh/id_rsa root@holy-bible-api.com 'systemctl restart api.service'
