@@ -46,5 +46,6 @@ jobs:
 
       - name: SSH into server and run commands
         run: |
+          cat ~/.ssh/id_rsa
           ssh -i ~/.ssh/id_rsa root@holy-bible-api.com "echo Connected && hostname && uptime"
 
