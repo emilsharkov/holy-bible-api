@@ -23,11 +23,7 @@ jobs:
       - name: Build release binary
         run: |
           cd api
-          # cargo build --release
-          mkdir -p target/release
-          echo '#!/bin/bash' > target/release/api
-          echo 'echo "Fake API binary"' >> target/release/api
-          chmod +x target/release/api
+          cargo build --release
 
       - name: Copy binary to VPS using rsync
         env:
