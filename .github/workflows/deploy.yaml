@@ -38,4 +38,4 @@ jobs:
           ssh -i ~/.ssh/id_rsa -T root@holy-bible-api.com || echo "SSH failed"
 
           # Copy binary (correct path)
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa" api/target/release/api root@holy-bible-api.com:/usr/local/bin/api
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa" ~/holy-bible-api/api/target/release/api root@holy-bible-api.com:/usr/local/bin/api
