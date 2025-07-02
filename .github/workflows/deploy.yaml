@@ -24,6 +24,7 @@ jobs:
         run: |
           cd api
           # cargo build --release
+          touch target/release/api
           echo "Build complete" > target/release/api
 
       - name: Copy binary to VPS using rsync
