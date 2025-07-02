@@ -33,14 +33,14 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          # Set up SSH
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H holy-bible-api.com >> ~/.ssh/known_hosts
 
-          # Rsync the binary to the server
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa" target/release/api root@holy-bible-api.com:/usr/local/bin/api
+          # Test connection
+          ssh -i ~/.ssh/id_rsa -T root@holy-bible-api.com || echo "SSH failed"
 
-          # (Optional) Restart your service
-          # ssh -i ~/.ssh/id_rsa root@holy-bible-api.com 'systemctl restart api.service'
+          # Copy binary (correct path)
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa" api/target/release/api root@holy-bible-api.com:/usr/local/bin/api
+
