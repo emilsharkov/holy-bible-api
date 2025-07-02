@@ -1,5 +1,5 @@
-use std::{any::type_name_of_val, time::{SystemTime, UNIX_EPOCH}};
-use axum::{extract::{Request, State}, middleware::Next, response::Response};
+use std::{any::type_name_of_val, net::SocketAddr, time::{SystemTime, UNIX_EPOCH}};
+use axum::{extract::{ConnectInfo, Request, State}, middleware::Next, response::Response};
 use hyper::StatusCode;
 use redis::Commands;
 use tracing::error;
@@ -7,12 +7,13 @@ use crate::app::state::AppState;
 
 pub async fn rate_limiter(
     State(state): State<AppState>,
-    request: Request,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    request: Request,   
     next: Next,
     request_limit_per_hour: u16
 ) -> Result<Response,StatusCode> {
     let redis_client = state.redis_client;
-    let ip = get_client_ip(&request);
+    let ip = addr.ip().to_string();
     match is_rate_limited((*redis_client).clone(),ip,request_limit_per_hour).await {
         Ok(false) => return Ok(next.run(request).await),
         Ok(true) => return Err(StatusCode::TOO_MANY_REQUESTS),
@@ -54,11 +55,4 @@ fn get_current_window() -> Result<u64, redis::RedisError> {
                 format!("{:?}", e),
             ))
         })
-}
-
-fn get_client_ip(request: &Request) -> String {
-    let ip = match &request {
-        _ => "127.0.0.1".to_string(),
-    };
-    return ip;
 }
