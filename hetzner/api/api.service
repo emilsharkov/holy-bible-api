@@ -1,0 +1,14 @@
+[Unit]
+Description=API Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/api
+Restart=on-failure
+RestartSec=5
+User=www-data
+Environment=RUST_LOG=info
+WorkingDirectory=/your/project/path
+
+[Install]
+WantedBy=multi-user.target
