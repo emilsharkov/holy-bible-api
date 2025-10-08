@@ -1,20 +1,28 @@
-use std::{any::type_name_of_val, net::SocketAddr, time::{SystemTime, UNIX_EPOCH}};
-use axum::{extract::{ConnectInfo, Request, State}, middleware::Next, response::Response};
+use crate::app::state::AppState;
+use axum::{
+    extract::{ConnectInfo, Request, State},
+    middleware::Next,
+    response::Response,
+};
 use hyper::StatusCode;
 use redis::Commands;
+use std::{
+    any::type_name_of_val,
+    net::SocketAddr,
+    time::{SystemTime, UNIX_EPOCH},
+};
 use tracing::error;
-use crate::app::state::AppState;
 
 pub async fn rate_limiter(
     State(state): State<AppState>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
-    request: Request,   
+    request: Request,
     next: Next,
-    request_limit_per_hour: u16
-) -> Result<Response,StatusCode> {
+    request_limit_per_hour: u16,
+) -> Result<Response, StatusCode> {
     let redis_client = state.redis_client;
     let ip = addr.ip().to_string();
-    match is_rate_limited((*redis_client).clone(),ip,request_limit_per_hour).await {
+    match is_rate_limited((*redis_client).clone(), ip, request_limit_per_hour).await {
         Ok(false) => return Ok(next.run(request).await),
         Ok(true) => return Err(StatusCode::TOO_MANY_REQUESTS),
         Err(e) => {
@@ -42,7 +50,6 @@ pub async fn is_rate_limited(
     let _: () = conn.expire(&bucket_key, 3600)?;
     Ok(false)
 }
-
 
 fn get_current_window() -> Result<u64, redis::RedisError> {
     SystemTime::now()

@@ -1,10 +1,10 @@
+use aws_sdk_s3::error::{ProvideErrorMetadata, SdkError};
 use axum::{
     body::Body,
     extract::{Path, State},
     response::Response,
     Json,
 };
-use aws_sdk_s3::error::{SdkError, ProvideErrorMetadata};
 use tokio_util::io::ReaderStream;
 use tracing;
 
@@ -20,7 +20,6 @@ use crate::{
     },
 };
 
-
 #[utoipa::path(
     get,
     path = "/audio_bibles/{audio_bible_id}/books/{book_num}/chapters",
@@ -35,22 +34,22 @@ pub async fn get_audio_bible_chapters(
 ) -> Result<Json<GetAudioChaptersRes>, Response> {
     let db_client = &*app_state.db_client;
     let rows: Vec<audio_bibles::Count> = sqlx::query_as(
-    "SELECT COUNT(distinct chapter) 
+        "SELECT COUNT(distinct chapter) 
         FROM audio_bible_chapters 
         WHERE audio_bible_id = $1
-        AND book = $2"
+        AND book = $2",
     )
-        .bind(params.audio_bible_id)
-        .bind(params.book_num)
-        .fetch_all(db_client)
-        .await
-        .map_err(|err| {
-            Response::builder()
-                .status(500)
-                .body(format!("Database query failed: {}", err).into())
-                .expect("axum response builder failed")
-        })?;
-    
+    .bind(params.audio_bible_id)
+    .bind(params.book_num)
+    .fetch_all(db_client)
+    .await
+    .map_err(|err| {
+        Response::builder()
+            .status(500)
+            .body(format!("Database query failed: {}", err).into())
+            .expect("axum response builder failed")
+    })?;
+
     let num_chapters = rows
         .into_iter()
         .next()
@@ -76,23 +75,26 @@ pub async fn get_audio_bible_chapters(
 )]
 pub async fn get_audio_chapter(
     State(app_state): State<AppState>,
-    Path(params): Path<AudioChapterPathParams>
+    Path(params): Path<AudioChapterPathParams>,
 ) -> Result<Response<Body>, Response> {
     let db_client = &*app_state.db_client;
-    let S3Client { client, audio_bibles_bucket } = &*app_state.s3_client;
+    let S3Client {
+        client,
+        audio_bibles_bucket,
+    } = &*app_state.s3_client;
 
     let rows: Vec<audio_bibles::AudioBible> = sqlx::query_as(
-        "SELECT audio_bible_id, language, version FROM audio_bibles WHERE audio_bible_id = $1"
+        "SELECT audio_bible_id, language, version FROM audio_bibles WHERE audio_bible_id = $1",
     )
-        .bind(params.audio_bible_id)
-        .fetch_all(db_client)
-        .await
-        .map_err(|_err| {
-            Response::builder()
-                .status(404)
-                .body("audio_bible_id not found".into())
-                .expect("axum response builder failed")
-        })?;
+    .bind(params.audio_bible_id)
+    .fetch_all(db_client)
+    .await
+    .map_err(|_err| {
+        Response::builder()
+            .status(404)
+            .body("audio_bible_id not found".into())
+            .expect("axum response builder failed")
+    })?;
 
     let audio_bible_language = rows
         .into_iter()
@@ -106,10 +108,8 @@ pub async fn get_audio_chapter(
         .language;
 
     let file_key = format!(
-        "languages/{}/{}/{}.mp3", 
-        audio_bible_language, 
-        params.book_num, 
-        params.chapter_num
+        "languages/{}/{}/{}.mp3",
+        audio_bible_language, params.book_num, params.chapter_num
     );
 
     let object_output = client
@@ -147,7 +147,7 @@ pub async fn get_audio_chapter(
         })?;
 
     let async_buf_reader = object_output.body.into_async_read();
-    let stream =  ReaderStream::new(async_buf_reader);
+    let stream = ReaderStream::new(async_buf_reader);
     let body = Body::from_stream(stream);
 
     let response = Response::builder()

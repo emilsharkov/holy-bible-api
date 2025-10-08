@@ -1,11 +1,13 @@
-use std::i32;
+use crate::app::state::AppState;
+use crate::models::http::params::bibles::verses::{
+    VerseByNumberPathParams, VersesPathParams, VersesQueryParams,
+};
+use crate::models::http::response::bibles::verses::{BibleVerse, GetBibleVersesRes};
+use crate::models::sql::bible;
 use axum::extract::{Path, Query, State};
 use axum::Json;
 use sqlx::PgPool;
-use crate::app::state::AppState;
-use crate::models::http::params::bibles::verses::{VerseByNumberPathParams, VersesPathParams, VersesQueryParams};
-use crate::models::http::response::bibles::verses::{BibleVerse,GetBibleVersesRes};
-use crate::models::sql::bible;
+use std::i32;
 
 #[utoipa::path(
     get,
@@ -26,37 +28,35 @@ pub async fn get_bible_verses(
     let end = query.end.unwrap_or(i32::MAX);
 
     if start > end {
-        return Err(
-            axum::response::Response::builder()
-                .status(400)
-                .body("Invalid range".into())
-                .expect("axum response builder failed"),
-        );
+        return Err(axum::response::Response::builder()
+            .status(400)
+            .body("Invalid range".into())
+            .expect("axum response builder failed"));
     }
 
     let rows: Vec<bible::Verse> = sqlx::query_as(
-    "SELECT bible_id, book, chapter, verse, text 
+        "SELECT bible_id, book, chapter, verse, text 
         FROM verses 
         WHERE bible_id = $1 
         AND book = $2 
         AND chapter = $3
         AND verse >= $4
         AND verse <= $5
-        ORDER BY verse ASC"
+        ORDER BY verse ASC",
     )
-        .bind(path.bible_id)
-        .bind(path.book_num)
-        .bind(path.chapter_num)
-        .bind(start)
-        .bind(end)
-        .fetch_all(db_client)
-        .await
-        .map_err(|err| {
-            axum::response::Response::builder()
-                .status(500)
-                .body(format!("Database query failed: {}", err).into())
-                .expect("axum response builder failed")
-        })?;
+    .bind(path.bible_id)
+    .bind(path.book_num)
+    .bind(path.chapter_num)
+    .bind(start)
+    .bind(end)
+    .fetch_all(db_client)
+    .await
+    .map_err(|err| {
+        axum::response::Response::builder()
+            .status(500)
+            .body(format!("Database query failed: {}", err).into())
+            .expect("axum response builder failed")
+    })?;
 
     let result = rows
         .into_iter()
@@ -71,11 +71,7 @@ pub async fn get_bible_verses(
         })
         .collect::<Vec<BibleVerse>>();
 
-    Ok(Json(
-        GetBibleVersesRes {
-            verses: result,
-        }
-    ))
+    Ok(Json(GetBibleVersesRes { verses: result }))
 }
 
 #[utoipa::path(
@@ -98,20 +94,20 @@ pub async fn get_bible_verse_by_number(
             WHERE bible_id = $1 
             AND book = $2 
             AND chapter = $3 
-            AND verse = $4"
+            AND verse = $4",
     )
-        .bind(path.bible_id)
-        .bind(path.book_num)
-        .bind(path.chapter_num)
-        .bind(path.verse_num)
-        .fetch_all(db_client)
-        .await
-        .map_err(|err| {
-            axum::response::Response::builder()
-                .status(500)
-                .body(format!("Database query failed: {}", err).into())
-                .expect("axum response builder failed")
-        })?;
+    .bind(path.bible_id)
+    .bind(path.book_num)
+    .bind(path.chapter_num)
+    .bind(path.verse_num)
+    .fetch_all(db_client)
+    .await
+    .map_err(|err| {
+        axum::response::Response::builder()
+            .status(500)
+            .body(format!("Database query failed: {}", err).into())
+            .expect("axum response builder failed")
+    })?;
 
     let first_row = rows.into_iter().next().ok_or_else(|| {
         axum::response::Response::builder()

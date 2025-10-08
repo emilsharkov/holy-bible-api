@@ -1,5 +1,5 @@
-use redis::Client;
 use crate::config::settings::RedisSettings;
+use redis::Client;
 use std::error::Error;
 
 pub async fn get_client(settings: &RedisSettings) -> Result<Client, Box<dyn Error>> {

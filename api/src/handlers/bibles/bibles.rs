@@ -1,10 +1,10 @@
-use axum::extract::{Query, State};
-use axum::Json;
-use sqlx::{QueryBuilder, PgPool};
 use crate::app::state::AppState;
 use crate::models::http::params::bibles::bible::BibleQueryParams;
 use crate::models::http::response::bibles::bibles::{Bible, GetBiblesRes};
 use crate::models::sql;
+use axum::extract::{Query, State};
+use axum::Json;
+use sqlx::{PgPool, QueryBuilder};
 
 #[utoipa::path(
     get,
@@ -16,12 +16,12 @@ use crate::models::sql;
 )]
 pub async fn get_bibles(
     State(app_state): State<AppState>,
-    Query(params): Query<BibleQueryParams>
+    Query(params): Query<BibleQueryParams>,
 ) -> Result<Json<GetBiblesRes>, axum::response::Response> {
     let db_client: &PgPool = &app_state.db_client;
 
     let mut query_builder = QueryBuilder::new("SELECT bible_id, language, version FROM bibles");
-    
+
     let mut has_conditions = false;
     if params.language.is_some() || params.version.is_some() {
         query_builder.push(" WHERE ");
@@ -39,7 +39,8 @@ pub async fn get_bibles(
         query_builder.push("version = ").push_bind(version);
     }
 
-    let rows: Vec<sql::bible::Bible> = query_builder.build_query_as::<sql::bible::Bible>()
+    let rows: Vec<sql::bible::Bible> = query_builder
+        .build_query_as::<sql::bible::Bible>()
         .fetch_all(db_client)
         .await
         .map_err(|err| {
@@ -51,11 +52,13 @@ pub async fn get_bibles(
 
     let bibles = rows
         .into_iter()
-        .map(|bible| -> Bible { Bible {
-            bible_id: bible.bible_id,
-            language: bible.language,
-            version: bible.version
-        }})
+        .map(|bible| -> Bible {
+            Bible {
+                bible_id: bible.bible_id,
+                language: bible.language,
+                version: bible.version,
+            }
+        })
         .collect::<Vec<Bible>>();
 
     Ok(Json(GetBiblesRes { bibles }))

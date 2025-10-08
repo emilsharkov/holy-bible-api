@@ -1,5 +1,5 @@
-use std::error::Error;
 use crate::config;
+use std::error::Error;
 
 #[derive(Debug, Clone)]
 pub struct DatabaseSettings {
@@ -76,7 +76,7 @@ impl Settings {
         };
         Ok(database_settings)
     }
-    
+
     fn get_aws_settings() -> Result<AwsSettings, Box<dyn Error>> {
         let aws_settings = AwsSettings {
             access_key_id: std::env::var("S3_AWS_ACCESS_KEY_ID")?,

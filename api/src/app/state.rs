@@ -1,6 +1,9 @@
-use std::{error::Error, sync::Arc};
-use crate::{config,db::{self, s3::S3Client}};
+use crate::{
+    config,
+    db::{self, s3::S3Client},
+};
 use config::settings::Settings;
+use std::{error::Error, sync::Arc};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -22,4 +25,3 @@ impl AppState {
         Ok(app_state)
     }
 }
-

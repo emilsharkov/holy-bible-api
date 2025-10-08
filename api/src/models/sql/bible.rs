@@ -13,7 +13,7 @@ pub struct Verse {
     pub book: i32,
     pub chapter: i32,
     pub verse: i32,
-    pub text: String
+    pub text: String,
 }
 
 #[derive(Debug, FromRow)]
