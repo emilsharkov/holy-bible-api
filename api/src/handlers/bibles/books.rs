@@ -28,7 +28,7 @@ pub async fn get_bible_books(
             .map_err(|err| {
                 axum::response::Response::builder()
                     .status(500)
-                    .body(format!("Database query failed: {}", err).into())
+                    .body(format!("Database query failed: {err}").into())
                     .expect("axum response builder failed")
             })?;
 

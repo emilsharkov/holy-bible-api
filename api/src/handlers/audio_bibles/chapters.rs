@@ -46,7 +46,7 @@ pub async fn get_audio_bible_chapters(
     .map_err(|err| {
         Response::builder()
             .status(500)
-            .body(format!("Database query failed: {}", err).into())
+            .body(format!("Database query failed: {err}").into())
             .expect("axum response builder failed")
     })?;
 

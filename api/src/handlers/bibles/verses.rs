@@ -54,7 +54,7 @@ pub async fn get_bible_verses(
     .map_err(|err| {
         axum::response::Response::builder()
             .status(500)
-            .body(format!("Database query failed: {}", err).into())
+            .body(format!("Database query failed: {err}").into())
             .expect("axum response builder failed")
     })?;
 
@@ -105,7 +105,7 @@ pub async fn get_bible_verse_by_number(
     .map_err(|err| {
         axum::response::Response::builder()
             .status(500)
-            .body(format!("Database query failed: {}", err).into())
+            .body(format!("Database query failed: {err}").into())
             .expect("axum response builder failed")
     })?;
 

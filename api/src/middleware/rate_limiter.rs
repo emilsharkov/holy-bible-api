@@ -23,8 +23,8 @@ pub async fn rate_limiter(
     let redis_client = state.redis_client;
     let ip = addr.ip().to_string();
     match is_rate_limited((*redis_client).clone(), ip, request_limit_per_hour).await {
-        Ok(false) => return Ok(next.run(request).await),
-        Ok(true) => return Err(StatusCode::TOO_MANY_REQUESTS),
+        Ok(false) => Ok(next.run(request).await),
+        Ok(true) => Err(StatusCode::TOO_MANY_REQUESTS),
         Err(e) => {
             error!("Error type: {}", type_name_of_val(&e));
             Err(StatusCode::INTERNAL_SERVER_ERROR)
@@ -39,7 +39,7 @@ pub async fn is_rate_limited(
 ) -> Result<bool, redis::RedisError> {
     let mut conn = redis_client.get_connection()?;
     let current_window = get_current_window()?;
-    let bucket_key = format!("rate_limit:{}:{}", ip, current_window);
+    let bucket_key = format!("rate_limit:{ip}:{current_window}");
 
     let current_request_count: u64 = conn.get(&bucket_key).unwrap_or(0);
     if current_request_count >= u64::from(request_limit_per_hour) {
@@ -59,7 +59,7 @@ fn get_current_window() -> Result<u64, redis::RedisError> {
             redis::RedisError::from((
                 redis::ErrorKind::ClientError,
                 "Failed to calculate the current window in hours",
-                format!("{:?}", e),
+                format!("{e:?}"),
             ))
         })
 }
