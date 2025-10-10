@@ -1,0 +1,41 @@
+{
+  "name": "holy-bible-api",
+  "version": "1.0.5",
+  "description": "OpenAPI Client for Holy Bible API",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "module": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "generated"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./generated": {
+      "import": "./generated/index.js",
+      "types": "./generated/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "tsx src/test.ts",
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "clean-build": "npm run clean && npm run build",
+    "push-package": "npm run clean-build && npm publish --access public"
+  },
+  "keywords": [
+    "bible",
+    "api",
+    "typescript",
+    "openapi",
+    "client"
+  ],
+  "devDependencies": {
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

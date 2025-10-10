@@ -1,0 +1,16 @@
+.openapi-generator-ignore
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/AudioBible.ts
+models/Bible.ts
+models/BibleVerse.ts
+models/GetAudioBiblesRes.ts
+models/GetAudioBooksRes.ts
+models/GetAudioChaptersRes.ts
+models/GetBibleBooksRes.ts
+models/GetBibleChaptersRes.ts
+models/GetBibleVersesRes.ts
+models/GetBiblesRes.ts
+models/index.ts
+runtime.ts

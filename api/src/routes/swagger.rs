@@ -25,7 +25,7 @@ use utoipa_swagger_ui::SwaggerUi;
     get_audio_bible_chapters,
     get_audio_chapter
 ))]
-struct ApiDoc;
+pub struct ApiDoc;
 
 pub fn get_swagger_route() -> Router<AppState> {
     SwaggerUi::new("/docs")

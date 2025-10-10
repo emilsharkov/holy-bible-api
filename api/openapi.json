@@ -1,0 +1,580 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "api",
+    "description": "",
+    "license": {
+      "name": ""
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/audio_bibles": {
+      "get": {
+        "tags": [],
+        "operationId": "get_audio_bibles",
+        "parameters": [
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAudioBiblesRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/audio_bibles/{audio_bible_id}/books": {
+      "get": {
+        "tags": [],
+        "operationId": "get_audio_bible_books",
+        "parameters": [
+          {
+            "name": "audio_bible_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAudioBooksRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/audio_bibles/{audio_bible_id}/books/{book_num}/chapters": {
+      "get": {
+        "tags": [],
+        "operationId": "get_audio_bible_chapters",
+        "parameters": [
+          {
+            "name": "audio_bible_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "book_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAudioChaptersRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/audio_bibles/{audio_bible_id}/books/{book_num}/chapters/{chapter_num}": {
+      "get": {
+        "tags": [],
+        "operationId": "get_audio_chapter",
+        "parameters": [
+          {
+            "name": "audio_bible_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "book_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "chapter_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the audio chapter file",
+            "content": {
+              "audio/mpeg": {}
+            }
+          },
+          "404": {
+            "description": "Audio Chapter not found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bibles": {
+      "get": {
+        "tags": [],
+        "operationId": "get_bibles",
+        "parameters": [
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBiblesRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bibles/{bible_id}/books": {
+      "get": {
+        "tags": [],
+        "operationId": "get_bible_books",
+        "parameters": [
+          {
+            "name": "bible_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBibleBooksRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bibles/{bible_id}/books/{book_num}/chapters": {
+      "get": {
+        "tags": [],
+        "operationId": "get_bible_chapters",
+        "parameters": [
+          {
+            "name": "bible_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "book_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBibleChaptersRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses": {
+      "get": {
+        "tags": [],
+        "operationId": "get_bible_verses",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "bible_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "book_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "chapter_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBibleVersesRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses/{verse_num}": {
+      "get": {
+        "tags": [],
+        "operationId": "get_bible_verse_by_number",
+        "parameters": [
+          {
+            "name": "bible_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "book_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "chapter_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "verse_num",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BibleVerse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [],
+        "operationId": "get_health",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AudioBible": {
+        "type": "object",
+        "required": [
+          "audio_bible_id",
+          "language"
+        ],
+        "properties": {
+          "audio_bible_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "language": {
+            "type": "string"
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Bible": {
+        "type": "object",
+        "required": [
+          "bible_id",
+          "language"
+        ],
+        "properties": {
+          "bible_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "language": {
+            "type": "string"
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "BibleVerse": {
+        "type": "object",
+        "required": [
+          "bible_id",
+          "book",
+          "chapter",
+          "verse",
+          "text"
+        ],
+        "properties": {
+          "bible_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "book": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "chapter": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "text": {
+            "type": "string"
+          },
+          "verse": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GetAudioBiblesRes": {
+        "type": "object",
+        "required": [
+          "audio_bibles"
+        ],
+        "properties": {
+          "audio_bibles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AudioBible"
+            }
+          }
+        }
+      },
+      "GetAudioBooksRes": {
+        "type": "object",
+        "required": [
+          "num_books"
+        ],
+        "properties": {
+          "num_books": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetAudioChaptersRes": {
+        "type": "object",
+        "required": [
+          "num_chapters"
+        ],
+        "properties": {
+          "num_chapters": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetBibleBooksRes": {
+        "type": "object",
+        "required": [
+          "num_books"
+        ],
+        "properties": {
+          "num_books": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetBibleChaptersRes": {
+        "type": "object",
+        "required": [
+          "num_chapters"
+        ],
+        "properties": {
+          "num_chapters": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetBibleVersesRes": {
+        "type": "object",
+        "required": [
+          "verses"
+        ],
+        "properties": {
+          "verses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BibleVerse"
+            }
+          }
+        }
+      },
+      "GetBiblesRes": {
+        "type": "object",
+        "required": [
+          "bibles"
+        ],
+        "properties": {
+          "bibles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bible"
+            }
+          }
+        }
+      }
+    }
+  }
+}

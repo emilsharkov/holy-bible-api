@@ -1,0 +1,15 @@
+{
+  "name": "openapi-clients",
+  "version": "1.0.0",
+  "description": "OpenAPI Clients for Holy Bible API",
+  "scripts": {
+    "install-generator": "brew install openapi-generator && source ~/.bashrc",
+    "generate-all": "npm run generate-typescript && npm run generate-python && npm run generate-golang && npm run generate-kotlin && npm run generate-java",
+    "generate-typescript": "rm -rf ./typescript/generated && openapi-generator generate -i ./openapi/openapi.json -g typescript-fetch -o ./typescript/generated --skip-validate-spec --additional-properties=supportsES6=true,importFileExtension=.js",
+    "generate-python": "openapi-generator generate -i ../api/openapi.json -g python -o ./python",
+    "generate-golang": "openapi-generator generate -i ../api/openapi.json -g golang -o ./golang",
+    "generate-kotlin": "openapi-generator generate -i ../api/openapi.json -g kotlin -o ./kotlin",
+    "generate-java": "openapi-generator generate -i ../api/openapi.json -g java -o ./java",
+    "build": "echo wassup"
+  }
+}
