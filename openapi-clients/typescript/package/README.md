@@ -5,13 +5,13 @@ A clean, well-typed TypeScript client for the Holy Bible API.
 ### Installation
 
 ```bash
-npm install holy-bible-api-typescript
+npm install holy-bible-api
 ```
 
 ## 🚀 Quick Start
 
 ```typescript
-import { createBibleApi } from 'holy-bible-api-typescript';
+import { createBibleApi } from 'holy-bible-api';
 
 // Create API instance
 const api = createBibleApi();

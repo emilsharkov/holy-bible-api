@@ -4,12 +4,11 @@
   "description": "OpenAPI Clients for Holy Bible API",
   "scripts": {
     "install-generator": "brew install openapi-generator && source ~/.bashrc",
-    "generate-all": "npm run generate-typescript && npm run generate-python && npm run generate-golang && npm run generate-kotlin && npm run generate-java",
-    "generate-typescript": "rm -rf ./typescript/generated && openapi-generator generate -i ./openapi/openapi.json -g typescript-fetch -o ./typescript/generated --skip-validate-spec --additional-properties=supportsES6=true,importFileExtension=.js",
-    "generate-python": "openapi-generator generate -i ../api/openapi.json -g python -o ./python",
-    "generate-golang": "openapi-generator generate -i ../api/openapi.json -g golang -o ./golang",
-    "generate-kotlin": "openapi-generator generate -i ../api/openapi.json -g kotlin -o ./kotlin",
-    "generate-java": "openapi-generator generate -i ../api/openapi.json -g java -o ./java",
+    "generate-all": "npm run generate-typescript && npm run generate-python && npm run generate-go && npm run generate-rust && npm run generate-kotlin && npm run generate-java",
+    "generate-typescript": "rm -rf ./typescript/package/generated && openapi-generator generate -i ./openapi.json -g typescript-fetch -o ./typescript/package/generated --skip-validate-spec --additional-properties=supportsES6=true,importFileExtension=.js",
+    "generate-python": "rm -rf ./python/package/generated && openapi-generator generate -i ./openapi.json -g python -o ./python/package/generated --skip-validate-spec",
+    "generate-go": "rm -rf ./go/package/generated && openapi-generator generate -i ./openapi.json -g go -o ./go/package/generated --skip-validate-spec",
+    "generate-rust": "rm -rf ./rust/package/src/generated && openapi-generator generate -i ./openapi.json -g rust -o ./rust/package/src/generated --skip-validate-spec",
     "build": "echo wassup"
   }
 }
