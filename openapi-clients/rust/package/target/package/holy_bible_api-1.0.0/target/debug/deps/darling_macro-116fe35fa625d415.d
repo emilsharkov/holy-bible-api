@@ -1,5 +1,0 @@
-/Users/emilsharkov/vscode/holy-bible-api/openapi-clients/rust/package/target/package/holy_bible_api-1.0.0/target/debug/deps/darling_macro-116fe35fa625d415.d: /Users/emilsharkov/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/darling_macro-0.21.3/src/lib.rs
-
-/Users/emilsharkov/vscode/holy-bible-api/openapi-clients/rust/package/target/package/holy_bible_api-1.0.0/target/debug/deps/libdarling_macro-116fe35fa625d415.dylib: /Users/emilsharkov/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/darling_macro-0.21.3/src/lib.rs
-
-/Users/emilsharkov/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/darling_macro-0.21.3/src/lib.rs:
