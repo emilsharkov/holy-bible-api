@@ -8,7 +8,7 @@
     "generate-typescript": "rm -rf ./typescript/package/generated && openapi-generator generate -i ./openapi.json -g typescript-fetch -o ./typescript/package/generated --skip-validate-spec --additional-properties=supportsES6=true,importFileExtension=.js",
     "generate-python": "rm -rf ./python/package/generated && openapi-generator generate -i ./openapi.json -g python -o ./python/package/generated --skip-validate-spec",
     "generate-go": "rm -rf ./go/package/generated && openapi-generator generate -i ./openapi.json -g go -o ./go/package/generated --skip-validate-spec",
-    "generate-rust": "rm -rf ./rust/package/src/generated && openapi-generator generate -i ./openapi.json -g rust -o ./rust/package/src/generated --skip-validate-spec",
+    "generate-rust": "rm -rf ./rust/package/src/generated && openapi-generator generate -i ./openapi.json -g rust -o ./rust/package/src/generated --skip-validate-spec && rm rust/package/src/generated/Cargo.toml",
     "build": "echo wassup"
   }
 }

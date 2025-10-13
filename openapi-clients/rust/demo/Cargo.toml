@@ -1,0 +1,9 @@
+[package]
+name = "holy-bible-api-demo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+holy_bible_api = "1.0.0"
+tokio = { version = "1", features = ["full"] }
+
