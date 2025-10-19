@@ -2,7 +2,7 @@
 ## About
 This is an Open-Source API for serving the Holy Bible written in Rust. The API serves text Bibles in 100+ languages with 800+ versions. It also serves audio Bibles in 40+ languages. This API is also OpenAPI compliant, meaning that the goal is to create [auto-generated](https://openapi-generator.tech/docs/generators) SDKs in the future.
 
-## Docs
+## OpenAPI Docs
 https://holy-bible-api.com/docs
 
 ## OpenAPI Clients
@@ -10,16 +10,19 @@ https://holy-bible-api.com/docs
 ```sh
 npm install holy-bible-api
 ```
+https://www.npmjs.com/package/holy-bible-api
 
 ### Python SDK
 ```sh
 pip install holy_bible_api_python
 ```
+https://pypi.org/project/holy_bible_api_python/
 
 ### Rust SDK
 ```sh
 cargo add holy_bible_api
 ```
+https://crates.io/crates/holy_bible_api
 
 ## Data Sources 
 ### Disclaimer
