@@ -5,6 +5,27 @@ This is an Open-Source API for serving the Holy Bible written in Rust. The API s
 ## Docs
 https://holy-bible-api.com/docs
 
+## OpenAPI Clients
+### TypeScript SDK
+```sh
+npm install holy-bible-api
+```
+
+### Python SDK
+```sh
+pip install holy_bible_api_python
+```
+
+### Rust SDK
+```sh
+cargo add holy_bible_api
+```
+
+### Golang SDK
+```sh
+
+```
+
 ## Data Sources 
 ### Disclaimer
 This project is open-source meaning that each user that wants to run this project needs to provide their own data to the API. The data I am using has been source from the [Word Project](https://www.wordproject.org/bibles/audio/index.htm) for the audio and [Holy-Bible-JSON](https://github.com/emilsharkov/Holy-Bible-JSON) and [Holy-Bible-XML](https://github.com/Beblia/Holy-Bible-XML-Format) for the text.
