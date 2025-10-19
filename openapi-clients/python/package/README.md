@@ -5,7 +5,7 @@ A Python client library for accessing the Holy Bible API with full type support.
 ## Installation
 
 ```bash
-pip install holy_bible_api_python
+pip install holy_bible_api
 ```
 
 ## Usage

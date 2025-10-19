@@ -1,15 +1,15 @@
 [project]
-name = "holy_bible_api_python"
-version = "7.0.0"
-description = "Add your description here"
+name = "holy_bible_api"
+version = "6.0.0"
+description = "A Python client library for the Holy Bible API"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.9"
 dependencies = [
-    "openapi_client",
+    "urllib3>=2.1.0,<3.0.0",
+    "python-dateutil>=2.8.2",
+    "pydantic>=2",
+    "typing-extensions>=4.7.1",
 ]
-
-[tool.uv.sources]
-openapi_client = { path = "generated" }
 
 [tool.hatch.build.targets.wheel]
 packages = ["holy_bible_api"]

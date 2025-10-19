@@ -14,9 +14,9 @@ https://www.npmjs.com/package/holy-bible-api
 
 ### Python SDK
 ```sh
-pip install holy_bible_api_python
+pip install holy_bible_api
 ```
-https://pypi.org/project/holy_bible_api_python/
+https://pypi.org/project/holy_bible_api/
 
 ### Rust SDK
 ```sh
