@@ -1,4 +1,9 @@
-use axum::Json;
+use crate::app::state::AppState;
+use axum::{routing::get, Json, Router};
+
+pub fn get_health_route() -> Router<AppState> {
+    Router::new().route("/health", get(get_health))
+}
 
 #[utoipa::path(
     get,

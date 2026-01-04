@@ -1,7 +1,6 @@
 use crate::{
-    app, config,
+    app, config, controller,
     middleware::{self, cors},
-    routes,
 };
 use app::state::AppState;
 use axum::{
@@ -22,10 +21,10 @@ pub async fn get_app_router(
     let app_settings = settings.clone();
     let app_state = AppState::get_app_state(&app_settings).await?;
     let app_router = Router::new()
-        .merge(routes::health::get_health_route())
-        .merge(routes::bibles::get_bible_routes())
-        .merge(routes::audio_bibles::get_audio_bible_routes())
-        .merge(routes::swagger::get_swagger_route())
+        .merge(controller::health::get_health_route())
+        .merge(controller::bibles::get_bible_routes())
+        .merge(controller::audio_bibles::get_audio_bible_routes())
+        .merge(controller::swagger::get_swagger_route())
         .layer(
             ServiceBuilder::new()
                 .layer(middleware::trace::get_trace_layer())

@@ -1,12 +1,14 @@
 use crate::app::state::AppState;
-use crate::handlers::{
-    audio_bibles::audio_bibles::__path_get_audio_bibles,
-    audio_bibles::books::__path_get_audio_bible_books,
-    audio_bibles::chapters::__path_get_audio_bible_chapters,
-    audio_bibles::chapters::__path_get_audio_chapter, bibles::bibles::__path_get_bibles,
-    bibles::books::__path_get_bible_books, bibles::chapters::__path_get_bible_chapters,
-    bibles::verses::__path_get_bible_verse_by_number, bibles::verses::__path_get_bible_verses,
-    health::health::__path_get_health,
+use crate::controller::{
+    audio_bibles::{
+        __path_get_audio_bible_books, __path_get_audio_bible_chapters, __path_get_audio_bibles,
+        __path_get_audio_chapter,
+    },
+    bibles::{
+        __path_get_bible_books, __path_get_bible_chapters, __path_get_bible_verse_by_number,
+        __path_get_bible_verses, __path_get_bibles,
+    },
+    health::__path_get_health,
 };
 use axum::Router;
 use utoipa::OpenApi;

@@ -1,4 +1,4 @@
-use crate::routes::swagger::ApiDoc;
+use crate::controller::swagger::ApiDoc;
 use serde_json;
 use std::fs;
 use std::path::Path;
