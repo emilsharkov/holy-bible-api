@@ -16,11 +16,11 @@ impl BibleService {
         language: Option<String>,
         version: Option<String>,
     ) -> Result<Vec<crate::models::http::response::bibles::bibles::Bible>, Box<dyn Error>> {
-        bibles::bibles::get_bibles(&self.db, language, version).await
+        bibles::get_bibles(&self.db, language, version).await
     }
 
     pub async fn get_bible_books(&self, bible_id: i32) -> Result<i64, Box<dyn Error>> {
-        bibles::books::get_bible_books(&self.db, bible_id).await
+        bibles::get_bible_books(&self.db, bible_id).await
     }
 
     pub async fn get_bible_chapters(
@@ -28,7 +28,7 @@ impl BibleService {
         bible_id: i32,
         book_num: i32,
     ) -> Result<i64, Box<dyn Error>> {
-        bibles::chapters::get_bible_chapters(&self.db, bible_id, book_num).await
+        bibles::get_bible_chapters(&self.db, bible_id, book_num).await
     }
 
     pub async fn get_bible_verses(
@@ -39,7 +39,7 @@ impl BibleService {
         start: i32,
         end: i32,
     ) -> Result<Vec<BibleVerse>, Box<dyn Error>> {
-        bibles::verses::get_bible_verses(&self.db, bible_id, book_num, chapter_num, start, end)
+        bibles::get_bible_verses(&self.db, bible_id, book_num, chapter_num, start, end)
             .await
     }
 
@@ -50,7 +50,7 @@ impl BibleService {
         chapter_num: i32,
         verse_num: i32,
     ) -> Result<BibleVerse, Box<dyn Error>> {
-        bibles::verses::get_bible_verse_by_number(
+        bibles::get_bible_verse_by_number(
             &self.db,
             bible_id,
             book_num,
