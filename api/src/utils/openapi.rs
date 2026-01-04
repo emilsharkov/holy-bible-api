@@ -8,11 +8,11 @@ use utoipa::OpenApi;
 pub fn generate_and_save_openapi_json(output_path: &str) -> Result<(), Box<dyn std::error::Error>> {
     let openapi_spec = ApiDoc::openapi();
     let json_string = serde_json::to_string_pretty(&openapi_spec)?;
-    
+
     if let Some(parent_dir) = Path::new(output_path).parent() {
         fs::create_dir_all(parent_dir)?;
     }
-    
+
     fs::write(output_path, json_string)?;
     Ok(())
 }

@@ -1,6 +1,6 @@
 use crate::{
     app, config,
-    middleware::{self},
+    middleware::{self, cors},
     routes,
 };
 use app::state::AppState;
@@ -37,6 +37,7 @@ pub async fn get_app_router(
                 .layer(middleware::timeout::get_timeout_layer(
                     app_settings.middleware_settings.timeout_seconds,
                 ))
+                .layer(cors::get_cors_layer(&app_settings.cors_settings))
                 .layer(from_fn_with_state(
                     app_state.clone(),
                     move |state, connect_info: ConnectInfo<SocketAddr>, req, next| {
