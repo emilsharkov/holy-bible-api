@@ -59,4 +59,12 @@ impl BibleService {
         )
         .await
     }
+
+    pub async fn get_random_bible_verse(
+        &self,
+        bible_id: i32,
+        seed: Option<f64>,
+    ) -> Result<BibleVerse, Box<dyn Error>> {
+        bibles::get_random_bible_verse(&self.db, bible_id, seed).await
+    }
 }

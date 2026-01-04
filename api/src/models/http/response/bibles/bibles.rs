@@ -7,8 +7,3 @@ pub struct Bible {
     pub language: String,
     pub version: Option<String>, // Nullable column in the database
 }
-
-#[derive(ToSchema, Serialize)]
-pub struct GetBiblesRes {
-    pub bibles: Vec<Bible>,
-}

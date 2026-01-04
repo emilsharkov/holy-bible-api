@@ -7,8 +7,3 @@ pub struct AudioBible {
     pub language: String,
     pub version: Option<String>, // Nullable column in the database
 }
-
-#[derive(Serialize, ToSchema)]
-pub struct GetAudioBiblesRes {
-    pub audio_bibles: Vec<AudioBible>,
-}
