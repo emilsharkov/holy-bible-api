@@ -1,6 +1,6 @@
 use crate::{
     config,
-    db::{self, s3::S3Client},
+    db::{self},
     service::audio_bibles::AudioBibleService,
     service::bibles::BibleService,
 };
