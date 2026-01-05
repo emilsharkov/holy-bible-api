@@ -18,10 +18,7 @@ impl AwsS3Repo {
 #[async_trait::async_trait]
 impl BlobStore for AwsS3Repo {
     async fn get_object(&self, bucket: &str, key: &str) -> Result<BlobObject, Box<dyn Error>> {
-        let S3Client {
-            client,
-            audio_bibles_bucket: _,
-        } = &*self.client;
+        let S3Client { client } = &*self.client;
 
         let object_output = client
             .get_object()

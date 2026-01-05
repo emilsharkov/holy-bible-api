@@ -5,7 +5,6 @@ use std::error::Error;
 
 pub struct S3Client {
     pub client: aws_sdk_s3::Client,
-    pub audio_bibles_bucket: String,
 }
 
 pub async fn get_client(settings: &AwsSettings) -> Result<S3Client, Box<dyn Error>> {
@@ -20,9 +19,7 @@ pub async fn get_client(settings: &AwsSettings) -> Result<S3Client, Box<dyn Erro
         .await;
 
     let client = aws_sdk_s3::Client::new(&config);
-    let audio_bibles_bucket = settings.audio_bibles_bucket.to_string();
     Ok(S3Client {
         client,
-        audio_bibles_bucket,
     })
 }
