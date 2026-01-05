@@ -1,6 +1,6 @@
 pub mod default;
 pub mod mock;
-pub mod trait_def;
+pub mod interface;
 
-pub use trait_def::AudioBibleService;
+pub use interface::AudioBibleService;
 pub use default::DefaultAudioBibleService;

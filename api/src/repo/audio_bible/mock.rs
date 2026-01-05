@@ -1,8 +1,7 @@
-use super::trait_def::AudioBibleRepo;
+use super::interface::AudioBibleRepo;
 use crate::models::http::response::audio_bibles::audio_bibles::AudioBible;
 use std::{collections::HashMap, error::Error};
 
-/// Mock implementation of AudioBibleRepo for testing
 pub struct MockAudioBibleRepo {
     audio_bibles: Vec<AudioBible>,
     books: HashMap<i32, i64>,

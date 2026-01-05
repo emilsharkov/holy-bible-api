@@ -1,4 +1,4 @@
-use super::trait_def::{BlobObject, BlobStore};
+use super::interface::{BlobObject, BlobStore};
 use aws_sdk_s3::error::{ProvideErrorMetadata, SdkError};
 use std::{error::Error, sync::Arc};
 use tracing;

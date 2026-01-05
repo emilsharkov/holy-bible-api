@@ -1,11 +1,10 @@
-use crate::service::audio_bibles::trait_def::AudioBibleService;
+use crate::service::audio_bibles::interface::AudioBibleService;
 use crate::{
     models::http::response::audio_bibles::audio_bibles::AudioBible,
     repo::blob::BlobObject,
 };
 use std::{collections::HashMap, error::Error};
 
-/// Mock implementation of AudioBibleService for testing
 pub struct MockAudioBibleService {
     audio_bibles: Vec<AudioBible>,
     books: HashMap<i32, i64>,

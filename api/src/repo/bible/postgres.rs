@@ -1,4 +1,4 @@
-use super::trait_def::BibleRepo;
+use super::interface::BibleRepo;
 use crate::models::{
     http::response::bibles::{bibles::Bible, verses::BibleVerse},
     sql,
@@ -7,7 +7,6 @@ use sqlx::{PgPool, QueryBuilder};
 use std::{error::Error, sync::Arc};
 use std::time;
 
-/// Postgres implementation of BibleRepo
 pub struct PgBibleRepo {
     db: Arc<PgPool>,
 }

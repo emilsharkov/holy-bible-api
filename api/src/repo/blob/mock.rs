@@ -1,9 +1,8 @@
-use super::trait_def::{BlobObject, BlobStore};
+use super::interface::{BlobObject, BlobStore};
 use aws_sdk_s3::primitives::ByteStream;
 use std::collections::HashMap;
 use std::error::Error;
 
-/// Mock implementation of BlobStore for testing
 pub struct MockS3Repo {
     objects: HashMap<(String, String), Vec<u8>>,
 }

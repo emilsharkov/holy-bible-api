@@ -1,11 +1,10 @@
-use crate::service::bibles::trait_def::BibleService;
+use crate::service::bibles::interface::BibleService;
 use crate::{
     models::http::response::bibles::verses::BibleVerse,
     repo::bible::BibleRepo,
 };
 use std::{error::Error, sync::Arc};
 
-/// Default implementation of BibleService
 pub struct DefaultBibleService {
     bible_repo: Arc<dyn BibleRepo>,
 }

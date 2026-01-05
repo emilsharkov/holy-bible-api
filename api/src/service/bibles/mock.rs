@@ -1,8 +1,7 @@
-use crate::service::bibles::trait_def::BibleService;
+use crate::service::bibles::interface::BibleService;
 use crate::models::http::response::bibles::{bibles::Bible, verses::BibleVerse};
 use std::{collections::HashMap, error::Error};
 
-/// Mock implementation of BibleService for testing
 pub struct MockBibleService {
     bibles: Vec<Bible>,
     books: HashMap<i32, i64>,

@@ -1,4 +1,4 @@
-use super::trait_def::AudioBibleRepo;
+use super::interface::AudioBibleRepo;
 use crate::models::{
     http::response::audio_bibles::audio_bibles::AudioBible,
     sql,
@@ -6,7 +6,6 @@ use crate::models::{
 use sqlx::{PgPool, QueryBuilder};
 use std::{error::Error, sync::Arc};
 
-/// Postgres implementation of AudioBibleRepo
 pub struct PgAudioBibleRepo {
     db: Arc<PgPool>,
 }

@@ -1,7 +1,7 @@
 pub mod mock;
 pub mod postgres;
-pub mod trait_def;
+pub mod interface;
 
-pub use trait_def::BibleRepo;
+pub use interface::BibleRepo;
 pub use postgres::PgBibleRepo;
 

@@ -1,5 +1,5 @@
 use crate::config::settings::Settings;
-use crate::service::audio_bibles::trait_def::AudioBibleService;
+use crate::service::audio_bibles::interface::AudioBibleService;
 use crate::{
     models::http::response::audio_bibles::audio_bibles::AudioBible,
     repo::{

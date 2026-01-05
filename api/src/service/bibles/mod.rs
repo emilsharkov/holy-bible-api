@@ -1,6 +1,6 @@
 pub mod default;
 pub mod mock;
-pub mod trait_def;
+pub mod interface;
 
-pub use trait_def::BibleService;
+pub use interface::BibleService;
 pub use default::DefaultBibleService;

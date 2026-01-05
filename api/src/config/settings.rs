@@ -1,5 +1,6 @@
-use crate::config;
 use std::error::Error;
+
+use dotenvy::dotenv;
 
 #[derive(Debug, Clone)]
 pub struct DatabaseSettings {
@@ -56,7 +57,7 @@ pub struct Settings {
 
 impl Settings {
     pub fn new() -> Result<Self, Box<dyn Error>> {
-        config::env::load_env();
+        dotenv().ok();
         let database_settings = Self::get_database_settings()
             .map_err(|e| format!("Failed to load database settings: {}", e))?;
         let aws_settings =

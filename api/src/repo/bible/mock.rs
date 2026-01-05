@@ -1,8 +1,7 @@
-use super::trait_def::BibleRepo;
+use super::interface::BibleRepo;
 use crate::models::http::response::bibles::{bibles::Bible, verses::BibleVerse};
 use std::{collections::HashMap, error::Error};
 
-/// Mock implementation of BibleRepo for testing
 pub struct MockBibleRepo {
     bibles: Vec<Bible>,
     verses: HashMap<(i32, i32, i32), Vec<BibleVerse>>,
