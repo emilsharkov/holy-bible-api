@@ -27,7 +27,6 @@ impl AppState {
         let s3_client = Arc::new(db::s3::get_client(&settings.aws_settings).await?);
         let redis_client = Arc::new(db::redis::get_client(&settings.redis_settings).await?);
 
-        // Initialize repositories
         let bible_repo = Arc::new(PgBibleRepo::new(db_client.clone()));
         let audio_bible_repo = Arc::new(PgAudioBibleRepo::new(db_client.clone()));
         let blob_store = Arc::new(AwsS3Repo::new(s3_client.clone()));
