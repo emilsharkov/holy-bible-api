@@ -86,10 +86,12 @@ dependencies = [
 name = "api"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "aws-config",
  "aws-credential-types",
  "aws-sdk-config",
  "aws-sdk-s3",
+ "aws-smithy-types",
  "axum 0.7.9",
  "axum-client-ip",
  "dotenvy",

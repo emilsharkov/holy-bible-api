@@ -1,11 +1,6 @@
-pub mod bibles;
-pub mod books;
-pub mod chapters;
-pub mod service;
-pub mod verses;
+pub mod default;
+pub mod mock;
+pub mod trait_def;
 
-pub use service::*;
-pub use bibles::*;
-pub use books::*;
-pub use chapters::*;
-pub use verses::*;
+pub use trait_def::BibleService;
+pub use default::DefaultBibleService;

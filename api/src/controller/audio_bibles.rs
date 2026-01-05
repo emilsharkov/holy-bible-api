@@ -118,12 +118,12 @@ pub async fn get_audio_chapter(
     Path(params): Path<AudioChapterPath>,
 ) -> Result<Response<Body>, axum::response::Response> {
     let audio_bible_service = &app_state.audio_bible_service;
-    let object_output = audio_bible_service
+    let blob_object = audio_bible_service
         .get_audio_chapter(params.audio_bible_id, params.book_num, params.chapter_num)
         .await
         .into_axum_response()?;
 
-    let async_buf_reader = object_output.body.into_async_read();
+    let async_buf_reader = blob_object.content.into_async_read();
     let stream = ReaderStream::new(async_buf_reader);
     let body = Body::from_stream(stream);
 

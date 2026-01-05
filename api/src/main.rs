@@ -4,6 +4,7 @@ mod controller;
 mod db;
 mod middleware;
 mod models;
+mod repo;
 mod service;
 mod utils;
 

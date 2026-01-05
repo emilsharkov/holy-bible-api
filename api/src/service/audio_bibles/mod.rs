@@ -1,9 +1,6 @@
-pub mod audio_bibles;
-pub mod books;
-pub mod chapters;
-pub mod service;
+pub mod default;
+pub mod mock;
+pub mod trait_def;
 
-pub use audio_bibles::*;
-pub use books::*;
-pub use chapters::*;
-pub use service::*;
+pub use trait_def::AudioBibleService;
+pub use default::DefaultAudioBibleService;
