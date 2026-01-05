@@ -554,7 +554,6 @@
       },
       "BooksCountResponse": {
         "type": "object",
-        "description": "Response containing a count of books",
         "required": [
           "num_books"
         ],
@@ -567,7 +566,6 @@
       },
       "ChaptersCountResponse": {
         "type": "object",
-        "description": "Response containing a count of chapters",
         "required": [
           "num_chapters"
         ],

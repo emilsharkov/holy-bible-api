@@ -3,9 +3,9 @@ use std::time::Duration;
 use axum::http::{HeaderName, HeaderValue, Method};
 use tower_http::cors::{AllowOrigin, Any, CorsLayer};
 
-use crate::config::settings::CorsSettings;
+use crate::config::cors::CorsConfig;
 
-pub fn get_cors_layer(settings: &CorsSettings) -> CorsLayer {
+pub fn get_cors_layer(config: &CorsConfig) -> CorsLayer {
     let allowed_methods = [
         Method::GET,
         Method::POST,
@@ -27,10 +27,10 @@ pub fn get_cors_layer(settings: &CorsSettings) -> CorsLayer {
         .allow_headers(allowed_headers)
         .max_age(Duration::from_secs(60 * 60));
 
-    if settings.allow_any_origin {
+    if config.allow_any_origin {
         // Cannot use credentials with wildcard origin
         cors_layer = cors_layer.allow_origin(Any);
-    } else if let Some(origins) = build_origin_list(&settings.allowed_origins) {
+    } else if let Some(origins) = build_origin_list(&config.allowed_origins) {
         // Can use credentials with explicit origins
         cors_layer = cors_layer
             .allow_origin(AllowOrigin::list(origins))

@@ -10,16 +10,16 @@ use axum::{
     middleware::from_fn_with_state,
     BoxError, Router,
 };
-use config::settings::Settings;
+use config::settings::Config;
 use std::{error::Error, net::SocketAddr};
 use tower::ServiceBuilder;
 use tracing::error;
 
 pub async fn get_app_router(
-    settings: &Settings,
+    config: &Config,
 ) -> Result<IntoMakeServiceWithConnectInfo<Router, SocketAddr>, Box<dyn Error>> {
-    let app_settings = settings.clone();
-    let app_state = AppState::get_app_state(&app_settings).await?;
+    let app_config = config.clone();
+    let app_state = AppState::get_app_state(&app_config).await?;
     let app_router = Router::new()
         .merge(controller::health::get_health_route())
         .merge(controller::bibles::get_bible_routes())
@@ -34,9 +34,9 @@ pub async fn get_app_router(
                     StatusCode::REQUEST_TIMEOUT
                 }))
                 .layer(middleware::timeout::get_timeout_layer(
-                    app_settings.middleware_settings.timeout_seconds,
+                    app_config.middleware_config.timeout_seconds,
                 ))
-                .layer(cors::get_cors_layer(&app_settings.cors_settings))
+                .layer(cors::get_cors_layer(&app_config.cors_config))
                 .layer(from_fn_with_state(
                     app_state.clone(),
                     move |state, connect_info: ConnectInfo<SocketAddr>, req, next| {
@@ -45,7 +45,7 @@ pub async fn get_app_router(
                             connect_info,
                             req,
                             next,
-                            app_settings.middleware_settings.request_limit_per_hour,
+                            app_config.middleware_config.request_limit_per_hour,
                         )
                     },
                 )),

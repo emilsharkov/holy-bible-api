@@ -1,11 +1,11 @@
-use crate::config::settings::RedisSettings;
+use crate::config::redis::RedisConfig;
 use redis::Client;
 use std::error::Error;
 
-pub async fn get_client(settings: &RedisSettings) -> Result<Client, Box<dyn Error>> {
+pub async fn get_client(config: &RedisConfig) -> Result<Client, Box<dyn Error>> {
     let redis_url = format!(
         "redis://:{}@{}:{}",
-        settings.password, settings.host, settings.port
+        config.password, config.host, config.port
     );
     let client = Client::open(redis_url)?;
     Ok(client)

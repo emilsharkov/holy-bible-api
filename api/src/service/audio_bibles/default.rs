@@ -1,4 +1,4 @@
-use crate::config::settings::Settings;
+use crate::config::settings::Config;
 use crate::service::audio_bibles::interface::AudioBibleService;
 use crate::{
     models::http::response::audio_bibles::audio_bibles::AudioBible,
@@ -12,19 +12,19 @@ use std::{error::Error, sync::Arc};
 pub struct DefaultAudioBibleService {
     audio_bible_repo: Arc<PgAudioBibleRepo>,
     blob_store: Arc<AwsS3Repo>,
-    app_settings: Arc<Settings>,
+    app_config: Arc<Config>,
 }
 
 impl DefaultAudioBibleService {
     pub fn new(
         audio_bible_repo: Arc<PgAudioBibleRepo>,
         blob_store: Arc<AwsS3Repo>,
-        app_settings: Arc<Settings>,
+        app_config: Arc<Config>,
     ) -> Self {
         Self {
             audio_bible_repo,
             blob_store,
-            app_settings,
+            app_config,
         }
     }
 }
@@ -65,7 +65,7 @@ impl AudioBibleService for DefaultAudioBibleService {
             .await?;
 
         self.blob_store
-            .get_object(&self.app_settings.aws_settings.audio_bibles_bucket, &file_key)
+            .get_object(&self.app_config.aws_config.audio_bibles_bucket, &file_key)
             .await
     }
 }
