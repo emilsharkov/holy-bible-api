@@ -1,0 +1,27 @@
+#!/bin/sh
+# Pre-push hook to ensure OpenAPI clients are up to date
+# This hook requires running npm run update-all-clients before pushing
+
+cd "$(dirname "$0")/../../openapi-clients" || exit 1
+
+echo "Running pre-push hook: Checking if OpenAPI clients are up to date..."
+
+# Check if package.json exists
+if [ ! -f "package.json" ]; then
+    echo "Error: package.json not found in openapi-clients directory"
+    exit 1
+fi
+
+# Run the update-all-clients script
+npm run update-all-clients
+
+# Check if the command succeeded
+if [ $? -ne 0 ]; then
+    echo "Error: npm run update-all-clients failed"
+    echo "Please run 'npm run update-all-clients' manually and fix any issues before pushing"
+    exit 1
+fi
+
+echo "Pre-push hook passed: OpenAPI clients are up to date"
+exit 0
+

@@ -1,0 +1,30 @@
+#!/bin/sh
+# Pre-commit hook to format and fix Rust code
+# This hook runs cargo fmt and cargo fix before committing
+
+cd "$(dirname "$0")/../../api" || exit 1
+
+echo "Running pre-commit hook: Formatting and fixing Rust code..."
+
+# Run cargo fmt
+echo "Running cargo fmt..."
+cargo fmt
+
+# Check if cargo fmt succeeded
+if [ $? -ne 0 ]; then
+    echo "Error: cargo fmt failed"
+    exit 1
+fi
+
+# Run cargo fix
+echo "Running cargo fix..."
+cargo fix --allow-dirty --allow-staged
+
+# Check if cargo fix succeeded
+if [ $? -ne 0 ]; then
+    echo "Warning: cargo fix had issues, but continuing..."
+fi
+
+echo "Pre-commit hook passed: Code formatted and fixed"
+exit 0
+
