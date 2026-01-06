@@ -455,24 +455,6 @@
           }
         }
       }
-    },
-    "/health": {
-      "get": {
-        "tags": [],
-        "operationId": "get_health",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
