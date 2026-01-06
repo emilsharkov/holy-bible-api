@@ -8,8 +8,8 @@ cd "$REPO_ROOT" || exit 1
 
 echo "Running pre-commit hook..."
 
-# Check if api/openapi.json is in the staged changes
-if git diff --cached --name-only | grep -q "^api/openapi.json$"; then
+# Check if api/openapi.json is in the staged changes (added, modified, or renamed)
+if git diff --cached --name-only --diff-filter=ACMR | grep -q "api/openapi.json"; then
     echo "Detected changes to api/openapi.json, updating OpenAPI clients..."
     
     cd "$REPO_ROOT/openapi-clients" || exit 1
