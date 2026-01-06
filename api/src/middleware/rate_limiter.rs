@@ -57,7 +57,7 @@ fn get_current_window() -> Result<u64, redis::RedisError> {
         .map(|duration| duration.as_secs() / 3600)
         .map_err(|e| {
             redis::RedisError::from((
-                redis::ErrorKind::ClientError,
+                redis::ErrorKind::Client,
                 "Failed to calculate the current window in hours",
                 format!("{e:?}"),
             ))

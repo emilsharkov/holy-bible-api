@@ -29,15 +29,15 @@ pub fn get_audio_bible_routes() -> Router<AppState> {
     Router::<AppState>::new()
         .route("/audio_bibles", get(get_audio_bibles))
         .route(
-            "/audio_bibles/:audio_bible_id/books",
+            "/audio_bibles/{audio_bible_id}/books",
             get(get_audio_bible_books),
         )
         .route(
-            "/audio_bibles/:audio_bible_id/books/:book_num/chapters",
+            "/audio_bibles/{audio_bible_id}/books/{book_num}/chapters",
             get(get_audio_bible_chapters),
         )
         .route(
-            "/audio_bibles/:audio_bible_id/books/:book_num/chapters/:chapter_num",
+            "/audio_bibles/{audio_bible_id}/books/{book_num}/chapters/{chapter_num}",
             get(get_audio_chapter),
         )
 }

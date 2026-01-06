@@ -26,25 +26,25 @@ use std::i32;
 pub fn get_bible_routes() -> Router<AppState> {
     Router::<AppState>::new()
         .route("/bibles", get(get_bibles))
-        .route("/bibles/:bible_id/books", get(get_bible_books))
+        .route("/bibles/{bible_id}/books", get(get_bible_books))
         .route(
-            "/bibles/:bible_id/books/:book_num/chapters",
+            "/bibles/{bible_id}/books/{book_num}/chapters",
             get(get_bible_chapters),
         )
         .route(
-            "/bibles/:bible_id/books/:book_num/chapters/:chapter_num/verses",
+            "/bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses",
             get(get_bible_verses),
         )
         .route(
-            "/bibles/:bible_id/books/:book_num/chapters/:chapter_num/verses/:verse_num",
+            "/bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses/{verse_num}",
             get(get_bible_verse_by_number),
         )
         .route(
-            "/bibles/:bible_id/random",
+            "/bibles/{bible_id}/random",
             get(get_random_bible_verse),
         )
         .route(
-            "/bibles/:bible_id/verse-of-the-day",
+            "/bibles/{bible_id}/verse-of-the-day",
             get(get_verse_of_the_day),
         )
 }
