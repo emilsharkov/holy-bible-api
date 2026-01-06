@@ -9,7 +9,7 @@ use crate::controller::{
         __path_get_bible_verses, __path_get_bibles, __path_get_random_bible_verse,
         __path_get_verse_of_the_day,
     },
-    health::__path_get_health,
+    // health::__path_get_health,
 };
 use axum::Router;
 use utoipa::OpenApi;
@@ -18,7 +18,7 @@ use utoipa_swagger_ui::SwaggerUi;
 #[derive(OpenApi)]
 #[openapi(paths(
     // get_health,
-    get_bibles,
+    // get_bibles,
     get_bible_books,
     get_bible_chapters,
     get_bible_verses,

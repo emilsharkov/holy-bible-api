@@ -8,23 +8,8 @@ cd "$REPO_ROOT" || exit 1
 
 echo "Running pre-commit hook..."
 
-# Check if api/openapi.json is in the staged changes (added, modified, or renamed)
-SHOULD_UPDATE=false
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null)
-
-# Check if openapi.json is in the staged files
-if echo "$STAGED_FILES" | grep -q "openapi.json"; then
-    SHOULD_UPDATE=true
-fi
-
-# Also check if the file differs from HEAD (handles cases where it's modified)
-if [ "$SHOULD_UPDATE" = false ]; then
-    if git diff --name-only HEAD -- "api/openapi.json" 2>/dev/null | grep -q "openapi.json"; then
-        SHOULD_UPDATE=true
-    fi
-fi
-
-if [ "$SHOULD_UPDATE" = true ]; then
+# Check if api/openapi.json has changed compared to master branch
+if git diff --cached master -- "api/openapi.json" 2>/dev/null | grep -q . || git diff --cached HEAD -- "api/openapi.json" 2>/dev/null | grep -q .; then
     echo "Detected changes to api/openapi.json, updating OpenAPI clients..."
     
     cd "$REPO_ROOT/openapi-clients" || exit 1

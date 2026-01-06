@@ -168,45 +168,6 @@
         }
       }
     },
-    "/bibles": {
-      "get": {
-        "tags": [],
-        "operationId": "get_bibles",
-        "parameters": [
-          {
-            "name": "language",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Bible"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/bibles/{bible_id}/books": {
       "get": {
         "tags": [],
@@ -467,28 +428,6 @@
         ],
         "properties": {
           "audio_bible_id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "language": {
-            "type": "string"
-          },
-          "version": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        }
-      },
-      "Bible": {
-        "type": "object",
-        "required": [
-          "bible_id",
-          "language"
-        ],
-        "properties": {
-          "bible_id": {
             "type": "integer",
             "format": "int32"
           },
