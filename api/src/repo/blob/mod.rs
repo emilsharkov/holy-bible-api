@@ -4,6 +4,4 @@ pub mod interface;
 
 pub use interface::{BlobObject, BlobStore};
 pub use aws::AwsS3Repo;
-#[cfg(test)]
-pub use mock::MockS3Repo;
 

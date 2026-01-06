@@ -2,11 +2,13 @@ use super::interface::BibleRepo;
 use crate::models::http::response::bibles::{bibles::Bible, verses::BibleVerse};
 use std::{collections::HashMap, error::Error};
 
+#[allow(dead_code)] // Used in tests
 pub struct MockBibleRepo {
     bibles: Vec<Bible>,
     verses: HashMap<(i32, i32, i32), Vec<BibleVerse>>,
 }
 
+#[allow(dead_code)] // Used in tests
 impl MockBibleRepo {
     pub fn new() -> Self {
         Self {
@@ -147,6 +149,184 @@ impl BibleRepo for MockBibleRepo {
             }
         }
         Err(Box::<dyn Error>::from("Verse not found"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_new() {
+        let repo = MockBibleRepo::new();
+        let bibles = repo.get_bibles(None, None).await.unwrap();
+        assert_eq!(bibles.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_with_bibles() {
+        let bibles = vec![
+            Bible {
+                bible_id: 1,
+                language: "en".to_string(),
+                version: Some("KJV".to_string()),
+            },
+            Bible {
+                bible_id: 2,
+                language: "es".to_string(),
+                version: Some("RVR".to_string()),
+            },
+        ];
+        let repo = MockBibleRepo::new().with_bibles(bibles);
+        let result = repo.get_bibles(None, None).await.unwrap();
+        assert_eq!(result.len(), 2);
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_filter_by_language() {
+        let bibles = vec![
+            Bible {
+                bible_id: 1,
+                language: "en".to_string(),
+                version: Some("KJV".to_string()),
+            },
+            Bible {
+                bible_id: 2,
+                language: "es".to_string(),
+                version: Some("RVR".to_string()),
+            },
+        ];
+        let repo = MockBibleRepo::new().with_bibles(bibles);
+        let result = repo.get_bibles(Some("en".to_string()), None).await.unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].language, "en");
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_filter_by_version() {
+        let bibles = vec![
+            Bible {
+                bible_id: 1,
+                language: "en".to_string(),
+                version: Some("KJV".to_string()),
+            },
+            Bible {
+                bible_id: 2,
+                language: "en".to_string(),
+                version: Some("NIV".to_string()),
+            },
+        ];
+        let repo = MockBibleRepo::new().with_bibles(bibles);
+        let result = repo.get_bibles(None, Some("KJV".to_string())).await.unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].version, Some("KJV".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_with_verses() {
+        let verses = vec![
+            BibleVerse {
+                bible_id: 1,
+                book: 1,
+                chapter: 1,
+                verse: 1,
+                text: "In the beginning".to_string(),
+            },
+            BibleVerse {
+                bible_id: 1,
+                book: 1,
+                chapter: 1,
+                verse: 2,
+                text: "God created".to_string(),
+            },
+        ];
+        let repo = MockBibleRepo::new().with_verses(1, 1, 1, verses);
+        let result = repo.get_bible_verses(1, 1, 1, 1, 2).await.unwrap();
+        assert_eq!(result.len(), 2);
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_get_books() {
+        let verse1 = BibleVerse {
+            bible_id: 1,
+            book: 1,
+            chapter: 1,
+            verse: 1,
+            text: "Verse 1".to_string(),
+        };
+        let verse2 = BibleVerse {
+            bible_id: 1,
+            book: 2,
+            chapter: 1,
+            verse: 1,
+            text: "Verse 2".to_string(),
+        };
+        let repo = MockBibleRepo::new()
+            .with_verses(1, 1, 1, vec![verse1])
+            .with_verses(1, 2, 1, vec![verse2]);
+        let num_books = repo.get_bible_books(1).await.unwrap();
+        assert_eq!(num_books, 2);
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_get_chapters() {
+        let verse1 = BibleVerse {
+            bible_id: 1,
+            book: 1,
+            chapter: 1,
+            verse: 1,
+            text: "Verse 1".to_string(),
+        };
+        let verse2 = BibleVerse {
+            bible_id: 1,
+            book: 1,
+            chapter: 2,
+            verse: 1,
+            text: "Verse 2".to_string(),
+        };
+        let repo = MockBibleRepo::new()
+            .with_verses(1, 1, 1, vec![verse1])
+            .with_verses(1, 1, 2, vec![verse2]);
+        let num_chapters = repo.get_bible_chapters(1, 1).await.unwrap();
+        assert_eq!(num_chapters, 2);
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_get_verse_by_number() {
+        let verses = vec![
+            BibleVerse {
+                bible_id: 1,
+                book: 1,
+                chapter: 1,
+                verse: 1,
+                text: "In the beginning".to_string(),
+            },
+            BibleVerse {
+                bible_id: 1,
+                book: 1,
+                chapter: 1,
+                verse: 2,
+                text: "God created".to_string(),
+            },
+        ];
+        let repo = MockBibleRepo::new().with_verses(1, 1, 1, verses);
+        let verse = repo.get_bible_verse_by_number(1, 1, 1, 1).await.unwrap();
+        assert_eq!(verse.verse, 1);
+        assert_eq!(verse.text, "In the beginning");
+    }
+
+    #[tokio::test]
+    async fn test_mock_bible_repo_get_random_verse() {
+        let verses = vec![BibleVerse {
+            bible_id: 1,
+            book: 1,
+            chapter: 1,
+            verse: 1,
+            text: "Random verse".to_string(),
+        }];
+        let repo = MockBibleRepo::new().with_verses(1, 1, 1, verses);
+        let verse = repo.get_random_bible_verse(1, None).await.unwrap();
+        assert_eq!(verse.bible_id, 1);
     }
 }
 

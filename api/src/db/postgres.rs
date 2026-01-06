@@ -1,8 +1,8 @@
-use crate::config::database::DatabaseConfig;
+use crate::config::postgres::PostgresConfig;
 use sqlx::{Pool, Postgres};
 use std::error::Error;
 
-pub async fn get_client(config: &DatabaseConfig) -> Result<Pool<Postgres>, Box<dyn Error>> {
+pub async fn get_client(config: &PostgresConfig) -> Result<Pool<Postgres>, Box<dyn Error>> {
     let database_url = format!(
         "postgres://{}:{}@{}:{}/{}?sslmode={}",
         config.user,

@@ -16,6 +16,7 @@ use std::{error::Error, sync::Arc};
 
 #[derive(Clone)]
 pub struct AppState {
+    #[allow(dead_code)] // Kept for potential future use in middleware or handlers
     pub app_config: Arc<Config>,
     pub redis_client: Arc<redis::Client>,
     pub audio_bible_service: Arc<dyn AudioBibleService>,

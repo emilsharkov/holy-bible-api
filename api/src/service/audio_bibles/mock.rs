@@ -5,6 +5,7 @@ use crate::{
 };
 use std::{collections::HashMap, error::Error};
 
+#[allow(dead_code)] // Used in tests
 pub struct MockAudioBibleService {
     audio_bibles: Vec<AudioBible>,
     books: HashMap<i32, i64>,
@@ -12,6 +13,7 @@ pub struct MockAudioBibleService {
     file_keys: HashMap<(i32, i32, i32), String>,
 }
 
+#[allow(dead_code)] // Used in tests
 impl MockAudioBibleService {
     pub fn new() -> Self {
         Self {
@@ -99,6 +101,119 @@ impl AudioBibleService for MockAudioBibleService {
     ) -> Result<BlobObject, Box<dyn Error>> {
         // Mock implementation - return error indicating this is a mock
         Err(Box::<dyn Error>::from("MockAudioBibleService: BlobObject construction not implemented"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_new() {
+        let service = MockAudioBibleService::new();
+        let audio_bibles = service.get_audio_bibles(None, None).await.unwrap();
+        assert_eq!(audio_bibles.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_with_audio_bibles() {
+        let audio_bibles = vec![
+            AudioBible {
+                audio_bible_id: 1,
+                language: "en".to_string(),
+                version: Some("KJV".to_string()),
+            },
+            AudioBible {
+                audio_bible_id: 2,
+                language: "es".to_string(),
+                version: Some("RVR".to_string()),
+            },
+        ];
+        let service = MockAudioBibleService::new().with_audio_bibles(audio_bibles);
+        let result = service.get_audio_bibles(None, None).await.unwrap();
+        assert_eq!(result.len(), 2);
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_filter_by_language() {
+        let audio_bibles = vec![
+            AudioBible {
+                audio_bible_id: 1,
+                language: "en".to_string(),
+                version: Some("KJV".to_string()),
+            },
+            AudioBible {
+                audio_bible_id: 2,
+                language: "es".to_string(),
+                version: Some("RVR".to_string()),
+            },
+        ];
+        let service = MockAudioBibleService::new().with_audio_bibles(audio_bibles);
+        let result = service.get_audio_bibles(Some("en".to_string()), None).await.unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].language, "en");
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_filter_by_version() {
+        let audio_bibles = vec![
+            AudioBible {
+                audio_bible_id: 1,
+                language: "en".to_string(),
+                version: Some("KJV".to_string()),
+            },
+            AudioBible {
+                audio_bible_id: 2,
+                language: "en".to_string(),
+                version: Some("NIV".to_string()),
+            },
+        ];
+        let service = MockAudioBibleService::new().with_audio_bibles(audio_bibles);
+        let result = service.get_audio_bibles(None, Some("KJV".to_string())).await.unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].version, Some("KJV".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_with_books() {
+        let service = MockAudioBibleService::new().with_books(1, 66);
+        let num_books = service.get_audio_bible_books(1).await.unwrap();
+        assert_eq!(num_books, 66);
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_with_chapters() {
+        let service = MockAudioBibleService::new().with_chapters(1, 1, 50);
+        let num_chapters = service.get_audio_bible_chapters(1, 1).await.unwrap();
+        assert_eq!(num_chapters, 50);
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_with_file_key() {
+        let service = MockAudioBibleService::new()
+            .with_file_key(1, 1, 1, "test/path/file.mp3".to_string());
+        // The with_file_key method is tested by its usage, but get_audio_chapter
+        // returns an error in the mock implementation
+        let result = service.get_audio_chapter(1, 1, 1).await;
+        assert!(result.is_err());
+        if let Err(e) = result {
+            let error_msg = e.to_string();
+            assert!(error_msg.contains("MockAudioBibleService"));
+        }
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_books_not_found() {
+        let service = MockAudioBibleService::new();
+        let result = service.get_audio_bible_books(999).await;
+        assert!(result.is_err());
+    }
+
+    #[tokio::test]
+    async fn test_mock_audio_bible_service_chapters_not_found() {
+        let service = MockAudioBibleService::new();
+        let result = service.get_audio_bible_chapters(999, 1).await;
+        assert!(result.is_err());
     }
 }
 

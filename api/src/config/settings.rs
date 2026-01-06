@@ -4,14 +4,14 @@ use dotenvy::dotenv;
 
 use crate::config::aws::AwsConfig;
 use crate::config::cors::CorsConfig;
-use crate::config::database::DatabaseConfig;
+use crate::config::postgres::PostgresConfig;
 use crate::config::middleware::MiddlewareConfig;
 use crate::config::redis::RedisConfig;
 use crate::config::server::ServerConfig;
 
 #[derive(Debug, Clone)]
 pub struct Config {
-    pub database_config: DatabaseConfig,
+    pub database_config: PostgresConfig,
     pub aws_config: AwsConfig,
     pub middleware_config: MiddlewareConfig,
     pub redis_config: RedisConfig,
@@ -22,7 +22,7 @@ pub struct Config {
 impl Config {
     pub fn new() -> Result<Self, Box<dyn Error>> {
         dotenv().ok();
-        let database_config = DatabaseConfig::from_env()
+        let database_config = PostgresConfig::from_env()
             .map_err(|e| format!("Failed to load database config: {}", e))?;
         let aws_config = AwsConfig::from_env()
             .map_err(|e| format!("Failed to load AWS config: {}", e))?;

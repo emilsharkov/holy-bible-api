@@ -1,6 +1,6 @@
 pub mod aws;
 pub mod cors;
-pub mod database;
+pub mod postgres;
 pub mod middleware;
 pub mod redis;
 pub mod server;

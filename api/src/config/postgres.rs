@@ -1,7 +1,7 @@
 use std::error::Error;
 
 #[derive(Debug, Clone)]
-pub struct DatabaseConfig {
+pub struct PostgresConfig {
     pub host: String,
     pub port: u16,
     pub user: String,
@@ -10,7 +10,7 @@ pub struct DatabaseConfig {
     pub ssl_mode: String,
 }
 
-impl DatabaseConfig {
+impl PostgresConfig {
     pub fn from_env() -> Result<Self, Box<dyn Error>> {
         let host = std::env::var("DB_HOST")
             .map_err(|_| "Missing required environment variable: DB_HOST")?;
@@ -27,7 +27,7 @@ impl DatabaseConfig {
         let ssl_mode = std::env::var("DB_SSL_MODE")
             .map_err(|_| "Missing required environment variable: DB_SSL_MODE")?;
 
-        Ok(DatabaseConfig {
+        Ok(PostgresConfig {
             host,
             port,
             database,
