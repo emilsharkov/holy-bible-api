@@ -9,7 +9,7 @@ cd "$REPO_ROOT" || exit 1
 echo "Running pre-commit hook..."
 
 # Check if api/openapi.json has changed compared to master branch
-if git diff --cached master -- "api/openapi.json" 2>/dev/null | grep -q . || git diff --cached HEAD -- "api/openapi.json" 2>/dev/null | grep -q .; then
+if [ -n "$(git diff --cached master -- "$REPO_ROOT/api/openapi.json" 2>/dev/null)" ]; then
     echo "Detected changes to api/openapi.json, updating OpenAPI clients..."
     
     cd "$REPO_ROOT/openapi-clients" || exit 1
