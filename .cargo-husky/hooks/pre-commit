@@ -54,9 +54,20 @@ cargo fix --allow-staged
 
 # Check if cargo fix succeeded
 if [ $? -ne 0 ]; then
-    echo "Warning: cargo fix had issues, but continuing..."
+    echo "Error: cargo fix failed"
+    exit 1
 fi
 
-echo "Pre-commit hook passed: Code formatted and fixed "
+# Check if cargo fix made any changes
+if ! git diff --quiet; then
+    echo ""
+    echo "cargo fix made changes to your code."
+    echo "Please review the changes, add them to staging, and commit again:"
+    echo "  git add -A"
+    echo "  git commit"
+    exit 1
+fi
+
+echo "Pre-commit hook passed: Code formatted and fixed"
 exit 0
 
