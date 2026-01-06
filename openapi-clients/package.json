@@ -4,10 +4,11 @@
   "description": "OpenAPI Clients for Holy Bible API",
   "scripts": {
     "install-generator": "brew install openapi-generator && source ~/.bashrc",
+    "get-latest-openapi": "cp ../api/openapi.json .",
     "generate-all": "npm run generate-typescript && npm run generate-python && npm run generate-rust",
     "generate-typescript": "rm -rf ./typescript/package/generated && openapi-generator generate -i ./openapi.json -g typescript-fetch -o ./typescript/package/generated --skip-validate-spec --additional-properties=supportsES6=true,importFileExtension=.js",
     "generate-python": "rm -rf ./python/package/generated && openapi-generator generate -i ./openapi.json -g python -o ./python/package/generated --skip-validate-spec",
     "generate-rust": "rm -rf ./rust/package/src/generated && openapi-generator generate -i ./openapi.json -g rust -o ./rust/package/src/generated --skip-validate-spec && rm rust/package/src/generated/Cargo.toml",
-    "build": "echo wassup"
+    "update-all-clients": "npm run get-latest-openapi && npm run generate-all"
   }
 }
