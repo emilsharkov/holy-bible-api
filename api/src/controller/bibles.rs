@@ -1,4 +1,5 @@
 use axum::{extract::Path, extract::Query, extract::State, routing::get, Json, Router};
+use axum_valid::Valid;
 
 use crate::{
     app::state::AppState,
@@ -59,7 +60,7 @@ pub fn get_bible_routes() -> Router<AppState> {
 )]
 pub async fn get_bibles(
     State(app_state): State<AppState>,
-    Query(params): Query<BibleQuery>,
+    Valid(Query(params)): Valid<Query<BibleQuery>>,
 ) -> Result<Json<Vec<Bible>>, axum::response::Response> {
     let bible_service = &app_state.bible_service;
     let bibles = bible_service
@@ -79,7 +80,7 @@ pub async fn get_bibles(
 )]
 pub async fn get_bible_books(
     State(app_state): State<AppState>,
-    Path(params): Path<BookPath>,
+    Valid(Path(params)): Valid<Path<BookPath>>,
 ) -> Result<Json<BooksCountResponse>, axum::response::Response> {
     let bible_service = &app_state.bible_service;
     let num_books = bible_service
@@ -99,7 +100,7 @@ pub async fn get_bible_books(
 )]
 pub async fn get_bible_chapters(
     State(app_state): State<AppState>,
-    Path(params): Path<ChaptersPath>,
+    Valid(Path(params)): Valid<Path<ChaptersPath>>,
 ) -> Result<Json<ChaptersCountResponse>, axum::response::Response> {
     let bible_service = &app_state.bible_service;
     let num_chapters = bible_service
@@ -119,8 +120,8 @@ pub async fn get_bible_chapters(
 )]
 pub async fn get_bible_verses(
     State(app_state): State<AppState>,
-    Query(query): Query<VersesQuery>,
-    Path(path): Path<VersesPath>,
+    Valid(Query(query)): Valid<Query<VersesQuery>>,
+    Valid(Path(path)): Valid<Path<VersesPath>>,
 ) -> Result<Json<Vec<BibleVerse>>, axum::response::Response> {
     let start = query.start.unwrap_or(1);
     let end = query.end.unwrap_or(i32::MAX);
@@ -128,7 +129,7 @@ pub async fn get_bible_verses(
     if start > end {
         return Err(axum::response::Response::builder()
             .status(400)
-            .body("Invalid range".into())
+            .body("Start verse must be less than or equal to end verse".into())
             .expect("axum response builder failed"));
     }
 
@@ -150,7 +151,7 @@ pub async fn get_bible_verses(
 )]
 pub async fn get_bible_verse_by_number(
     State(app_state): State<AppState>,
-    Path(path): Path<VerseByNumberPath>,
+    Valid(Path(path)): Valid<Path<VerseByNumberPath>>,
 ) -> Result<Json<BibleVerse>, axum::response::Response> {
     let bible_service = &app_state.bible_service;
     let verse = bible_service
@@ -175,7 +176,7 @@ pub async fn get_bible_verse_by_number(
 )]
 pub async fn get_random_bible_verse(
     State(app_state): State<AppState>,
-    Path(path): Path<RandomBibleVersePath>,
+    Valid(Path(path)): Valid<Path<RandomBibleVersePath>>,
 ) -> Result<Json<BibleVerse>, axum::response::Response> {
     let bible_service = &app_state.bible_service;
     let verse = bible_service
@@ -196,7 +197,7 @@ pub async fn get_random_bible_verse(
 )]
 pub async fn get_verse_of_the_day(
     State(app_state): State<AppState>,
-    Path(path): Path<VerseOfTheDayPath>,
+    Valid(Path(path)): Valid<Path<VerseOfTheDayPath>>,
 ) -> Result<Json<BibleVerse>, axum::response::Response> {
     // Generate seed based on current date (days since epoch) to ensure same verse for the day
     let days_since_epoch = std::time::SystemTime::now()

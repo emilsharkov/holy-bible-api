@@ -5,6 +5,7 @@ use axum::{
     routing::get,
     Json, Router,
 };
+use axum_valid::Valid;
 use tokio_util::io::ReaderStream;
 
 use crate::{
@@ -52,7 +53,7 @@ pub fn get_audio_bible_routes() -> Router<AppState> {
 )]
 pub async fn get_audio_bibles(
     State(app_state): State<AppState>,
-    Query(params): Query<AudioBibleQuery>,
+    Valid(Query(params)): Valid<Query<AudioBibleQuery>>,
 ) -> Result<Json<Vec<AudioBible>>, axum::response::Response> {
     let audio_bible_service = &app_state.audio_bible_service;
     let language = params.language;
@@ -74,7 +75,7 @@ pub async fn get_audio_bibles(
 )]
 pub async fn get_audio_bible_books(
     State(app_state): State<AppState>,
-    Path(params): Path<BookPath>,
+    Valid(Path(params)): Valid<Path<BookPath>>,
 ) -> Result<Json<BooksCountResponse>, axum::response::Response> {
     let audio_bible_service = &app_state.audio_bible_service;
     let num_books = audio_bible_service
@@ -94,7 +95,7 @@ pub async fn get_audio_bible_books(
 )]
 pub async fn get_audio_bible_chapters(
     State(app_state): State<AppState>,
-    Path(params): Path<ChaptersPath>,
+    Valid(Path(params)): Valid<Path<ChaptersPath>>,
 ) -> Result<Json<ChaptersCountResponse>, axum::response::Response> {
     let audio_bible_service = &app_state.audio_bible_service;
     let num_chapters = audio_bible_service
@@ -115,7 +116,7 @@ pub async fn get_audio_bible_chapters(
 )]
 pub async fn get_audio_chapter(
     State(app_state): State<AppState>,
-    Path(params): Path<AudioChapterPath>,
+    Valid(Path(params)): Valid<Path<AudioChapterPath>>,
 ) -> Result<Response<Body>, axum::response::Response> {
     let audio_bible_service = &app_state.audio_bible_service;
     let blob_object = audio_bible_service

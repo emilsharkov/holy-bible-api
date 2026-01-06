@@ -337,3 +337,390 @@ async fn test_get_verse_of_the_day() {
     }
 }
 
+// Validation tests - verify that invalid parameters return appropriate error status codes
+// Note: axum-valid returns 400 Bad Request for validation errors, not 422
+mod validation_tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_get_bibles_invalid_language_too_long() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        let long_language = "a".repeat(101);
+        let response = client
+            .get(&format!("{}/bibles?language={}", server.base_url, long_language))
+            .send()
+            .await
+            .expect("Failed to send request");
+        
+        assert_eq!(
+            response.status(),
+            400,
+            "GET /bibles with language > 100 chars should return 400"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_bibles_invalid_version_too_long() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        let long_version = "a".repeat(101);
+        let response = client
+            .get(&format!("{}/bibles?version={}", server.base_url, long_version))
+            .send()
+            .await
+            .expect("Failed to send request");
+        
+        assert_eq!(
+            response.status(),
+            400,
+            "GET /bibles with version > 100 chars should return 400"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_books_invalid_bible_id_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        let response = client
+            .get(&format!("{}/bibles/0/books", server.base_url))
+            .send()
+            .await
+            .expect("Failed to send request");
+        
+        assert_eq!(
+            response.status(),
+            400,
+            "GET /bibles/0/books should return 400 for invalid bible_id"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_books_invalid_bible_id_negative() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        let response = client
+            .get(&format!("{}/bibles/-1/books", server.base_url))
+            .send()
+            .await
+            .expect("Failed to send request");
+        
+        assert_eq!(
+            response.status(),
+            400,
+            "GET /bibles/-1/books should return 400 for negative bible_id"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_chapters_invalid_book_num_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        // First get a valid bible_id
+        let bibles_response = client
+            .get(&format!("{}/bibles", server.base_url))
+            .send()
+            .await
+            .expect("Failed to get bibles");
+        
+        let bibles: Vec<serde_json::Value> = bibles_response
+            .json()
+            .await
+            .expect("Failed to parse bibles");
+        
+        if let Some(bible) = bibles.first() {
+            let bible_id = bible.get("bible_id")
+                .and_then(|v| v.as_i64())
+                .expect("bible_id should be a number");
+            
+            let response = client
+                .get(&format!("{}/bibles/{}/books/0/chapters", server.base_url, bible_id))
+                .send()
+                .await
+                .expect("Failed to send request");
+            
+            assert_eq!(
+                response.status(),
+                400,
+                "GET /bibles/{{id}}/books/0/chapters should return 400 for invalid book_num"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_chapters_invalid_bible_id_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        let response = client
+            .get(&format!("{}/bibles/0/books/1/chapters", server.base_url))
+            .send()
+            .await
+            .expect("Failed to send request");
+        
+        assert_eq!(
+            response.status(),
+            400,
+            "GET /bibles/0/books/1/chapters should return 400 for invalid bible_id"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_verses_invalid_start_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        // First get a valid bible_id
+        let bibles_response = client
+            .get(&format!("{}/bibles", server.base_url))
+            .send()
+            .await
+            .expect("Failed to get bibles");
+        
+        let bibles: Vec<serde_json::Value> = bibles_response
+            .json()
+            .await
+            .expect("Failed to parse bibles");
+        
+        if let Some(bible) = bibles.first() {
+            let bible_id = bible.get("bible_id")
+                .and_then(|v| v.as_i64())
+                .expect("bible_id should be a number");
+            
+            let response = client
+                .get(&format!("{}/bibles/{}/books/1/chapters/1/verses?start=0", server.base_url, bible_id))
+                .send()
+                .await
+                .expect("Failed to send request");
+            
+            assert_eq!(
+                response.status(),
+                400,
+                "GET /bibles/{{id}}/books/1/chapters/1/verses?start=0 should return 400"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_verses_invalid_start_negative() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        // First get a valid bible_id
+        let bibles_response = client
+            .get(&format!("{}/bibles", server.base_url))
+            .send()
+            .await
+            .expect("Failed to get bibles");
+        
+        let bibles: Vec<serde_json::Value> = bibles_response
+            .json()
+            .await
+            .expect("Failed to parse bibles");
+        
+        if let Some(bible) = bibles.first() {
+            let bible_id = bible.get("bible_id")
+                .and_then(|v| v.as_i64())
+                .expect("bible_id should be a number");
+            
+            let response = client
+                .get(&format!("{}/bibles/{}/books/1/chapters/1/verses?start=-1", server.base_url, bible_id))
+                .send()
+                .await
+                .expect("Failed to send request");
+            
+            assert_eq!(
+                response.status(),
+                400,
+                "GET /bibles/{{id}}/books/1/chapters/1/verses?start=-1 should return 400"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_verses_invalid_end_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        // First get a valid bible_id
+        let bibles_response = client
+            .get(&format!("{}/bibles", server.base_url))
+            .send()
+            .await
+            .expect("Failed to get bibles");
+        
+        let bibles: Vec<serde_json::Value> = bibles_response
+            .json()
+            .await
+            .expect("Failed to parse bibles");
+        
+        if let Some(bible) = bibles.first() {
+            let bible_id = bible.get("bible_id")
+                .and_then(|v| v.as_i64())
+                .expect("bible_id should be a number");
+            
+            let response = client
+                .get(&format!("{}/bibles/{}/books/1/chapters/1/verses?end=0", server.base_url, bible_id))
+                .send()
+                .await
+                .expect("Failed to send request");
+            
+            assert_eq!(
+                response.status(),
+                400,
+                "GET /bibles/{{id}}/books/1/chapters/1/verses?end=0 should return 400"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_verses_invalid_chapter_num_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        // First get a valid bible_id
+        let bibles_response = client
+            .get(&format!("{}/bibles", server.base_url))
+            .send()
+            .await
+            .expect("Failed to get bibles");
+        
+        let bibles: Vec<serde_json::Value> = bibles_response
+            .json()
+            .await
+            .expect("Failed to parse bibles");
+        
+        if let Some(bible) = bibles.first() {
+            let bible_id = bible.get("bible_id")
+                .and_then(|v| v.as_i64())
+                .expect("bible_id should be a number");
+            
+            let response = client
+                .get(&format!("{}/bibles/{}/books/1/chapters/0/verses", server.base_url, bible_id))
+                .send()
+                .await
+                .expect("Failed to send request");
+            
+            assert_eq!(
+                response.status(),
+                400,
+                "GET /bibles/{{id}}/books/1/chapters/0/verses should return 400"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_verse_by_number_invalid_verse_num_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        // First get a valid bible_id
+        let bibles_response = client
+            .get(&format!("{}/bibles", server.base_url))
+            .send()
+            .await
+            .expect("Failed to get bibles");
+        
+        let bibles: Vec<serde_json::Value> = bibles_response
+            .json()
+            .await
+            .expect("Failed to parse bibles");
+        
+        if let Some(bible) = bibles.first() {
+            let bible_id = bible.get("bible_id")
+                .and_then(|v| v.as_i64())
+                .expect("bible_id should be a number");
+            
+            let response = client
+                .get(&format!("{}/bibles/{}/books/1/chapters/1/verses/0", server.base_url, bible_id))
+                .send()
+                .await
+                .expect("Failed to send request");
+            
+            assert_eq!(
+                response.status(),
+                400,
+                "GET /bibles/{{id}}/books/1/chapters/1/verses/0 should return 400"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_get_random_bible_verse_invalid_bible_id_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        let response = client
+            .get(&format!("{}/bibles/0/random", server.base_url))
+            .send()
+            .await
+            .expect("Failed to send request");
+        
+        assert_eq!(
+            response.status(),
+            400,
+            "GET /bibles/0/random should return 400 for invalid bible_id"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_verse_of_the_day_invalid_bible_id_zero() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        let response = client
+            .get(&format!("{}/bibles/0/verse-of-the-day", server.base_url))
+            .send()
+            .await
+            .expect("Failed to send request");
+        
+        assert_eq!(
+            response.status(),
+            400,
+            "GET /bibles/0/verse-of-the-day should return 400 for invalid bible_id"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_bible_verses_invalid_range_start_greater_than_end() {
+        let server = TestServer::start().await.expect("Failed to start test server");
+        let client = server.client();
+        
+        // First get a valid bible_id
+        let bibles_response = client
+            .get(&format!("{}/bibles", server.base_url))
+            .send()
+            .await
+            .expect("Failed to get bibles");
+        
+        let bibles: Vec<serde_json::Value> = bibles_response
+            .json()
+            .await
+            .expect("Failed to parse bibles");
+        
+        if let Some(bible) = bibles.first() {
+            let bible_id = bible.get("bible_id")
+                .and_then(|v| v.as_i64())
+                .expect("bible_id should be a number");
+            
+            // Test that start > end returns 400 (handled by manual validation in controller)
+            let response = client
+                .get(&format!("{}/bibles/{}/books/1/chapters/1/verses?start=10&end=5", server.base_url, bible_id))
+                .send()
+                .await
+                .expect("Failed to send request");
+            
+            assert_eq!(
+                response.status(),
+                400,
+                "GET /bibles/{{id}}/books/1/chapters/1/verses?start=10&end=5 should return 400 for invalid range"
+            );
+        }
+    }
+}
+
