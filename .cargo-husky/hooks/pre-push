@@ -1,4 +1,0 @@
-#!/bin/sh
-# Pre-push hook (empty - logic moved to pre-commit)
-
-exit 0
