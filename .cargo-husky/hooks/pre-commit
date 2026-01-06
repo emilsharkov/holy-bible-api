@@ -57,6 +57,6 @@ if [ $? -ne 0 ]; then
     echo "Warning: cargo fix had issues, but continuing..."
 fi
 
-echo "Pre-commit hook passed: Code formatted and fixed"
+echo "Pre-commit hook passed: Code formatted and fixed "
 exit 0
 
