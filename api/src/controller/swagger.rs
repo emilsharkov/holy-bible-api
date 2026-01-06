@@ -6,7 +6,7 @@ use crate::controller::{
     },
     bibles::{
         __path_get_bible_books, __path_get_bible_chapters, __path_get_bible_verse_by_number,
-        __path_get_bible_verses, __path_get_random_bible_verse, __path_get_bibles,
+        __path_get_bible_verses, __path_get_bibles, __path_get_random_bible_verse,
         __path_get_verse_of_the_day,
     },
     // health::__path_get_health,
@@ -18,7 +18,7 @@ use utoipa_swagger_ui::SwaggerUi;
 #[derive(OpenApi)]
 #[openapi(paths(
     // get_health,
-    get_bibles,
+    // get_bibles,
     get_bible_books,
     get_bible_chapters,
     get_bible_verses,
