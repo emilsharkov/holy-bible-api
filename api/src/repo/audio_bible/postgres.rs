@@ -1,8 +1,5 @@
 use super::interface::AudioBibleRepo;
-use crate::models::{
-    http::response::audio_bibles::audio_bibles::AudioBible,
-    sql,
-};
+use crate::models::{http::response::audio_bibles::audio_bibles::AudioBible, sql};
 use sqlx::{PgPool, QueryBuilder};
 use std::{error::Error, sync::Arc};
 
@@ -133,4 +130,3 @@ impl AudioBibleRepo for PgAudioBibleRepo {
         Ok(file_key)
     }
 }
-

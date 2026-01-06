@@ -1,6 +1,6 @@
 pub mod default;
-pub mod mock;
 pub mod interface;
+pub mod mock;
 
-pub use interface::AudioBibleService;
 pub use default::DefaultAudioBibleService;
+pub use interface::AudioBibleService;

@@ -22,8 +22,15 @@ impl MockBibleRepo {
         self
     }
 
-    pub fn with_verses(mut self, bible_id: i32, book_num: i32, chapter_num: i32, verses: Vec<BibleVerse>) -> Self {
-        self.verses.insert((bible_id, book_num, chapter_num), verses);
+    pub fn with_verses(
+        mut self,
+        bible_id: i32,
+        book_num: i32,
+        chapter_num: i32,
+        verses: Vec<BibleVerse>,
+    ) -> Self {
+        self.verses
+            .insert((bible_id, book_num, chapter_num), verses);
         self
     }
 }
@@ -41,11 +48,15 @@ impl BibleRepo for MockBibleRepo {
         language: Option<String>,
         version: Option<String>,
     ) -> Result<Vec<Bible>, Box<dyn Error>> {
-        let mut result: Vec<Bible> = self.bibles.iter().map(|b| Bible {
-            bible_id: b.bible_id,
-            language: b.language.clone(),
-            version: b.version.clone(),
-        }).collect();
+        let mut result: Vec<Bible> = self
+            .bibles
+            .iter()
+            .map(|b| Bible {
+                bible_id: b.bible_id,
+                language: b.language.clone(),
+                version: b.version.clone(),
+            })
+            .collect();
 
         if let Some(lang) = language {
             result.retain(|b| b.language == lang);
@@ -68,7 +79,11 @@ impl BibleRepo for MockBibleRepo {
         Ok(books.len() as i64)
     }
 
-    async fn get_bible_chapters(&self, bible_id: i32, book_num: i32) -> Result<i64, Box<dyn Error>> {
+    async fn get_bible_chapters(
+        &self,
+        bible_id: i32,
+        book_num: i32,
+    ) -> Result<i64, Box<dyn Error>> {
         let mut chapters = std::collections::HashSet::new();
         for ((bid, bnum, chapter_num), _) in &self.verses {
             if *bid == bible_id && *bnum == book_num {
@@ -217,7 +232,10 @@ mod tests {
             },
         ];
         let repo = MockBibleRepo::new().with_bibles(bibles);
-        let result = repo.get_bibles(None, Some("KJV".to_string())).await.unwrap();
+        let result = repo
+            .get_bibles(None, Some("KJV".to_string()))
+            .await
+            .unwrap();
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].version, Some("KJV".to_string()));
     }
@@ -329,4 +347,3 @@ mod tests {
         assert_eq!(verse.bible_id, 1);
     }
 }
-

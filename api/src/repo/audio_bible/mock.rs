@@ -30,7 +30,8 @@ impl MockAudioBibleRepo {
     }
 
     pub fn with_chapters(mut self, audio_bible_id: i32, book_num: i32, num_chapters: i64) -> Self {
-        self.chapters.insert((audio_bible_id, book_num), num_chapters);
+        self.chapters
+            .insert((audio_bible_id, book_num), num_chapters);
         self
     }
 }
@@ -48,11 +49,15 @@ impl AudioBibleRepo for MockAudioBibleRepo {
         language: Option<String>,
         version: Option<String>,
     ) -> Result<Vec<AudioBible>, Box<dyn Error>> {
-        let mut result: Vec<AudioBible> = self.audio_bibles.iter().map(|ab| AudioBible {
-            audio_bible_id: ab.audio_bible_id,
-            language: ab.language.clone(),
-            version: ab.version.clone(),
-        }).collect();
+        let mut result: Vec<AudioBible> = self
+            .audio_bibles
+            .iter()
+            .map(|ab| AudioBible {
+                audio_bible_id: ab.audio_bible_id,
+                language: ab.language.clone(),
+                version: ab.version.clone(),
+            })
+            .collect();
 
         if let Some(lang) = language {
             result.retain(|ab| ab.language == lang);
@@ -150,7 +155,10 @@ mod tests {
             },
         ];
         let repo = MockAudioBibleRepo::new().with_audio_bibles(audio_bibles);
-        let result = repo.get_audio_bibles(Some("en".to_string()), None).await.unwrap();
+        let result = repo
+            .get_audio_bibles(Some("en".to_string()), None)
+            .await
+            .unwrap();
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].language, "en");
     }
@@ -170,7 +178,10 @@ mod tests {
             },
         ];
         let repo = MockAudioBibleRepo::new().with_audio_bibles(audio_bibles);
-        let result = repo.get_audio_bibles(None, Some("KJV".to_string())).await.unwrap();
+        let result = repo
+            .get_audio_bibles(None, Some("KJV".to_string()))
+            .await
+            .unwrap();
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].version, Some("KJV".to_string()));
     }
@@ -215,4 +226,3 @@ mod tests {
         assert!(result.is_err());
     }
 }
-

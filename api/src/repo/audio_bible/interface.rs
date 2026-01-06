@@ -24,4 +24,3 @@ pub trait AudioBibleRepo: Send + Sync {
         chapter_num: i32,
     ) -> Result<String, Box<dyn Error>>;
 }
-

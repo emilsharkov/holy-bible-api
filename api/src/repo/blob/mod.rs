@@ -1,7 +1,6 @@
 pub mod aws;
-pub mod mock;
 pub mod interface;
+pub mod mock;
 
-pub use interface::{BlobObject, BlobStore};
 pub use aws::AwsS3Repo;
-
+pub use interface::{BlobObject, BlobStore};

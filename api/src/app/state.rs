@@ -1,11 +1,7 @@
 use crate::{
     config,
     db::{self},
-    repo::{
-        audio_bible::PgAudioBibleRepo,
-        bible::PgBibleRepo,
-        blob::AwsS3Repo,
-    },
+    repo::{audio_bible::PgAudioBibleRepo, bible::PgBibleRepo, blob::AwsS3Repo},
     service::{
         audio_bibles::{AudioBibleService, DefaultAudioBibleService},
         bibles::{BibleService, DefaultBibleService},
@@ -34,14 +30,12 @@ impl AppState {
         let audio_bible_repo = Arc::new(PgAudioBibleRepo::new(db_client.clone()));
         let blob_store = Arc::new(AwsS3Repo::new(s3_client.clone()));
 
-        let audio_bible_service = Arc::new(
-            DefaultAudioBibleService::new(
-                audio_bible_repo.clone(),
-                blob_store.clone(),
-                app_config.clone(),
-            )
-        );
-        let bible_service= Arc::new(DefaultBibleService::new(bible_repo.clone()));
+        let audio_bible_service = Arc::new(DefaultAudioBibleService::new(
+            audio_bible_repo.clone(),
+            blob_store.clone(),
+            app_config.clone(),
+        ));
+        let bible_service = Arc::new(DefaultBibleService::new(bible_repo.clone()));
 
         let app_state = AppState {
             app_config,

@@ -54,4 +54,3 @@ impl BlobStore for AwsS3Repo {
         Ok(BlobObject::new(object_output.body))
     }
 }
-

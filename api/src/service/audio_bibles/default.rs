@@ -36,11 +36,15 @@ impl AudioBibleService for DefaultAudioBibleService {
         language: Option<String>,
         version: Option<String>,
     ) -> Result<Vec<AudioBible>, Box<dyn Error>> {
-        self.audio_bible_repo.get_audio_bibles(language, version).await
+        self.audio_bible_repo
+            .get_audio_bibles(language, version)
+            .await
     }
 
     async fn get_audio_bible_books(&self, audio_bible_id: i32) -> Result<i64, Box<dyn Error>> {
-        self.audio_bible_repo.get_audio_bible_books(audio_bible_id).await
+        self.audio_bible_repo
+            .get_audio_bible_books(audio_bible_id)
+            .await
     }
 
     async fn get_audio_bible_chapters(
@@ -69,4 +73,3 @@ impl AudioBibleService for DefaultAudioBibleService {
             .await
     }
 }
-

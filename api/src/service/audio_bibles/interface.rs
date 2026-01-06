@@ -1,6 +1,5 @@
 use crate::{
-    models::http::response::audio_bibles::audio_bibles::AudioBible,
-    repo::blob::BlobObject,
+    models::http::response::audio_bibles::audio_bibles::AudioBible, repo::blob::BlobObject,
 };
 use std::error::Error;
 
@@ -27,4 +26,3 @@ pub trait AudioBibleService: Send + Sync {
         chapter_num: i32,
     ) -> Result<BlobObject, Box<dyn Error>>;
 }
-

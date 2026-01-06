@@ -66,4 +66,3 @@ mod tests {
         assert!(errors.field_errors().contains_key("version"));
     }
 }
-

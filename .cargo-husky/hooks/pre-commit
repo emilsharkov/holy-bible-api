@@ -1,10 +1,42 @@
 #!/bin/sh
 # Pre-commit hook to format and fix Rust code
 # This hook runs cargo fmt and cargo fix before committing
+# If api/openapi.json has changed, it also updates all OpenAPI clients
 
-cd "$(dirname "$0")/../../api" || exit 1
+REPO_ROOT="$(dirname "$0")/../.."
+cd "$REPO_ROOT" || exit 1
 
-echo "Running pre-commit hook: Formatting and fixing Rust code..."
+echo "Running pre-commit hook..."
+
+# Check if api/openapi.json is in the staged changes
+if git diff --cached --name-only | grep -q "^api/openapi.json$"; then
+    echo "Detected changes to api/openapi.json, updating OpenAPI clients..."
+    
+    cd "$REPO_ROOT/openapi-clients" || exit 1
+    
+    # Check if package.json exists
+    if [ ! -f "package.json" ]; then
+        echo "Error: package.json not found in openapi-clients directory"
+        exit 1
+    fi
+    
+    # Run the update-all-clients script
+    npm run update-all-clients
+    
+    # Check if the command succeeded
+    if [ $? -ne 0 ]; then
+        echo "Error: npm run update-all-clients failed"
+        exit 1
+    fi
+    
+    echo "OpenAPI clients updated successfully"
+    cd "$REPO_ROOT" || exit 1
+fi
+
+# Format and fix Rust code
+cd "$REPO_ROOT/api" || exit 1
+
+echo "Formatting and fixing Rust code..."
 
 # Run cargo fmt
 echo "Running cargo fmt..."
@@ -18,7 +50,7 @@ fi
 
 # Run cargo fix
 echo "Running cargo fix..."
-cargo fix --allow-dirty --allow-staged
+cargo fix --allow-staged
 
 # Check if cargo fix succeeded
 if [ $? -ne 0 ]; then

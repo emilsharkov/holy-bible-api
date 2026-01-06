@@ -18,4 +18,3 @@ impl ServerConfig {
         Ok(ServerConfig { host, port })
     }
 }
-

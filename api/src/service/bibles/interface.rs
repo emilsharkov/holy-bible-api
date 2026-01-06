@@ -11,7 +11,8 @@ pub trait BibleService: Send + Sync {
 
     async fn get_bible_books(&self, bible_id: i32) -> Result<i64, Box<dyn Error>>;
 
-    async fn get_bible_chapters(&self, bible_id: i32, book_num: i32) -> Result<i64, Box<dyn Error>>;
+    async fn get_bible_chapters(&self, bible_id: i32, book_num: i32)
+        -> Result<i64, Box<dyn Error>>;
 
     async fn get_bible_verses(
         &self,
@@ -36,4 +37,3 @@ pub trait BibleService: Send + Sync {
         seed: Option<f64>,
     ) -> Result<BibleVerse, Box<dyn Error>>;
 }
-

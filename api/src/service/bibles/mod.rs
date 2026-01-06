@@ -1,6 +1,6 @@
 pub mod default;
-pub mod mock;
 pub mod interface;
+pub mod mock;
 
-pub use interface::BibleService;
 pub use default::DefaultBibleService;
+pub use interface::BibleService;

@@ -9,15 +9,15 @@ use crate::{
             bibles::{
                 books::BookPath,
                 chapters::ChaptersPath,
-                verses::{RandomBibleVersePath, VerseByNumberPath, VerseOfTheDayPath, VersesPath, VersesQuery},
+                verses::{
+                    RandomBibleVersePath, VerseByNumberPath, VerseOfTheDayPath, VersesPath,
+                    VersesQuery,
+                },
             },
             common::BibleQuery,
         },
         response::{
-            bibles::{
-                bibles::Bible,
-                verses::BibleVerse
-            },
+            bibles::{bibles::Bible, verses::BibleVerse},
             common::{BooksCountResponse, ChaptersCountResponse},
         },
     },
@@ -40,10 +40,7 @@ pub fn get_bible_routes() -> Router<AppState> {
             "/bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses/{verse_num}",
             get(get_bible_verse_by_number),
         )
-        .route(
-            "/bibles/{bible_id}/random",
-            get(get_random_bible_verse),
-        )
+        .route("/bibles/{bible_id}/random", get(get_random_bible_verse))
         .route(
             "/bibles/{bible_id}/verse-of-the-day",
             get(get_verse_of_the_day),
@@ -203,8 +200,9 @@ pub async fn get_verse_of_the_day(
     let days_since_epoch = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
-        .as_secs() / 86400; // Convert to days
-    
+        .as_secs()
+        / 86400; // Convert to days
+
     let bible_service = &app_state.bible_service;
     let verse = bible_service
         .get_random_bible_verse(path.bible_id, Some(days_since_epoch as f64))

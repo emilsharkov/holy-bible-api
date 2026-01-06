@@ -1,8 +1,5 @@
 use crate::service::bibles::interface::BibleService;
-use crate::{
-    models::http::response::bibles::verses::BibleVerse,
-    repo::bible::BibleRepo,
-};
+use crate::{models::http::response::bibles::verses::BibleVerse, repo::bible::BibleRepo};
 use std::{error::Error, sync::Arc};
 
 pub struct DefaultBibleService {
@@ -29,7 +26,11 @@ impl BibleService for DefaultBibleService {
         self.bible_repo.get_bible_books(bible_id).await
     }
 
-    async fn get_bible_chapters(&self, bible_id: i32, book_num: i32) -> Result<i64, Box<dyn Error>> {
+    async fn get_bible_chapters(
+        &self,
+        bible_id: i32,
+        book_num: i32,
+    ) -> Result<i64, Box<dyn Error>> {
         self.bible_repo.get_bible_chapters(bible_id, book_num).await
     }
 
@@ -66,4 +67,3 @@ impl BibleService for DefaultBibleService {
         self.bible_repo.get_random_bible_verse(bible_id, seed).await
     }
 }
-

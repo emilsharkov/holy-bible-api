@@ -10,4 +10,3 @@ pub struct BooksCountResponse {
 pub struct ChaptersCountResponse {
     pub num_chapters: i64,
 }
-

@@ -1,7 +1,6 @@
 use crate::service::audio_bibles::interface::AudioBibleService;
 use crate::{
-    models::http::response::audio_bibles::audio_bibles::AudioBible,
-    repo::blob::BlobObject,
+    models::http::response::audio_bibles::audio_bibles::AudioBible, repo::blob::BlobObject,
 };
 use std::{collections::HashMap, error::Error};
 
@@ -35,12 +34,20 @@ impl MockAudioBibleService {
     }
 
     pub fn with_chapters(mut self, audio_bible_id: i32, book_num: i32, num_chapters: i64) -> Self {
-        self.chapters.insert((audio_bible_id, book_num), num_chapters);
+        self.chapters
+            .insert((audio_bible_id, book_num), num_chapters);
         self
     }
 
-    pub fn with_file_key(mut self, audio_bible_id: i32, book_num: i32, chapter_num: i32, file_key: String) -> Self {
-        self.file_keys.insert((audio_bible_id, book_num, chapter_num), file_key);
+    pub fn with_file_key(
+        mut self,
+        audio_bible_id: i32,
+        book_num: i32,
+        chapter_num: i32,
+        file_key: String,
+    ) -> Self {
+        self.file_keys
+            .insert((audio_bible_id, book_num, chapter_num), file_key);
         self
     }
 }
@@ -58,11 +65,15 @@ impl AudioBibleService for MockAudioBibleService {
         language: Option<String>,
         version: Option<String>,
     ) -> Result<Vec<AudioBible>, Box<dyn Error>> {
-        let mut result: Vec<AudioBible> = self.audio_bibles.iter().map(|ab| AudioBible {
-            audio_bible_id: ab.audio_bible_id,
-            language: ab.language.clone(),
-            version: ab.version.clone(),
-        }).collect();
+        let mut result: Vec<AudioBible> = self
+            .audio_bibles
+            .iter()
+            .map(|ab| AudioBible {
+                audio_bible_id: ab.audio_bible_id,
+                language: ab.language.clone(),
+                version: ab.version.clone(),
+            })
+            .collect();
 
         if let Some(lang) = language {
             result.retain(|ab| ab.language == lang);
@@ -100,7 +111,9 @@ impl AudioBibleService for MockAudioBibleService {
         _chapter_num: i32,
     ) -> Result<BlobObject, Box<dyn Error>> {
         // Mock implementation - return error indicating this is a mock
-        Err(Box::<dyn Error>::from("MockAudioBibleService: BlobObject construction not implemented"))
+        Err(Box::<dyn Error>::from(
+            "MockAudioBibleService: BlobObject construction not implemented",
+        ))
     }
 }
 
@@ -149,7 +162,10 @@ mod tests {
             },
         ];
         let service = MockAudioBibleService::new().with_audio_bibles(audio_bibles);
-        let result = service.get_audio_bibles(Some("en".to_string()), None).await.unwrap();
+        let result = service
+            .get_audio_bibles(Some("en".to_string()), None)
+            .await
+            .unwrap();
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].language, "en");
     }
@@ -169,7 +185,10 @@ mod tests {
             },
         ];
         let service = MockAudioBibleService::new().with_audio_bibles(audio_bibles);
-        let result = service.get_audio_bibles(None, Some("KJV".to_string())).await.unwrap();
+        let result = service
+            .get_audio_bibles(None, Some("KJV".to_string()))
+            .await
+            .unwrap();
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].version, Some("KJV".to_string()));
     }
@@ -190,8 +209,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_mock_audio_bible_service_with_file_key() {
-        let service = MockAudioBibleService::new()
-            .with_file_key(1, 1, 1, "test/path/file.mp3".to_string());
+        let service =
+            MockAudioBibleService::new().with_file_key(1, 1, 1, "test/path/file.mp3".to_string());
         // The with_file_key method is tested by its usage, but get_audio_chapter
         // returns an error in the mock implementation
         let result = service.get_audio_chapter(1, 1, 1).await;
@@ -216,4 +235,3 @@ mod tests {
         assert!(result.is_err());
     }
 }
-

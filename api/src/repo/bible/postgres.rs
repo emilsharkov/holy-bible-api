@@ -4,8 +4,8 @@ use crate::models::{
     sql,
 };
 use sqlx::{PgPool, QueryBuilder};
-use std::{error::Error, sync::Arc};
 use std::time;
+use std::{error::Error, sync::Arc};
 
 pub struct PgBibleRepo {
     db: Arc<PgPool>,
@@ -78,7 +78,11 @@ impl BibleRepo for PgBibleRepo {
         Ok(num_books)
     }
 
-    async fn get_bible_chapters(&self, bible_id: i32, book_num: i32) -> Result<i64, Box<dyn Error>> {
+    async fn get_bible_chapters(
+        &self,
+        bible_id: i32,
+        book_num: i32,
+    ) -> Result<i64, Box<dyn Error>> {
         let rows: Vec<sql::bible::Count> = sqlx::query_as(
             "SELECT count(distinct chapter) FROM verses WHERE bible_id = $1 AND book = $2",
         )
@@ -210,4 +214,3 @@ impl BibleRepo for PgBibleRepo {
         })
     }
 }
-

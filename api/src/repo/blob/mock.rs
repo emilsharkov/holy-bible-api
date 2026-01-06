@@ -17,7 +17,8 @@ impl MockBlobRepo {
     }
 
     pub fn with_object(mut self, bucket: &str, key: &str, data: Vec<u8>) -> Self {
-        self.objects.insert((bucket.to_string(), key.to_string()), data);
+        self.objects
+            .insert((bucket.to_string(), key.to_string()), data);
         self
     }
 }
@@ -74,14 +75,13 @@ mod tests {
         let repo = MockBlobRepo::new()
             .with_object("bucket1", "key1", b"data1".to_vec())
             .with_object("bucket2", "key2", b"data2".to_vec());
-        
+
         let obj1 = repo.get_object("bucket1", "key1").await.unwrap();
         // ByteStream doesn't have is_some(), but if we got here without error, the object exists
         let _ = obj1.content;
-        
+
         let obj2 = repo.get_object("bucket2", "key2").await.unwrap();
         // ByteStream doesn't have is_some(), but if we got here without error, the object exists
         let _ = obj2.content;
     }
 }
-

@@ -1,5 +1,5 @@
-use crate::service::bibles::interface::BibleService;
 use crate::models::http::response::bibles::{bibles::Bible, verses::BibleVerse};
+use crate::service::bibles::interface::BibleService;
 use std::{collections::HashMap, error::Error};
 
 #[allow(dead_code)] // Used in tests
@@ -36,8 +36,15 @@ impl MockBibleService {
         self
     }
 
-    pub fn with_verses(mut self, bible_id: i32, book_num: i32, chapter_num: i32, verses: Vec<BibleVerse>) -> Self {
-        self.verses.insert((bible_id, book_num, chapter_num), verses);
+    pub fn with_verses(
+        mut self,
+        bible_id: i32,
+        book_num: i32,
+        chapter_num: i32,
+        verses: Vec<BibleVerse>,
+    ) -> Self {
+        self.verses
+            .insert((bible_id, book_num, chapter_num), verses);
         self
     }
 }
@@ -55,11 +62,15 @@ impl BibleService for MockBibleService {
         language: Option<String>,
         version: Option<String>,
     ) -> Result<Vec<Bible>, Box<dyn Error>> {
-        let mut result: Vec<Bible> = self.bibles.iter().map(|b| Bible {
-            bible_id: b.bible_id,
-            language: b.language.clone(),
-            version: b.version.clone(),
-        }).collect();
+        let mut result: Vec<Bible> = self
+            .bibles
+            .iter()
+            .map(|b| Bible {
+                bible_id: b.bible_id,
+                language: b.language.clone(),
+                version: b.version.clone(),
+            })
+            .collect();
 
         if let Some(lang) = language {
             result.retain(|b| b.language == lang);
@@ -79,7 +90,11 @@ impl BibleService for MockBibleService {
             .ok_or_else(|| Box::<dyn Error>::from("Bible not found"))
     }
 
-    async fn get_bible_chapters(&self, bible_id: i32, book_num: i32) -> Result<i64, Box<dyn Error>> {
+    async fn get_bible_chapters(
+        &self,
+        bible_id: i32,
+        book_num: i32,
+    ) -> Result<i64, Box<dyn Error>> {
         self.chapters
             .get(&(bible_id, book_num))
             .copied()
@@ -204,7 +219,10 @@ mod tests {
             },
         ];
         let service = MockBibleService::new().with_bibles(bibles);
-        let result = service.get_bibles(Some("en".to_string()), None).await.unwrap();
+        let result = service
+            .get_bibles(Some("en".to_string()), None)
+            .await
+            .unwrap();
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].language, "en");
     }
@@ -316,4 +334,3 @@ mod tests {
         assert_eq!(result[1].verse, 3);
     }
 }
-

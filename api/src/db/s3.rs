@@ -19,7 +19,5 @@ pub async fn get_client(config: &AwsConfig) -> Result<S3Client, Box<dyn Error>> 
         .await;
 
     let client = aws_sdk_s3::Client::new(&config);
-    Ok(S3Client {
-        client,
-    })
+    Ok(S3Client { client })
 }

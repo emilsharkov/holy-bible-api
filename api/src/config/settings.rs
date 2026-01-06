@@ -4,8 +4,8 @@ use dotenvy::dotenv;
 
 use crate::config::aws::AwsConfig;
 use crate::config::cors::CorsConfig;
-use crate::config::postgres::PostgresConfig;
 use crate::config::middleware::MiddlewareConfig;
+use crate::config::postgres::PostgresConfig;
 use crate::config::redis::RedisConfig;
 use crate::config::server::ServerConfig;
 
@@ -24,16 +24,16 @@ impl Config {
         dotenv().ok();
         let database_config = PostgresConfig::from_env()
             .map_err(|e| format!("Failed to load database config: {}", e))?;
-        let aws_config = AwsConfig::from_env()
-            .map_err(|e| format!("Failed to load AWS config: {}", e))?;
+        let aws_config =
+            AwsConfig::from_env().map_err(|e| format!("Failed to load AWS config: {}", e))?;
         let middleware_config = MiddlewareConfig::from_env()
             .map_err(|e| format!("Failed to load middleware config: {}", e))?;
-        let redis_config = RedisConfig::from_env()
-            .map_err(|e| format!("Failed to load Redis config: {}", e))?;
-        let server_config = ServerConfig::from_env()
-            .map_err(|e| format!("Failed to load server config: {}", e))?;
-        let cors_config = CorsConfig::from_env()
-            .map_err(|e| format!("Failed to load CORS config: {}", e))?;
+        let redis_config =
+            RedisConfig::from_env().map_err(|e| format!("Failed to load Redis config: {}", e))?;
+        let server_config =
+            ServerConfig::from_env().map_err(|e| format!("Failed to load server config: {}", e))?;
+        let cors_config =
+            CorsConfig::from_env().map_err(|e| format!("Failed to load CORS config: {}", e))?;
 
         Ok(Self {
             database_config,
