@@ -16,30 +16,30 @@ import { mapValues } from '../runtime.js';
 /**
  * 
  * @export
- * @interface GetAudioChaptersRes
+ * @interface ChaptersCountResponse
  */
-export interface GetAudioChaptersRes {
+export interface ChaptersCountResponse {
     /**
      * 
      * @type {number}
-     * @memberof GetAudioChaptersRes
+     * @memberof ChaptersCountResponse
      */
     numChapters: number;
 }
 
 /**
- * Check if a given object implements the GetAudioChaptersRes interface.
+ * Check if a given object implements the ChaptersCountResponse interface.
  */
-export function instanceOfGetAudioChaptersRes(value: object): value is GetAudioChaptersRes {
+export function instanceOfChaptersCountResponse(value: object): value is ChaptersCountResponse {
     if (!('numChapters' in value) || value['numChapters'] === undefined) return false;
     return true;
 }
 
-export function GetAudioChaptersResFromJSON(json: any): GetAudioChaptersRes {
-    return GetAudioChaptersResFromJSONTyped(json, false);
+export function ChaptersCountResponseFromJSON(json: any): ChaptersCountResponse {
+    return ChaptersCountResponseFromJSONTyped(json, false);
 }
 
-export function GetAudioChaptersResFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetAudioChaptersRes {
+export function ChaptersCountResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ChaptersCountResponse {
     if (json == null) {
         return json;
     }
@@ -49,11 +49,11 @@ export function GetAudioChaptersResFromJSONTyped(json: any, ignoreDiscriminator:
     };
 }
 
-export function GetAudioChaptersResToJSON(json: any): GetAudioChaptersRes {
-    return GetAudioChaptersResToJSONTyped(json, false);
+export function ChaptersCountResponseToJSON(json: any): ChaptersCountResponse {
+    return ChaptersCountResponseToJSONTyped(json, false);
 }
 
-export function GetAudioChaptersResToJSONTyped(value?: GetAudioChaptersRes | null, ignoreDiscriminator: boolean = false): any {
+export function ChaptersCountResponseToJSONTyped(value?: ChaptersCountResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -17,18 +17,17 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
-from openapi_client.models.audio_bible import AudioBible
 from typing import Optional, Set
 from typing_extensions import Self
 
-class GetAudioBiblesRes(BaseModel):
+class ChaptersCountResponse(BaseModel):
     """
-    GetAudioBiblesRes
+    ChaptersCountResponse
     """ # noqa: E501
-    audio_bibles: List[AudioBible]
-    __properties: ClassVar[List[str]] = ["audio_bibles"]
+    num_chapters: StrictInt
+    __properties: ClassVar[List[str]] = ["num_chapters"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +47,7 @@ class GetAudioBiblesRes(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of GetAudioBiblesRes from a JSON string"""
+        """Create an instance of ChaptersCountResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,18 +68,11 @@ class GetAudioBiblesRes(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in audio_bibles (list)
-        _items = []
-        if self.audio_bibles:
-            for _item_audio_bibles in self.audio_bibles:
-                if _item_audio_bibles:
-                    _items.append(_item_audio_bibles.to_dict())
-            _dict['audio_bibles'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of GetAudioBiblesRes from a dict"""
+        """Create an instance of ChaptersCountResponse from a dict"""
         if obj is None:
             return None
 
@@ -88,7 +80,7 @@ class GetAudioBiblesRes(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "audio_bibles": [AudioBible.from_dict(_item) for _item in obj["audio_bibles"]] if obj.get("audio_bibles") is not None else None
+            "num_chapters": obj.get("num_chapters")
         })
         return _obj
 

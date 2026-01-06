@@ -14,12 +14,14 @@ Method | HTTP request | Description
 [**get_bible_verses**](DefaultApi.md#get_bible_verses) | **GET** /bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses | 
 [**get_bibles**](DefaultApi.md#get_bibles) | **GET** /bibles | 
 [**get_health**](DefaultApi.md#get_health) | **GET** /health | 
+[**get_random_bible_verse**](DefaultApi.md#get_random_bible_verse) | **GET** /bibles/{bible_id}/random | 
+[**get_verse_of_the_day**](DefaultApi.md#get_verse_of_the_day) | **GET** /bibles/{bible_id}/verse-of-the-day | 
 
 
 
 ## get_audio_bible_books
 
-> models::GetAudioBooksRes get_audio_bible_books(audio_bible_id)
+> models::BooksCountResponse get_audio_bible_books(audio_bible_id)
 
 
 ### Parameters
@@ -31,7 +33,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetAudioBooksRes**](GetAudioBooksRes.md)
+[**models::BooksCountResponse**](BooksCountResponse.md)
 
 ### Authorization
 
@@ -47,7 +49,7 @@ No authorization required
 
 ## get_audio_bible_chapters
 
-> models::GetAudioChaptersRes get_audio_bible_chapters(audio_bible_id, book_num)
+> models::ChaptersCountResponse get_audio_bible_chapters(audio_bible_id, book_num)
 
 
 ### Parameters
@@ -60,7 +62,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetAudioChaptersRes**](GetAudioChaptersRes.md)
+[**models::ChaptersCountResponse**](ChaptersCountResponse.md)
 
 ### Authorization
 
@@ -76,7 +78,7 @@ No authorization required
 
 ## get_audio_bibles
 
-> models::GetAudioBiblesRes get_audio_bibles(language, version)
+> Vec<models::AudioBible> get_audio_bibles(language, version)
 
 
 ### Parameters
@@ -89,7 +91,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetAudioBiblesRes**](GetAudioBiblesRes.md)
+[**Vec<models::AudioBible>**](AudioBible.md)
 
 ### Authorization
 
@@ -135,7 +137,7 @@ No authorization required
 
 ## get_bible_books
 
-> models::GetBibleBooksRes get_bible_books(bible_id)
+> models::BooksCountResponse get_bible_books(bible_id)
 
 
 ### Parameters
@@ -147,7 +149,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetBibleBooksRes**](GetBibleBooksRes.md)
+[**models::BooksCountResponse**](BooksCountResponse.md)
 
 ### Authorization
 
@@ -163,7 +165,7 @@ No authorization required
 
 ## get_bible_chapters
 
-> models::GetBibleChaptersRes get_bible_chapters(bible_id, book_num)
+> models::ChaptersCountResponse get_bible_chapters(bible_id, book_num)
 
 
 ### Parameters
@@ -176,7 +178,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetBibleChaptersRes**](GetBibleChaptersRes.md)
+[**models::ChaptersCountResponse**](ChaptersCountResponse.md)
 
 ### Authorization
 
@@ -223,7 +225,7 @@ No authorization required
 
 ## get_bible_verses
 
-> models::GetBibleVersesRes get_bible_verses(bible_id, book_num, chapter_num, start, end)
+> Vec<models::BibleVerse> get_bible_verses(bible_id, book_num, chapter_num, start, end)
 
 
 ### Parameters
@@ -239,7 +241,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetBibleVersesRes**](GetBibleVersesRes.md)
+[**Vec<models::BibleVerse>**](BibleVerse.md)
 
 ### Authorization
 
@@ -255,7 +257,7 @@ No authorization required
 
 ## get_bibles
 
-> models::GetBiblesRes get_bibles(language, version)
+> Vec<models::Bible> get_bibles(language, version)
 
 
 ### Parameters
@@ -268,7 +270,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetBiblesRes**](GetBiblesRes.md)
+[**Vec<models::Bible>**](Bible.md)
 
 ### Authorization
 
@@ -303,6 +305,62 @@ No authorization required
 
 - **Content-Type**: Not defined
 - **Accept**: text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_random_bible_verse
+
+> models::BibleVerse get_random_bible_verse(bible_id)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**bible_id** | **i32** |  | [required] |
+
+### Return type
+
+[**models::BibleVerse**](BibleVerse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_verse_of_the_day
+
+> models::BibleVerse get_verse_of_the_day(bible_id)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**bible_id** | **i32** |  | [required] |
+
+### Return type
+
+[**models::BibleVerse**](BibleVerse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

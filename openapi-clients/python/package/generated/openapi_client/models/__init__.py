@@ -16,11 +16,6 @@
 from openapi_client.models.audio_bible import AudioBible
 from openapi_client.models.bible import Bible
 from openapi_client.models.bible_verse import BibleVerse
-from openapi_client.models.get_audio_bibles_res import GetAudioBiblesRes
-from openapi_client.models.get_audio_books_res import GetAudioBooksRes
-from openapi_client.models.get_audio_chapters_res import GetAudioChaptersRes
-from openapi_client.models.get_bible_books_res import GetBibleBooksRes
-from openapi_client.models.get_bible_chapters_res import GetBibleChaptersRes
-from openapi_client.models.get_bible_verses_res import GetBibleVersesRes
-from openapi_client.models.get_bibles_res import GetBiblesRes
+from openapi_client.models.books_count_response import BooksCountResponse
+from openapi_client.models.chapters_count_response import ChaptersCountResponse
 

@@ -15,32 +15,23 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  AudioBible,
+  Bible,
   BibleVerse,
-  GetAudioBiblesRes,
-  GetAudioBooksRes,
-  GetAudioChaptersRes,
-  GetBibleBooksRes,
-  GetBibleChaptersRes,
-  GetBibleVersesRes,
-  GetBiblesRes,
+  BooksCountResponse,
+  ChaptersCountResponse,
 } from '../models/index.js';
 import {
+    AudioBibleFromJSON,
+    AudioBibleToJSON,
+    BibleFromJSON,
+    BibleToJSON,
     BibleVerseFromJSON,
     BibleVerseToJSON,
-    GetAudioBiblesResFromJSON,
-    GetAudioBiblesResToJSON,
-    GetAudioBooksResFromJSON,
-    GetAudioBooksResToJSON,
-    GetAudioChaptersResFromJSON,
-    GetAudioChaptersResToJSON,
-    GetBibleBooksResFromJSON,
-    GetBibleBooksResToJSON,
-    GetBibleChaptersResFromJSON,
-    GetBibleChaptersResToJSON,
-    GetBibleVersesResFromJSON,
-    GetBibleVersesResToJSON,
-    GetBiblesResFromJSON,
-    GetBiblesResToJSON,
+    BooksCountResponseFromJSON,
+    BooksCountResponseToJSON,
+    ChaptersCountResponseFromJSON,
+    ChaptersCountResponseToJSON,
 } from '../models/index.js';
 
 export interface GetAudioBibleBooksRequest {
@@ -92,6 +83,14 @@ export interface GetBiblesRequest {
     version?: string;
 }
 
+export interface GetRandomBibleVerseRequest {
+    bibleId: number;
+}
+
+export interface GetVerseOfTheDayRequest {
+    bibleId: number;
+}
+
 /**
  * 
  */
@@ -99,7 +98,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async getAudioBibleBooksRaw(requestParameters: GetAudioBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAudioBooksRes>> {
+    async getAudioBibleBooksRaw(requestParameters: GetAudioBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooksCountResponse>> {
         if (requestParameters['audioBibleId'] == null) {
             throw new runtime.RequiredError(
                 'audioBibleId',
@@ -122,19 +121,19 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAudioBooksResFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => BooksCountResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async getAudioBibleBooks(requestParameters: GetAudioBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAudioBooksRes> {
+    async getAudioBibleBooks(requestParameters: GetAudioBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooksCountResponse> {
         const response = await this.getAudioBibleBooksRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getAudioBibleChaptersRaw(requestParameters: GetAudioBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAudioChaptersRes>> {
+    async getAudioBibleChaptersRaw(requestParameters: GetAudioBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChaptersCountResponse>> {
         if (requestParameters['audioBibleId'] == null) {
             throw new runtime.RequiredError(
                 'audioBibleId',
@@ -165,19 +164,19 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAudioChaptersResFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChaptersCountResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async getAudioBibleChapters(requestParameters: GetAudioBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAudioChaptersRes> {
+    async getAudioBibleChapters(requestParameters: GetAudioBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChaptersCountResponse> {
         const response = await this.getAudioBibleChaptersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getAudioBiblesRaw(requestParameters: GetAudioBiblesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAudioBiblesRes>> {
+    async getAudioBiblesRaw(requestParameters: GetAudioBiblesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AudioBible>>> {
         const queryParameters: any = {};
 
         if (requestParameters['language'] != null) {
@@ -200,12 +199,12 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAudioBiblesResFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AudioBibleFromJSON));
     }
 
     /**
      */
-    async getAudioBibles(requestParameters: GetAudioBiblesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAudioBiblesRes> {
+    async getAudioBibles(requestParameters: GetAudioBiblesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AudioBible>> {
         const response = await this.getAudioBiblesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -262,7 +261,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async getBibleBooksRaw(requestParameters: GetBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetBibleBooksRes>> {
+    async getBibleBooksRaw(requestParameters: GetBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooksCountResponse>> {
         if (requestParameters['bibleId'] == null) {
             throw new runtime.RequiredError(
                 'bibleId',
@@ -285,19 +284,19 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetBibleBooksResFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => BooksCountResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async getBibleBooks(requestParameters: GetBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetBibleBooksRes> {
+    async getBibleBooks(requestParameters: GetBibleBooksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooksCountResponse> {
         const response = await this.getBibleBooksRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getBibleChaptersRaw(requestParameters: GetBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetBibleChaptersRes>> {
+    async getBibleChaptersRaw(requestParameters: GetBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChaptersCountResponse>> {
         if (requestParameters['bibleId'] == null) {
             throw new runtime.RequiredError(
                 'bibleId',
@@ -328,12 +327,12 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetBibleChaptersResFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChaptersCountResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async getBibleChapters(requestParameters: GetBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetBibleChaptersRes> {
+    async getBibleChapters(requestParameters: GetBibleChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChaptersCountResponse> {
         const response = await this.getBibleChaptersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -399,7 +398,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async getBibleVersesRaw(requestParameters: GetBibleVersesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetBibleVersesRes>> {
+    async getBibleVersesRaw(requestParameters: GetBibleVersesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BibleVerse>>> {
         if (requestParameters['bibleId'] == null) {
             throw new runtime.RequiredError(
                 'bibleId',
@@ -446,19 +445,19 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetBibleVersesResFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BibleVerseFromJSON));
     }
 
     /**
      */
-    async getBibleVerses(requestParameters: GetBibleVersesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetBibleVersesRes> {
+    async getBibleVerses(requestParameters: GetBibleVersesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BibleVerse>> {
         const response = await this.getBibleVersesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getBiblesRaw(requestParameters: GetBiblesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetBiblesRes>> {
+    async getBiblesRaw(requestParameters: GetBiblesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Bible>>> {
         const queryParameters: any = {};
 
         if (requestParameters['language'] != null) {
@@ -481,12 +480,12 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetBiblesResFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BibleFromJSON));
     }
 
     /**
      */
-    async getBibles(requestParameters: GetBiblesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetBiblesRes> {
+    async getBibles(requestParameters: GetBiblesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Bible>> {
         const response = await this.getBiblesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -519,6 +518,76 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.getHealthRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getRandomBibleVerseRaw(requestParameters: GetRandomBibleVerseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BibleVerse>> {
+        if (requestParameters['bibleId'] == null) {
+            throw new runtime.RequiredError(
+                'bibleId',
+                'Required parameter "bibleId" was null or undefined when calling getRandomBibleVerse().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/bibles/{bible_id}/random`;
+        urlPath = urlPath.replace(`{${"bible_id"}}`, encodeURIComponent(String(requestParameters['bibleId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BibleVerseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getRandomBibleVerse(requestParameters: GetRandomBibleVerseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BibleVerse> {
+        const response = await this.getRandomBibleVerseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getVerseOfTheDayRaw(requestParameters: GetVerseOfTheDayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BibleVerse>> {
+        if (requestParameters['bibleId'] == null) {
+            throw new runtime.RequiredError(
+                'bibleId',
+                'Required parameter "bibleId" was null or undefined when calling getVerseOfTheDay().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/bibles/{bible_id}/verse-of-the-day`;
+        urlPath = urlPath.replace(`{${"bible_id"}}`, encodeURIComponent(String(requestParameters['bibleId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BibleVerseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getVerseOfTheDay(requestParameters: GetVerseOfTheDayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BibleVerse> {
+        const response = await this.getVerseOfTheDayRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

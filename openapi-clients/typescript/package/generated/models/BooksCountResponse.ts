@@ -16,30 +16,30 @@ import { mapValues } from '../runtime.js';
 /**
  * 
  * @export
- * @interface GetBibleBooksRes
+ * @interface BooksCountResponse
  */
-export interface GetBibleBooksRes {
+export interface BooksCountResponse {
     /**
      * 
      * @type {number}
-     * @memberof GetBibleBooksRes
+     * @memberof BooksCountResponse
      */
     numBooks: number;
 }
 
 /**
- * Check if a given object implements the GetBibleBooksRes interface.
+ * Check if a given object implements the BooksCountResponse interface.
  */
-export function instanceOfGetBibleBooksRes(value: object): value is GetBibleBooksRes {
+export function instanceOfBooksCountResponse(value: object): value is BooksCountResponse {
     if (!('numBooks' in value) || value['numBooks'] === undefined) return false;
     return true;
 }
 
-export function GetBibleBooksResFromJSON(json: any): GetBibleBooksRes {
-    return GetBibleBooksResFromJSONTyped(json, false);
+export function BooksCountResponseFromJSON(json: any): BooksCountResponse {
+    return BooksCountResponseFromJSONTyped(json, false);
 }
 
-export function GetBibleBooksResFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetBibleBooksRes {
+export function BooksCountResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): BooksCountResponse {
     if (json == null) {
         return json;
     }
@@ -49,11 +49,11 @@ export function GetBibleBooksResFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function GetBibleBooksResToJSON(json: any): GetBibleBooksRes {
-    return GetBibleBooksResToJSONTyped(json, false);
+export function BooksCountResponseToJSON(json: any): BooksCountResponse {
+    return BooksCountResponseToJSONTyped(json, false);
 }
 
-export function GetBibleBooksResToJSONTyped(value?: GetBibleBooksRes | null, ignoreDiscriminator: boolean = false): any {
+export function BooksCountResponseToJSONTyped(value?: BooksCountResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

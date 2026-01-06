@@ -1,4 +1,4 @@
-# GetAudioChaptersRes
+# ChaptersCountResponse
 
 ## Properties
 

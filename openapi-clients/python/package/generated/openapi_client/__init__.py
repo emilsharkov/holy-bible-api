@@ -31,13 +31,8 @@ __all__ = [
     "AudioBible",
     "Bible",
     "BibleVerse",
-    "GetAudioBiblesRes",
-    "GetAudioBooksRes",
-    "GetAudioChaptersRes",
-    "GetBibleBooksRes",
-    "GetBibleChaptersRes",
-    "GetBibleVersesRes",
-    "GetBiblesRes",
+    "BooksCountResponse",
+    "ChaptersCountResponse",
 ]
 
 # import apis into sdk package
@@ -58,11 +53,6 @@ from openapi_client.exceptions import ApiException as ApiException
 from openapi_client.models.audio_bible import AudioBible as AudioBible
 from openapi_client.models.bible import Bible as Bible
 from openapi_client.models.bible_verse import BibleVerse as BibleVerse
-from openapi_client.models.get_audio_bibles_res import GetAudioBiblesRes as GetAudioBiblesRes
-from openapi_client.models.get_audio_books_res import GetAudioBooksRes as GetAudioBooksRes
-from openapi_client.models.get_audio_chapters_res import GetAudioChaptersRes as GetAudioChaptersRes
-from openapi_client.models.get_bible_books_res import GetBibleBooksRes as GetBibleBooksRes
-from openapi_client.models.get_bible_chapters_res import GetBibleChaptersRes as GetBibleChaptersRes
-from openapi_client.models.get_bible_verses_res import GetBibleVersesRes as GetBibleVersesRes
-from openapi_client.models.get_bibles_res import GetBiblesRes as GetBiblesRes
+from openapi_client.models.books_count_response import BooksCountResponse as BooksCountResponse
+from openapi_client.models.chapters_count_response import ChaptersCountResponse as ChaptersCountResponse
 

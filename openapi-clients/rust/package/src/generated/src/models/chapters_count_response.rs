@@ -12,15 +12,15 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetAudioBooksRes {
-    #[serde(rename = "num_books")]
-    pub num_books: i64,
+pub struct ChaptersCountResponse {
+    #[serde(rename = "num_chapters")]
+    pub num_chapters: i64,
 }
 
-impl GetAudioBooksRes {
-    pub fn new(num_books: i64) -> GetAudioBooksRes {
-        GetAudioBooksRes {
-            num_books,
+impl ChaptersCountResponse {
+    pub fn new(num_chapters: i64) -> ChaptersCountResponse {
+        ChaptersCountResponse {
+            num_chapters,
         }
     }
 }

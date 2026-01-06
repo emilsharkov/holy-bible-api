@@ -86,8 +86,22 @@ pub enum GetHealthError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`get_random_bible_verse`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetRandomBibleVerseError {
+    UnknownValue(serde_json::Value),
+}
 
-pub async fn get_audio_bible_books(configuration: &configuration::Configuration, audio_bible_id: i32) -> Result<models::GetAudioBooksRes, Error<GetAudioBibleBooksError>> {
+/// struct for typed errors of method [`get_verse_of_the_day`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetVerseOfTheDayError {
+    UnknownValue(serde_json::Value),
+}
+
+
+pub async fn get_audio_bible_books(configuration: &configuration::Configuration, audio_bible_id: i32) -> Result<models::BooksCountResponse, Error<GetAudioBibleBooksError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_audio_bible_id = audio_bible_id;
 
@@ -113,8 +127,8 @@ pub async fn get_audio_bible_books(configuration: &configuration::Configuration,
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetAudioBooksRes`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetAudioBooksRes`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BooksCountResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::BooksCountResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -123,7 +137,7 @@ pub async fn get_audio_bible_books(configuration: &configuration::Configuration,
     }
 }
 
-pub async fn get_audio_bible_chapters(configuration: &configuration::Configuration, audio_bible_id: i32, book_num: i32) -> Result<models::GetAudioChaptersRes, Error<GetAudioBibleChaptersError>> {
+pub async fn get_audio_bible_chapters(configuration: &configuration::Configuration, audio_bible_id: i32, book_num: i32) -> Result<models::ChaptersCountResponse, Error<GetAudioBibleChaptersError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_audio_bible_id = audio_bible_id;
     let p_path_book_num = book_num;
@@ -150,8 +164,8 @@ pub async fn get_audio_bible_chapters(configuration: &configuration::Configurati
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetAudioChaptersRes`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetAudioChaptersRes`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ChaptersCountResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ChaptersCountResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -160,7 +174,7 @@ pub async fn get_audio_bible_chapters(configuration: &configuration::Configurati
     }
 }
 
-pub async fn get_audio_bibles(configuration: &configuration::Configuration, language: Option<&str>, version: Option<&str>) -> Result<models::GetAudioBiblesRes, Error<GetAudioBiblesError>> {
+pub async fn get_audio_bibles(configuration: &configuration::Configuration, language: Option<&str>, version: Option<&str>) -> Result<Vec<models::AudioBible>, Error<GetAudioBiblesError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_query_language = language;
     let p_query_version = version;
@@ -193,8 +207,8 @@ pub async fn get_audio_bibles(configuration: &configuration::Configuration, lang
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetAudioBiblesRes`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetAudioBiblesRes`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `Vec&lt;models::AudioBible&gt;`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `Vec&lt;models::AudioBible&gt;`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -230,7 +244,7 @@ pub async fn get_audio_chapter(configuration: &configuration::Configuration, aud
     }
 }
 
-pub async fn get_bible_books(configuration: &configuration::Configuration, bible_id: i32) -> Result<models::GetBibleBooksRes, Error<GetBibleBooksError>> {
+pub async fn get_bible_books(configuration: &configuration::Configuration, bible_id: i32) -> Result<models::BooksCountResponse, Error<GetBibleBooksError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_bible_id = bible_id;
 
@@ -256,8 +270,8 @@ pub async fn get_bible_books(configuration: &configuration::Configuration, bible
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetBibleBooksRes`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetBibleBooksRes`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BooksCountResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::BooksCountResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -266,7 +280,7 @@ pub async fn get_bible_books(configuration: &configuration::Configuration, bible
     }
 }
 
-pub async fn get_bible_chapters(configuration: &configuration::Configuration, bible_id: i32, book_num: i32) -> Result<models::GetBibleChaptersRes, Error<GetBibleChaptersError>> {
+pub async fn get_bible_chapters(configuration: &configuration::Configuration, bible_id: i32, book_num: i32) -> Result<models::ChaptersCountResponse, Error<GetBibleChaptersError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_bible_id = bible_id;
     let p_path_book_num = book_num;
@@ -293,8 +307,8 @@ pub async fn get_bible_chapters(configuration: &configuration::Configuration, bi
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetBibleChaptersRes`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetBibleChaptersRes`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ChaptersCountResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ChaptersCountResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -342,7 +356,7 @@ pub async fn get_bible_verse_by_number(configuration: &configuration::Configurat
     }
 }
 
-pub async fn get_bible_verses(configuration: &configuration::Configuration, bible_id: i32, book_num: i32, chapter_num: i32, start: Option<i32>, end: Option<i32>) -> Result<models::GetBibleVersesRes, Error<GetBibleVersesError>> {
+pub async fn get_bible_verses(configuration: &configuration::Configuration, bible_id: i32, book_num: i32, chapter_num: i32, start: Option<i32>, end: Option<i32>) -> Result<Vec<models::BibleVerse>, Error<GetBibleVersesError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_bible_id = bible_id;
     let p_path_book_num = book_num;
@@ -378,8 +392,8 @@ pub async fn get_bible_verses(configuration: &configuration::Configuration, bibl
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetBibleVersesRes`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetBibleVersesRes`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `Vec&lt;models::BibleVerse&gt;`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `Vec&lt;models::BibleVerse&gt;`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -388,7 +402,7 @@ pub async fn get_bible_verses(configuration: &configuration::Configuration, bibl
     }
 }
 
-pub async fn get_bibles(configuration: &configuration::Configuration, language: Option<&str>, version: Option<&str>) -> Result<models::GetBiblesRes, Error<GetBiblesError>> {
+pub async fn get_bibles(configuration: &configuration::Configuration, language: Option<&str>, version: Option<&str>) -> Result<Vec<models::Bible>, Error<GetBiblesError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_query_language = language;
     let p_query_version = version;
@@ -421,8 +435,8 @@ pub async fn get_bibles(configuration: &configuration::Configuration, language: 
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetBiblesRes`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetBiblesRes`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `Vec&lt;models::Bible&gt;`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `Vec&lt;models::Bible&gt;`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -461,6 +475,78 @@ pub async fn get_health(configuration: &configuration::Configuration, ) -> Resul
     } else {
         let content = resp.text().await?;
         let entity: Option<GetHealthError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+pub async fn get_random_bible_verse(configuration: &configuration::Configuration, bible_id: i32) -> Result<models::BibleVerse, Error<GetRandomBibleVerseError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_bible_id = bible_id;
+
+    let uri_str = format!("{}/bibles/{bible_id}/random", configuration.base_path, bible_id=p_path_bible_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BibleVerse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::BibleVerse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<GetRandomBibleVerseError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+pub async fn get_verse_of_the_day(configuration: &configuration::Configuration, bible_id: i32) -> Result<models::BibleVerse, Error<GetVerseOfTheDayError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_bible_id = bible_id;
+
+    let uri_str = format!("{}/bibles/{bible_id}/verse-of-the-day", configuration.base_path, bible_id=p_path_bible_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BibleVerse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::BibleVerse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<GetVerseOfTheDayError> = serde_json::from_str(&content).ok();
         Err(Error::ResponseError(ResponseContent { status, content, entity }))
     }
 }

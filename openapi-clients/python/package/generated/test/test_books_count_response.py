@@ -14,10 +14,10 @@
 
 import unittest
 
-from openapi_client.models.get_bible_books_res import GetBibleBooksRes
+from openapi_client.models.books_count_response import BooksCountResponse
 
-class TestGetBibleBooksRes(unittest.TestCase):
-    """GetBibleBooksRes unit test stubs"""
+class TestBooksCountResponse(unittest.TestCase):
+    """BooksCountResponse unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,26 +25,26 @@ class TestGetBibleBooksRes(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> GetBibleBooksRes:
-        """Test GetBibleBooksRes
+    def make_instance(self, include_optional) -> BooksCountResponse:
+        """Test BooksCountResponse
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `GetBibleBooksRes`
+        # uncomment below to create an instance of `BooksCountResponse`
         """
-        model = GetBibleBooksRes()
+        model = BooksCountResponse()
         if include_optional:
-            return GetBibleBooksRes(
+            return BooksCountResponse(
                 num_books = 56
             )
         else:
-            return GetBibleBooksRes(
+            return BooksCountResponse(
                 num_books = 56,
         )
         """
 
-    def testGetBibleBooksRes(self):
-        """Test GetBibleBooksRes"""
+    def testBooksCountResponse(self):
+        """Test BooksCountResponse"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

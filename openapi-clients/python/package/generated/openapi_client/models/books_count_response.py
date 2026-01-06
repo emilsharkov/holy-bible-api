@@ -17,18 +17,17 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
-from openapi_client.models.bible import Bible
 from typing import Optional, Set
 from typing_extensions import Self
 
-class GetBiblesRes(BaseModel):
+class BooksCountResponse(BaseModel):
     """
-    GetBiblesRes
+    BooksCountResponse
     """ # noqa: E501
-    bibles: List[Bible]
-    __properties: ClassVar[List[str]] = ["bibles"]
+    num_books: StrictInt
+    __properties: ClassVar[List[str]] = ["num_books"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +47,7 @@ class GetBiblesRes(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of GetBiblesRes from a JSON string"""
+        """Create an instance of BooksCountResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,18 +68,11 @@ class GetBiblesRes(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in bibles (list)
-        _items = []
-        if self.bibles:
-            for _item_bibles in self.bibles:
-                if _item_bibles:
-                    _items.append(_item_bibles.to_dict())
-            _dict['bibles'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of GetBiblesRes from a dict"""
+        """Create an instance of BooksCountResponse from a dict"""
         if obj is None:
             return None
 
@@ -88,7 +80,7 @@ class GetBiblesRes(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "bibles": [Bible.from_dict(_item) for _item in obj["bibles"]] if obj.get("bibles") is not None else None
+            "num_books": obj.get("num_books")
         })
         return _obj
 

@@ -14,17 +14,19 @@ Method | HTTP request | Description
 [**get_bible_verses**](DefaultApi.md#get_bible_verses) | **GET** /bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses | 
 [**get_bibles**](DefaultApi.md#get_bibles) | **GET** /bibles | 
 [**get_health**](DefaultApi.md#get_health) | **GET** /health | 
+[**get_random_bible_verse**](DefaultApi.md#get_random_bible_verse) | **GET** /bibles/{bible_id}/random | 
+[**get_verse_of_the_day**](DefaultApi.md#get_verse_of_the_day) | **GET** /bibles/{bible_id}/verse-of-the-day | 
 
 
 # **get_audio_bible_books**
-> GetAudioBooksRes get_audio_bible_books(audio_bible_id)
+> BooksCountResponse get_audio_bible_books(audio_bible_id)
 
 ### Example
 
 
 ```python
 import openapi_client
-from openapi_client.models.get_audio_books_res import GetAudioBooksRes
+from openapi_client.models.books_count_response import BooksCountResponse
 from openapi_client.rest import ApiException
 from pprint import pprint
 
@@ -60,7 +62,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetAudioBooksRes**](GetAudioBooksRes.md)
+[**BooksCountResponse**](BooksCountResponse.md)
 
 ### Authorization
 
@@ -80,14 +82,14 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_audio_bible_chapters**
-> GetAudioChaptersRes get_audio_bible_chapters(audio_bible_id, book_num)
+> ChaptersCountResponse get_audio_bible_chapters(audio_bible_id, book_num)
 
 ### Example
 
 
 ```python
 import openapi_client
-from openapi_client.models.get_audio_chapters_res import GetAudioChaptersRes
+from openapi_client.models.chapters_count_response import ChaptersCountResponse
 from openapi_client.rest import ApiException
 from pprint import pprint
 
@@ -125,7 +127,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetAudioChaptersRes**](GetAudioChaptersRes.md)
+[**ChaptersCountResponse**](ChaptersCountResponse.md)
 
 ### Authorization
 
@@ -145,14 +147,14 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_audio_bibles**
-> GetAudioBiblesRes get_audio_bibles(language=language, version=version)
+> List[AudioBible] get_audio_bibles(language=language, version=version)
 
 ### Example
 
 
 ```python
 import openapi_client
-from openapi_client.models.get_audio_bibles_res import GetAudioBiblesRes
+from openapi_client.models.audio_bible import AudioBible
 from openapi_client.rest import ApiException
 from pprint import pprint
 
@@ -190,7 +192,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetAudioBiblesRes**](GetAudioBiblesRes.md)
+[**List[AudioBible]**](AudioBible.md)
 
 ### Authorization
 
@@ -275,14 +277,14 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_bible_books**
-> GetBibleBooksRes get_bible_books(bible_id)
+> BooksCountResponse get_bible_books(bible_id)
 
 ### Example
 
 
 ```python
 import openapi_client
-from openapi_client.models.get_bible_books_res import GetBibleBooksRes
+from openapi_client.models.books_count_response import BooksCountResponse
 from openapi_client.rest import ApiException
 from pprint import pprint
 
@@ -318,7 +320,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetBibleBooksRes**](GetBibleBooksRes.md)
+[**BooksCountResponse**](BooksCountResponse.md)
 
 ### Authorization
 
@@ -338,14 +340,14 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_bible_chapters**
-> GetBibleChaptersRes get_bible_chapters(bible_id, book_num)
+> ChaptersCountResponse get_bible_chapters(bible_id, book_num)
 
 ### Example
 
 
 ```python
 import openapi_client
-from openapi_client.models.get_bible_chapters_res import GetBibleChaptersRes
+from openapi_client.models.chapters_count_response import ChaptersCountResponse
 from openapi_client.rest import ApiException
 from pprint import pprint
 
@@ -383,7 +385,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetBibleChaptersRes**](GetBibleChaptersRes.md)
+[**ChaptersCountResponse**](ChaptersCountResponse.md)
 
 ### Authorization
 
@@ -472,14 +474,14 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_bible_verses**
-> GetBibleVersesRes get_bible_verses(bible_id, book_num, chapter_num, start=start, end=end)
+> List[BibleVerse] get_bible_verses(bible_id, book_num, chapter_num, start=start, end=end)
 
 ### Example
 
 
 ```python
 import openapi_client
-from openapi_client.models.get_bible_verses_res import GetBibleVersesRes
+from openapi_client.models.bible_verse import BibleVerse
 from openapi_client.rest import ApiException
 from pprint import pprint
 
@@ -523,7 +525,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetBibleVersesRes**](GetBibleVersesRes.md)
+[**List[BibleVerse]**](BibleVerse.md)
 
 ### Authorization
 
@@ -543,14 +545,14 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_bibles**
-> GetBiblesRes get_bibles(language=language, version=version)
+> List[Bible] get_bibles(language=language, version=version)
 
 ### Example
 
 
 ```python
 import openapi_client
-from openapi_client.models.get_bibles_res import GetBiblesRes
+from openapi_client.models.bible import Bible
 from openapi_client.rest import ApiException
 from pprint import pprint
 
@@ -588,7 +590,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetBiblesRes**](GetBiblesRes.md)
+[**List[Bible]**](Bible.md)
 
 ### Authorization
 
@@ -656,6 +658,132 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_random_bible_verse**
+> BibleVerse get_random_bible_verse(bible_id)
+
+### Example
+
+
+```python
+import openapi_client
+from openapi_client.models.bible_verse import BibleVerse
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = openapi_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with openapi_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = openapi_client.DefaultApi(api_client)
+    bible_id = 56 # int | 
+
+    try:
+        api_response = api_instance.get_random_bible_verse(bible_id)
+        print("The response of DefaultApi->get_random_bible_verse:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling DefaultApi->get_random_bible_verse: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **bible_id** | **int**|  | 
+
+### Return type
+
+[**BibleVerse**](BibleVerse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_verse_of_the_day**
+> BibleVerse get_verse_of_the_day(bible_id)
+
+### Example
+
+
+```python
+import openapi_client
+from openapi_client.models.bible_verse import BibleVerse
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = openapi_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with openapi_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = openapi_client.DefaultApi(api_client)
+    bible_id = 56 # int | 
+
+    try:
+        api_response = api_instance.get_verse_of_the_day(bible_id)
+        print("The response of DefaultApi->get_verse_of_the_day:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling DefaultApi->get_verse_of_the_day: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **bible_id** | **int**|  | 
+
+### Return type
+
+[**BibleVerse**](BibleVerse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 

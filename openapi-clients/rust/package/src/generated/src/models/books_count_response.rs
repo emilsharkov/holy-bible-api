@@ -12,14 +12,14 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetBibleBooksRes {
+pub struct BooksCountResponse {
     #[serde(rename = "num_books")]
     pub num_books: i64,
 }
 
-impl GetBibleBooksRes {
-    pub fn new(num_books: i64) -> GetBibleBooksRes {
-        GetBibleBooksRes {
+impl BooksCountResponse {
+    pub fn new(num_books: i64) -> BooksCountResponse {
+        BooksCountResponse {
             num_books,
         }
     }

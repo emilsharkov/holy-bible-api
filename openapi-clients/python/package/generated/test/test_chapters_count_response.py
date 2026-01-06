@@ -14,10 +14,10 @@
 
 import unittest
 
-from openapi_client.models.get_bible_chapters_res import GetBibleChaptersRes
+from openapi_client.models.chapters_count_response import ChaptersCountResponse
 
-class TestGetBibleChaptersRes(unittest.TestCase):
-    """GetBibleChaptersRes unit test stubs"""
+class TestChaptersCountResponse(unittest.TestCase):
+    """ChaptersCountResponse unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,26 +25,26 @@ class TestGetBibleChaptersRes(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> GetBibleChaptersRes:
-        """Test GetBibleChaptersRes
+    def make_instance(self, include_optional) -> ChaptersCountResponse:
+        """Test ChaptersCountResponse
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `GetBibleChaptersRes`
+        # uncomment below to create an instance of `ChaptersCountResponse`
         """
-        model = GetBibleChaptersRes()
+        model = ChaptersCountResponse()
         if include_optional:
-            return GetBibleChaptersRes(
+            return ChaptersCountResponse(
                 num_chapters = 56
             )
         else:
-            return GetBibleChaptersRes(
+            return ChaptersCountResponse(
                 num_chapters = 56,
         )
         """
 
-    def testGetBibleChaptersRes(self):
-        """Test GetBibleChaptersRes"""
+    def testChaptersCountResponse(self):
+        """Test ChaptersCountResponse"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

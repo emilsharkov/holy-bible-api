@@ -86,6 +86,18 @@ class TestDefaultApi(unittest.TestCase):
         """
         pass
 
+    def test_get_random_bible_verse(self) -> None:
+        """Test case for get_random_bible_verse
+
+        """
+        pass
+
+    def test_get_verse_of_the_day(self) -> None:
+        """Test case for get_verse_of_the_day
+
+        """
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()

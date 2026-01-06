@@ -1,4 +1,4 @@
-# GetBibleBooksRes
+# BooksCountResponse
 
 ## Properties
 
