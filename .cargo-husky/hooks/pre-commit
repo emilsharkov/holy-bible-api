@@ -3,39 +3,20 @@
 # This hook runs cargo fmt and cargo fix before committing
 # If api/openapi.json has changed, it also updates all OpenAPI clients
 
-REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-cd "$REPO_ROOT" || exit 1
+cd "$(dirname "$0")/../.." || exit 1
 
+cd openapi-clients || exit 1
 echo "Running pre-commit hook..."
-
-echo $REPO_ROOT
-# Check if api/openapi.json is staged and has changes
-if git diff --cached --name-only | grep -q "^api/openapi.json$"; then
-    echo "Detected changes to api/openapi.json, updating OpenAPI clients..."
-    
-    cd "$REPO_ROOT/openapi-clients" || exit 1
-    
-    # Check if package.json exists
-    if [ ! -f "package.json" ]; then
-        echo "Error: package.json not found in openapi-clients directory"
-        exit 1
-    fi
-    
-    # Run the update-all-clients script
-    npm run update-all-clients
-    
-    # Check if the command succeeded
-    if [ $? -ne 0 ]; then
-        echo "Error: npm run update-all-clients failed"
-        exit 1
-    fi
-    
-    echo "OpenAPI clients updated successfully"
-    cd "$REPO_ROOT" || exit 1
+npm run update-all-clients
+if [ $? -ne 0 ]; then
+    echo "Error: npm run update-all-clients failed"
+    exit 1
 fi
+git add openapi-clients
+git commit -m "Update OpenAPI clients"
 
-# Format and fix Rust code
-cd "$REPO_ROOT/api" || exit 1
+echo "OpenAPI clients updated successfully"
+cd ../api || exit 1
 
 echo "Formatting and fixing Rust code..."
 
