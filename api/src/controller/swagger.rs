@@ -18,7 +18,7 @@ use utoipa_swagger_ui::SwaggerUi;
 #[derive(OpenApi)]
 #[openapi(paths(
     // get_health,
-    // get_bibles,
+    get_bibles,
     get_bible_books,
     get_bible_chapters,
     get_bible_verses,
