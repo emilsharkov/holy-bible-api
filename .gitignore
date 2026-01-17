@@ -1,6 +1,7 @@
 **/*.env
 **/*.gz
 **/backup_file.sql
+**/*.dump
 **/dist
 **/target
 **/node_modules
