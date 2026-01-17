@@ -1,0 +1,133 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+    mem_limit: 64m
+
+  web:
+    image: holy-bible-api:latest
+    container_name: web
+    restart: unless-stopped
+    expose:
+      - "8080"
+    environment:
+      SERVER_HOST: web
+      SERVER_PORT: 8080
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_SSL_MODE: ${DB_SSL_MODE}
+
+      S3_AWS_ACCESS_KEY_ID: ${S3_AWS_ACCESS_KEY_ID}
+      S3_AWS_SECRET_ACCESS_KEY: ${S3_AWS_SECRET_ACCESS_KEY}
+      AUDIO_BIBLES_BUCKET: ${AUDIO_BIBLES_BUCKET}
+      AUDIO_BIBLES_BUCKET_AWS_REGION: ${AUDIO_BIBLES_BUCKET_AWS_REGION}
+
+      TIMEOUT_SECONDS: ${TIMEOUT_SECONDS}
+      REQUEST_LIMIT_PER_HOUR: ${REQUEST_LIMIT_PER_HOUR}
+
+    depends_on:
+      - postgres
+      - redis
+    mem_limit: 384m
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PORT: 5432
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    command: >
+      postgres
+      -c shared_buffers=128MB
+      -c effective_cache_size=512MB
+      -c work_mem=4MB
+      -c maintenance_work_mem=64MB
+      -c max_connections=30
+    mem_limit: 768m
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    command: >
+      sh -c 'redis-server
+      --requirepass "$REDIS_PASSWORD"
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru'
+    mem_limit: 128m
+
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - 8090:8090
+    volumes:
+      - beszel_data:/beszel_data
+      - beszel_socket:/beszel_socket
+
+  beszel-agent:
+    image: henrygd/beszel-agent
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - beszel_agent_data:/var/lib/beszel-agent
+    environment:
+      LISTEN: 45876
+      KEY: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsNP3E10JoWDbVfKs2auWowSmINa0rDd7o/PJ6zCr7a'
+      TOKEN: aaa07683-5f8e-4d1e-9e2e-fcd5cbe23fe5
+      HUB_URL: http://localhost:8090
+
+  restore:
+    image: ghcr.io/emilsharkov/holy-bible-api/holy-bible-db-restore:latest
+    container_name: db-restore
+    depends_on:
+      - postgres
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: ${DB_NAME}
+      PGUSER: ${DB_USER}
+      PGPASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: "no"
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
+  beszel_data:
+  beszel_socket:
+  beszel_agent_data:

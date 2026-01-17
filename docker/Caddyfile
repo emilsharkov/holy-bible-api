@@ -1,0 +1,5 @@
+http://localhost {
+  handle {
+    reverse_proxy web:8080
+  }
+}
