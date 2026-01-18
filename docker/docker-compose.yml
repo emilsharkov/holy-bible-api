@@ -15,7 +15,7 @@ services:
     mem_limit: 64m
 
   web:
-    image: holy-bible-api:latest
+    image: ghcr.io/emilsharkov/holy-bible-api/holy-bible-api:latest
     container_name: web
     restart: unless-stopped
     expose:
