@@ -1,10 +1,4 @@
 holy-bible-api.com {
-  redir /beszel /beszel/
-
-  basicauth /beszel/ {
-    admin ###generate password with docker run --rm -it caddy caddy hash-password
-  }
-
   handle_path /beszel* {
     reverse_proxy beszel:8090
   }
