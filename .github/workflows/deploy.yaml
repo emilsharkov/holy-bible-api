@@ -8,6 +8,10 @@ on:
       - "api/**"
       - "docker/**"
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
