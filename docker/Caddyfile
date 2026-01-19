@@ -1,9 +1,3 @@
 holy-bible-api.com {
-  redir /beszel /beszel/
-
-  handle_path /beszel/* {
-    reverse_proxy beszel:8090
-  }
-
   reverse_proxy web:8080
 }
