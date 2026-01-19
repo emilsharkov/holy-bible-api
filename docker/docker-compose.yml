@@ -15,7 +15,7 @@ services:
     mem_limit: 64m
 
   web:
-    image: ghcr.io/emilsharkov/holy-bible-api/holy-bible-api:latest
+    image: ghcr.io/emilsharkov/holy-bible-api/api:latest
     container_name: web
     restart: unless-stopped
     expose:
@@ -110,7 +110,7 @@ services:
       HUB_URL: http://localhost:8090
 
   restore:
-    image: ghcr.io/emilsharkov/holy-bible-api/holy-bible-db-restore:latest
+    image: ghcr.io/emilsharkov/holy-bible-api/db-restore:latest
     container_name: db-restore
     depends_on:
       - postgres
