@@ -1,3 +1,4 @@
+# How to Setup the Docker Compose
 curl -fsSL https://get.docker.com | sh
 cd ~
 git clone https://github.com/emilsharkov/holy-bible-api
