@@ -16,7 +16,6 @@
 import * as runtime from '../runtime.js';
 import type {
   AudioBible,
-  Bible,
   BibleVerse,
   BooksCountResponse,
   ChaptersCountResponse,
@@ -24,8 +23,6 @@ import type {
 import {
     AudioBibleFromJSON,
     AudioBibleToJSON,
-    BibleFromJSON,
-    BibleToJSON,
     BibleVerseFromJSON,
     BibleVerseToJSON,
     BooksCountResponseFromJSON,
@@ -76,11 +73,6 @@ export interface GetBibleVersesRequest {
     chapterNum: number;
     start?: number;
     end?: number;
-}
-
-export interface GetBiblesRequest {
-    language?: string;
-    version?: string;
 }
 
 export interface GetRandomBibleVerseRequest {
@@ -452,72 +444,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getBibleVerses(requestParameters: GetBibleVersesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BibleVerse>> {
         const response = await this.getBibleVersesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async getBiblesRaw(requestParameters: GetBiblesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Bible>>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['language'] != null) {
-            queryParameters['language'] = requestParameters['language'];
-        }
-
-        if (requestParameters['version'] != null) {
-            queryParameters['version'] = requestParameters['version'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/bibles`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BibleFromJSON));
-    }
-
-    /**
-     */
-    async getBibles(requestParameters: GetBiblesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Bible>> {
-        const response = await this.getBiblesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async getHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/health`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<string>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
-    }
-
-    /**
-     */
-    async getHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.getHealthRaw(initOverrides);
         return await response.value();
     }
 

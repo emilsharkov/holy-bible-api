@@ -14,7 +14,6 @@
 
 # import models into model package
 from openapi_client.models.audio_bible import AudioBible
-from openapi_client.models.bible import Bible
 from openapi_client.models.bible_verse import BibleVerse
 from openapi_client.models.books_count_response import BooksCountResponse
 from openapi_client.models.chapters_count_response import ChaptersCountResponse

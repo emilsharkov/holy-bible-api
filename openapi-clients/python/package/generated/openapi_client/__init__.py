@@ -29,7 +29,6 @@ __all__ = [
     "ApiAttributeError",
     "ApiException",
     "AudioBible",
-    "Bible",
     "BibleVerse",
     "BooksCountResponse",
     "ChaptersCountResponse",
@@ -51,7 +50,6 @@ from openapi_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
 from openapi_client.models.audio_bible import AudioBible as AudioBible
-from openapi_client.models.bible import Bible as Bible
 from openapi_client.models.bible_verse import BibleVerse as BibleVerse
 from openapi_client.models.books_count_response import BooksCountResponse as BooksCountResponse
 from openapi_client.models.chapters_count_response import ChaptersCountResponse as ChaptersCountResponse

@@ -1,7 +1,5 @@
 pub mod audio_bible;
 pub use self::audio_bible::AudioBible;
-pub mod bible;
-pub use self::bible::Bible;
 pub mod bible_verse;
 pub use self::bible_verse::BibleVerse;
 pub mod books_count_response;

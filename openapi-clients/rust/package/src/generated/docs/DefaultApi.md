@@ -12,8 +12,6 @@ Method | HTTP request | Description
 [**get_bible_chapters**](DefaultApi.md#get_bible_chapters) | **GET** /bibles/{bible_id}/books/{book_num}/chapters | 
 [**get_bible_verse_by_number**](DefaultApi.md#get_bible_verse_by_number) | **GET** /bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses/{verse_num} | 
 [**get_bible_verses**](DefaultApi.md#get_bible_verses) | **GET** /bibles/{bible_id}/books/{book_num}/chapters/{chapter_num}/verses | 
-[**get_bibles**](DefaultApi.md#get_bibles) | **GET** /bibles | 
-[**get_health**](DefaultApi.md#get_health) | **GET** /health | 
 [**get_random_bible_verse**](DefaultApi.md#get_random_bible_verse) | **GET** /bibles/{bible_id}/random | 
 [**get_verse_of_the_day**](DefaultApi.md#get_verse_of_the_day) | **GET** /bibles/{bible_id}/verse-of-the-day | 
 
@@ -251,60 +249,6 @@ No authorization required
 
 - **Content-Type**: Not defined
 - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## get_bibles
-
-> Vec<models::Bible> get_bibles(language, version)
-
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**language** | Option<**String**> |  |  |
-**version** | Option<**String**> |  |  |
-
-### Return type
-
-[**Vec<models::Bible>**](Bible.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## get_health
-
-> String get_health()
-
-
-### Parameters
-
-This endpoint does not need any parameter.
-
-### Return type
-
-**String**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: text/plain
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -72,20 +72,6 @@ pub enum GetBibleVersesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`get_bibles`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum GetBiblesError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`get_health`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum GetHealthError {
-    UnknownValue(serde_json::Value),
-}
-
 /// struct for typed errors of method [`get_random_bible_verse`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -398,83 +384,6 @@ pub async fn get_bible_verses(configuration: &configuration::Configuration, bibl
     } else {
         let content = resp.text().await?;
         let entity: Option<GetBibleVersesError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-pub async fn get_bibles(configuration: &configuration::Configuration, language: Option<&str>, version: Option<&str>) -> Result<Vec<models::Bible>, Error<GetBiblesError>> {
-    // add a prefix to parameters to efficiently prevent name collisions
-    let p_query_language = language;
-    let p_query_version = version;
-
-    let uri_str = format!("{}/bibles", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
-
-    if let Some(ref param_value) = p_query_language {
-        req_builder = req_builder.query(&[("language", &param_value.to_string())]);
-    }
-    if let Some(ref param_value) = p_query_version {
-        req_builder = req_builder.query(&[("version", &param_value.to_string())]);
-    }
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `Vec&lt;models::Bible&gt;`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `Vec&lt;models::Bible&gt;`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<GetBiblesError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-pub async fn get_health(configuration: &configuration::Configuration, ) -> Result<String, Error<GetHealthError>> {
-
-    let uri_str = format!("{}/health", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Ok(content),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `String`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<GetHealthError> = serde_json::from_str(&content).ok();
         Err(Error::ResponseError(ResponseContent { status, content, entity }))
     }
 }

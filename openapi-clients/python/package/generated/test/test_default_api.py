@@ -74,18 +74,6 @@ class TestDefaultApi(unittest.TestCase):
         """
         pass
 
-    def test_get_bibles(self) -> None:
-        """Test case for get_bibles
-
-        """
-        pass
-
-    def test_get_health(self) -> None:
-        """Test case for get_health
-
-        """
-        pass
-
     def test_get_random_bible_verse(self) -> None:
         """Test case for get_random_bible_verse
 

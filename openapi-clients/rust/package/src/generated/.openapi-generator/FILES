@@ -4,7 +4,6 @@
 Cargo.toml
 README.md
 docs/AudioBible.md
-docs/Bible.md
 docs/BibleVerse.md
 docs/BooksCountResponse.md
 docs/ChaptersCountResponse.md
@@ -15,7 +14,6 @@ src/apis/default_api.rs
 src/apis/mod.rs
 src/lib.rs
 src/models/audio_bible.rs
-src/models/bible.rs
 src/models/bible_verse.rs
 src/models/books_count_response.rs
 src/models/chapters_count_response.rs

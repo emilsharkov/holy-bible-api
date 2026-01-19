@@ -8,7 +8,7 @@ mod repo;
 mod service;
 mod utils;
 
-#[tokio::main] 
+#[tokio::main]
 async fn main() {
     utils::logging::init_logging();
     utils::openapi::try_generate_and_save_openapi_json_default();
