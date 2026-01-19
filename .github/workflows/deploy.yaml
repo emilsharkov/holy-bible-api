@@ -6,7 +6,8 @@ on:
       - master
     paths:
       - "api/**"
-      - "docker/**"
+      - "docker/Caddyfile"
+      - "docker/docker-compose.yml"
 
 permissions:
   contents: read
@@ -76,3 +77,49 @@ jobs:
 
             echo "Deploy complete."
           EOF
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install OpenAPI generator and update clients
+        working-directory: openapi-clients
+        run: |
+          npm run install-generator
+          npm run update-all-clients
+
+      - name: Publish npm package
+        working-directory: openapi-clients/typescript/package
+        run: |
+          npm install
+          npm run push-package
+
+      - name: Set up Python
+        if: ${{ secrets.PYPI_TOKEN != '' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build Python package
+        if: ${{ secrets.PYPI_TOKEN != '' }}
+        working-directory: openapi-clients/python/package
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+
+      - name: Publish PyPI package
+        if: ${{ secrets.PYPI_TOKEN != '' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
+          packages-dir: openapi-clients/python/package/dist
+
+      - name: Set up Rust toolchain
+        if: ${{ secrets.CRATES_TOKEN != '' }}
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Publish crate
+        if: ${{ secrets.CRATES_TOKEN != '' }}
+        run: cargo publish --manifest-path openapi-clients/rust/package/Cargo.toml --token ${{ secrets.CRATES_TOKEN }}
