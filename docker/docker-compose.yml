@@ -94,6 +94,8 @@ services:
     volumes:
       - beszel_data:/beszel_data
       - beszel_socket:/beszel_socket
+    environment:
+      APP_URL: "https://localhost/beszel"
 
   beszel-agent:
     image: henrygd/beszel-agent
@@ -103,11 +105,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - beszel_agent_data:/var/lib/beszel-agent
-    environment:
-      LISTEN: 45876
-      KEY: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsNP3E10JoWDbVfKs2auWowSmINa0rDd7o/PJ6zCr7a'
-      TOKEN: aaa07683-5f8e-4d1e-9e2e-fcd5cbe23fe5
-      HUB_URL: http://localhost:8090
 
   restore:
     image: ghcr.io/emilsharkov/holy-bible-api/db-restore:latest
