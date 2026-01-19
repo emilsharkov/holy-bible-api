@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "OpenAPI Clients for Holy Bible API",
   "scripts": {
-    "install-generator": "npm install -g openapi-generator-cli",
+    "install-generator": "npm install @openapitools/openapi-generator-cli -g",
     "get-latest-openapi": "cp ../api/openapi.json .",
     "generate-all": "npm run generate-typescript && npm run generate-python && npm run generate-rust",
     "generate-typescript": "rm -rf ./typescript/package/generated && openapi-generator-cli generate -i ./openapi.json -g typescript-fetch -o ./typescript/package/generated --skip-validate-spec --additional-properties=supportsES6=true,importFileExtension=.js",
