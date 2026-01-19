@@ -43,6 +43,14 @@
 #             type=sha,prefix={{branch}}-
 #             type=raw,value=latest,enable={{is_default_branch}}
 
+# docker buildx build \
+#   --platform linux/amd64,linux/arm64 \
+#   -t ghcr.io/emilsharkov/holy-bible-api/db-restore:latest \
+#   --push \
+#   --cache-to=type=inline \
+#   .
+
+
 #       - name: Build and push Docker image
 #         uses: docker/build-push-action@v5
 #         with:
