@@ -31,27 +31,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        run: |
-          docker buildx build \
-            --platform linux/amd64 \
-            -t ghcr.io/emilsharkov/holy-bible-api/api:latest \
-            --file api/Dockerfile \
-            --push \
-            --cache-from=type=gha \
-            --cache-to=type=gha,mode=max \
-            ./api
+      - name: Build and push Docker image (with cache)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./api
+          file: ./api/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/emilsharkov/holy-bible-api/api:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Deploy to VPS
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
+          set -e
+
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H holy-bible-api.com >> ~/.ssh/known_hosts
 
-          ssh -i ~/.ssh/id_rsa root@holy-bible-api.com << 'EOF'
+          ssh root@holy-bible-api.com << 'EOF'
             set -e
 
             cd ~/holy-bible-api
