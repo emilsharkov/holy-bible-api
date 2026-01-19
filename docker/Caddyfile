@@ -1,7 +1,9 @@
 holy-bible-api.com {
-  reverse_proxy web:8080
-}
+  handle_path /beszel/* {
+    reverse_proxy beszel:8090
+  }
 
-beszel.holy-bible-api.com {
-  reverse_proxy beszel:8090
+  handle {
+    reverse_proxy web:8080
+  }
 }
