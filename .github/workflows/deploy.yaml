@@ -24,16 +24,16 @@ jobs:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # - name: Detect API source changes
-      #   id: api_changes
-      #   uses: dorny/paths-filter@v3
-      #   with:
-      #     filters: |
-      #       api_src:
-      #         - "api/src/**"
+      - name: Detect API source changes
+        id: api_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            api_src:
+              - "api/src/**"
 
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v3
