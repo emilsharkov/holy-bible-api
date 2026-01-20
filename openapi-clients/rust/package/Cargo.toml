@@ -1,6 +1,6 @@
 [package]
 name = "holy_bible_api"
-version = "1.0.0"
+version = "1.0.6"
 authors = ["Emil Sharkov <emilsharkov@gmail.com>"]
 description = "A Rust client library for accessing the Holy Bible API"
 license = "MIT"

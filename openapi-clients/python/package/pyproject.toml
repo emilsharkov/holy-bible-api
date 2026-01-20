@@ -1,6 +1,6 @@
 [project]
 name = "holy_bible_api"
-version = "6.0.0"
+version = "1.0.6"
 description = "A Python client library for the Holy Bible API"
 readme = "README.md"
 requires-python = ">=3.9"
