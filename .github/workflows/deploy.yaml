@@ -23,7 +23,7 @@ jobs:
       CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    # steps:
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -108,8 +108,8 @@ jobs:
         run: |
           npm install
           npm run install-generator
-          npm run bump-versions
           npm run update-all-clients
+          npm run bump-versions
 
       - name: Publish npm package
         if: steps.api_changes.outputs.api_src == 'true'
