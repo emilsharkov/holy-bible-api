@@ -2,10 +2,9 @@ import fs from "fs";
 import path from "path";
 import toml, { JsonMap } from "@iarna/toml";
 
-const ROOT = path.resolve(__dirname, "..");
-const TS_PACKAGE_JSON = path.join(ROOT, "typescript", "package", "package.json");
-const PYPROJECT_TOML = path.join(ROOT, "python", "package", "pyproject.toml");
-const RUST_CARGO_TOML = path.join(ROOT, "rust", "package", "Cargo.toml");
+const TS_PACKAGE_JSON = path.join(__dirname, "typescript", "package", "package.json");
+const PYPROJECT_TOML = path.join(__dirname, "python", "package", "pyproject.toml");
+const RUST_CARGO_TOML = path.join(__dirname, "rust", "package", "Cargo.toml");
 
 type VersionTuple = [number, number, number];
 
