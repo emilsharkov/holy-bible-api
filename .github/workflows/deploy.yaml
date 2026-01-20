@@ -10,7 +10,7 @@ on:
       - "docker/docker-compose.yml"
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    steps:
+    # steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -106,7 +106,9 @@ jobs:
         if: steps.api_changes.outputs.api_src == 'true'
         working-directory: openapi-clients
         run: |
+          npm install
           npm run install-generator
+          npm run bump-versions
           npm run update-all-clients
 
       - name: Publish npm package
@@ -146,3 +148,15 @@ jobs:
           cargo publish \
             --manifest-path openapi-clients/rust/package/Cargo.toml \
             --token "$CRATES_TOKEN"
+
+      - name: Commit and push OpenAPI client updates
+        if: steps.api_changes.outputs.api_src == 'true'
+        run: |
+          if [ -n "$(git status --porcelain openapi-clients)" ]; then
+            git add openapi-clients
+            git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
+              commit -m "chore(openapi-clients): bump versions and regenerate clients"
+            git push origin HEAD
+          else
+            echo "No OpenAPI client changes to commit."
+          fi
