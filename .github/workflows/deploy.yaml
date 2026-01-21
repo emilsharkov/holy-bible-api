@@ -112,56 +112,56 @@ jobs:
           npm run update-all-clients
           npm run bump-versions
 
-      # - name: Publish npm package
-      #   if: steps.api_changes.outputs.api_src == 'true'
-      #   working-directory: openapi-clients/typescript/package
-      #   run: |
-      #     npm install
-      #     npm run push-package
+      - name: Publish npm package
+        if: steps.api_changes.outputs.api_src == 'true'
+        working-directory: openapi-clients/typescript/package
+        run: |
+          npm install
+          npm run push-package
 
-      # - name: Commit and push npm client updates
-      #   if: steps.api_changes.outputs.api_src == 'true'
-      #   run: |
-      #     if [ -n "$(git status --porcelain openapi-clients/typescript)" ]; then
-      #       git add openapi-clients/typescript
-      #       git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
-      #         commit -m "chore(openapi-clients): update npm package"
-      #       git push origin HEAD
-      #     else
-      #       echo "No npm client changes to commit."
-      #     fi
+      - name: Commit and push npm client updates
+        if: steps.api_changes.outputs.api_src == 'true'
+        run: |
+          if [ -n "$(git status --porcelain openapi-clients/typescript)" ]; then
+            git add openapi-clients/typescript
+            git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
+              commit -m "chore(openapi-clients): update npm package"
+            git push origin HEAD
+          else
+            echo "No npm client changes to commit."
+          fi
 
-      # - name: Set up Python
-      #   if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: "3.11"
+      - name: Set up Python
+        if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-      # - name: Build Python package
-      #   if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
-      #   working-directory: openapi-clients/python/package
-      #   run: |
-      #     python -m pip install --upgrade pip build
-      #     python -m build
+      - name: Build Python package
+        if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
+        working-directory: openapi-clients/python/package
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
 
-      # - name: Publish PyPI package
-      #   if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     password: ${{ env.PYPI_TOKEN }}
-      #     packages-dir: openapi-clients/python/package/dist
+      - name: Publish PyPI package
+        if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ env.PYPI_TOKEN }}
+          packages-dir: openapi-clients/python/package/dist
 
-      # - name: Commit and push Python client updates
-      #   if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
-      #   run: |
-      #     if [ -n "$(git status --porcelain openapi-clients/python)" ]; then
-      #       git add openapi-clients/python
-      #       git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
-      #         commit -m "chore(openapi-clients): update python package"
-      #       git push origin HEAD
-      #     else
-      #       echo "No Python client changes to commit."
-      #     fi
+      - name: Commit and push Python client updates
+        if: steps.api_changes.outputs.api_src == 'true' && env.PYPI_TOKEN != ''
+        run: |
+          if [ -n "$(git status --porcelain openapi-clients/python)" ]; then
+            git add openapi-clients/python
+            git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
+              commit -m "chore(openapi-clients): update python package"
+            git push origin HEAD
+          else
+            echo "No Python client changes to commit."
+          fi
 
       - name: Set up Rust toolchain
         if: steps.api_changes.outputs.api_src == 'true' && env.CRATES_TOKEN != ''
