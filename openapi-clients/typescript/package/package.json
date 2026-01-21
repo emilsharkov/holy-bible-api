@@ -1,6 +1,6 @@
 {
   "name": "holy-bible-api",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "OpenAPI Client for Holy Bible API",
   "type": "module",
   "main": "dist/src/index.js",
