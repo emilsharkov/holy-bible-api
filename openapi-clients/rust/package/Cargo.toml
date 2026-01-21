@@ -1,28 +1,39 @@
 [package]
 name = "holy_bible_api"
-version = "1.0.6"
-authors = ["Emil Sharkov <emilsharkov@gmail.com>"]
+version = "1.0.8"
+authors = [ "Emil Sharkov <emilsharkov@gmail.com>" ]
 description = "A Rust client library for accessing the Holy Bible API"
 license = "MIT"
 edition = "2021"
 repository = "https://github.com/emilsharkov/holy-bible-api"
 readme = "README.md"
-keywords = ["bible", "api", "holy-bible", "scripture", "religion"]
-categories = ["api-bindings"]
+keywords = [ "bible", "api", "holy-bible", "scripture", "religion" ]
+categories = [ "api-bindings" ]
 
 [dependencies]
-serde = { version = "^1.0", features = ["derive"] }
-serde_with = { version = "^3.8", default-features = false, features = ["base64", "std", "macros"] }
 serde_json = "^1.0"
 serde_repr = "^0.1"
 url = "^2.5"
-reqwest = { version = "^0.12", default-features = false, features = ["json", "multipart"] }
+
+  [dependencies.serde]
+  version = "^1.0"
+  features = [ "derive" ]
+
+  [dependencies.serde_with]
+  version = "^3.8"
+  default-features = false
+  features = [ "base64", "std", "macros" ]
+
+  [dependencies.reqwest]
+  version = "^0.12"
+  default-features = false
+  features = [ "json", "multipart" ]
 
 [features]
-default = ["native-tls"]
-native-tls = ["reqwest/native-tls"]
-rustls-tls = ["reqwest/rustls-tls"]
+default = [ "native-tls" ]
+native-tls = [ "reqwest/native-tls" ]
+rustls-tls = [ "reqwest/rustls-tls" ]
 
-[dev-dependencies]
-tokio = { version = "1", features = ["full"] }
-
+[dev-dependencies.tokio]
+version = "1"
+features = [ "full" ]
