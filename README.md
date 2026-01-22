@@ -26,8 +26,8 @@ https://crates.io/crates/holy_bible_api
 
 ## Self Hosting via Docker Compose
 ### Requirements
-- VM with docker installed
 - S3 Bucket
+- Virutal Machine (preferably running amd64 linux otherwise you will need to rebuild the api image)
 
 ### In the VM execute the following:
 1. Download Docker and Clone Repo
@@ -35,22 +35,23 @@ https://crates.io/crates/holy_bible_api
     curl -fsSL https://get.docker.com | sh
     cd ~
     git clone https://github.com/emilsharkov/holy-bible-api
-    cd holy-bible-api/docker
     ```
 
 2. Update Configs
     ```bash
+    cd holy-bible-api/docker
     cp .env.example .env # Fill it out everything except beszel env vars
-    nano Caddyfile # Replace holy-bible-api.com with your domain or with localhost
+    nano Caddyfile # Replace holy-bible-api.com with your Host/IP
     docker compose up -d
     ```
 
 3. Setup Beszel for Resource Monitoring
-    1. Go to https://yourdomain/beszel
+    1. Go to https://yourhost/beszel
     2. Create your account
     3. Click on add system in the top right corner
-    4. Fill in the name then fill in host ip with your domain (Port, Public Key, and Token should be filled already)
-    5. Copy the value in `Public Key` and `Token` into your `.env` in `BESZEL_PUBLIC_KEY` and `BESZEL_TOKEN`
+    4. Fill in `Name` with a name of your choosing
+    5. Fill in `Host/IP` with your HOST/IP
+    6. Copy the value in `Public Key` and `Token` into your `.env` in `BESZEL_PUBLIC_KEY` and `BESZEL_TOKEN`
 
 5. Reset Docker Compose
     ```bash
