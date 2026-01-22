@@ -1,3 +1,0 @@
-holy-bible-api.com {
-  reverse_proxy localhost:3000
-}

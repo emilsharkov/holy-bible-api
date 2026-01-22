@@ -24,8 +24,42 @@ cargo add holy_bible_api
 ```
 https://crates.io/crates/holy_bible_api
 
-## Data Sources 
-### Disclaimer
+## Self Hosting via Docker Compose
+### Requirements
+- VM with docker installed
+- S3 Bucket
+
+### In the VM execute the following:
+1. Download Docker and Clone Repo
+    ```bash
+    curl -fsSL https://get.docker.com | sh
+    cd ~
+    git clone https://github.com/emilsharkov/holy-bible-api
+    cd holy-bible-api/docker
+    ```
+
+2. Update Configs
+    ```bash
+    cp .env.example .env # Fill it out everything except beszel env vars
+    nano Caddyfile # Replace holy-bible-api.com with your domain or with localhost
+    docker compose up -d
+    ```
+
+3. Setup Beszel for Resource Monitoring
+    1. Go to https://yourdomain/beszel
+    2. Create your account
+    3. Click on add system in the top right corner
+    4. Fill in the name then fill in host ip with your domain (Port, Public Key, and Token should be filled already)
+    5. Copy the value in `Public Key` and `Token` into your `.env` in `BESZEL_PUBLIC_KEY` and `BESZEL_TOKEN`
+
+5. Reset Docker Compose
+    ```bash
+    docker compose down
+    docker compose up -d
+    ```
+
+
+## Data Source Disclaimer
 This project is open-source meaning that each user that wants to run this project needs to provide their own data to the API. The data I am using has been source from the [Word Project](https://www.wordproject.org/bibles/audio/index.htm) for the audio and [Holy-Bible-JSON](https://github.com/emilsharkov/Holy-Bible-JSON) and [Holy-Bible-XML](https://github.com/Beblia/Holy-Bible-XML-Format) for the text.
 
 Please double check this data with the real thing before using it. This data has been first parsed from another data source then again reparsed by me. This could cause there to be mistakes so please use the API with caution. If any are open to helping contribute to the verification of the data sources, it would be much appreciated.
